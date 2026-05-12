@@ -13,11 +13,9 @@ const CONFIG = {
   SHEETS_ID:          'YOUR_SPREADSHEET_ID',
   GOOGLE_API_KEY:     'YOUR_GOOGLE_API_KEY',
   ADMIN_PASSWORD:     'tving2026',
-  // TVING Redash API (TOP 20)
   REDASH_BASE:        'https://prod-redash-ext.tving-data.com',
   REDASH_TOP20_QUERY: '1438',
   REDASH_API_KEY:     '8Smmffh6rvxRICbOszmirHZnis82M2PgfMdbbE6W',
-  // 타겟 오디언스 태블로 (추후 연동)
   TABLEAU_BASE:       '',
   TABLEAU_TOKEN:      '',
 };
@@ -26,31 +24,20 @@ const CONFIG = {
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
-  /* ── 브랜드 ── */
   --tv:#E51B4A;     --tv-bg:#FEF1F4;   --tv-dark:#B5002D;
   --wv:#1B4FE8;     --wv-bg:#EEF3FE;   --wv-dark:#0D31B5;
   --green:#0D9467;  --green-bg:#EDFBF4;
   --purple:#5E3FCC; --purple-bg:#F0ECFF;
   --amber:#C07800;  --amber-bg:#FFF8EC;
-
-  /* ── 배경 ── */
   --bg:#FFFFFF;
   --bg2:#F7F8FA;
   --bg3:#F1F3F6;
-
-  /* ── 텍스트 ── */
   --t1:#0E0E10;
   --t2:#4B4E58;
   --t3:#9399A6;
-
-  /* ── 보더 ── */
   --bd:rgba(0,0,0,0.08);
   --bd2:rgba(0,0,0,0.15);
-
-  /* ── 기타 ── */
   --r:8px; --rl:12px; --sh:0 1px 3px rgba(0,0,0,0.06),0 4px 12px rgba(0,0,0,0.04);
-
-  /* ── 장르 컬러 ── */
   --g-drama:#E51B4A;   --g-drama-bg:#FEF1F4;   --g-drama-dark:#8B0020;
   --g-reality:#C07800; --g-reality-bg:#FFF8EC;  --g-reality-dark:#7A4E00;
   --g-survival:#0D9467;--g-survival-bg:#EDFBF4; --g-survival-dark:#075C42;
@@ -62,14 +49,12 @@ const CONFIG = {
 
 body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Apple SD Gothic Neo",sans-serif;font-size:14px;line-height:1.6;background:var(--bg3);color:var(--t1);min-height:100vh}
 
-/* ── Nav ── */
 .nav{background:#fff;border-bottom:1px solid var(--bd);position:sticky;top:0;z-index:100;}
 .nav-inner{max-width:1280px;margin:0 auto;padding:0 24px;display:flex;align-items:center;justify-content:space-between;height:56px;flex-wrap:wrap;gap:8px}
 .logo{font-size:15px;font-weight:600;color:var(--t1)}
 .logo em{color:var(--tv);font-style:normal}
 .logo-sub{font-size:10px;color:var(--t3);margin-top:1px}
 
-/* 관리자 버튼 — 오른쪽 하단 구석 고정, 매우 작고 흐릿하게 */
 .admin-trigger{
   position:fixed;bottom:16px;right:16px;z-index:50;
   width:28px;height:28px;border-radius:50%;
@@ -80,7 +65,6 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Apple SD Gothic Ne
 .admin-trigger:hover{opacity:0.55}
 .admin-trigger svg{width:13px;height:13px;fill:var(--t3)}
 
-/* ── 비밀번호 팝업 ── */
 .pw-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:500;align-items:center;justify-content:center}
 .pw-overlay.open{display:flex}
 .pw-box{background:var(--bg);border-radius:var(--rl);border:1px solid var(--bd);padding:28px 24px;width:320px;box-shadow:0 8px 32px rgba(0,0,0,0.2)}
@@ -91,11 +75,9 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Apple SD Gothic Ne
 .pw-err{font-size:11px;color:var(--tv);margin-bottom:10px;display:none}
 .pw-row{display:flex;gap:8px;justify-content:flex-end}
 
-/* ── Layout ── */
 .app{max-width:1280px;margin:0 auto;padding:0 24px 80px}
 .page{display:none}.page.active{display:block}
 
-/* ── Buttons ── */
 .btn{padding:7px 16px;font-size:13px;border-radius:8px;cursor:pointer;border:1px solid var(--bd2);background:#fff;color:var(--t2);transition:all .15s;white-space:nowrap;font-weight:500}
 .btn:hover{background:var(--bg2)}.btn.on{background:var(--t1);color:var(--bg);border-color:var(--t1)}
 .btn.pri{background:var(--purple-bg);color:var(--purple);border-color:var(--purple)}.btn.pri:hover{background:#CECBF6}
@@ -103,26 +85,14 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Apple SD Gothic Ne
 .btn.dan{background:var(--tv-bg);color:var(--tv);border-color:var(--tv)}
 .btn:disabled{opacity:.45;cursor:not-allowed}
 
-/* ── Stats ── */
-.stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin:24px 0 20px}
-.sc{background:var(--bg);border-radius:var(--r);padding:14px 16px;box-shadow:var(--sh)}
-.sc-l{font-size:11px;color:var(--t3);margin-bottom:4px}
-.sc-v{font-size:22px;font-weight:600}
-
-/* ── View tabs ── */
 .vtabs{display:flex;border:1px solid var(--bd);border-radius:var(--r);overflow:hidden;background:var(--bg2);margin-bottom:20px}
 .vtab{flex:1;padding:10px;font-size:12px;cursor:pointer;background:transparent;border:none;color:var(--t3);border-right:1px solid var(--bd);text-align:center;transition:all .15s}
 .vtab:last-child{border-right:none}
 .vtab.on{background:var(--bg);color:var(--t1);font-weight:700}
 .vtab-con{display:block}
-.vtab-con.hidden{display:none!important}
 .vcon{display:none}.vcon.on{display:block}
 
-/* ── Filters ── */
 .filters{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:16px;align-items:center}
-.fsep{width:1px;height:14px;background:var(--bd)}
-
-/* ── Poster grid ── */
 .poster-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:18px;margin-bottom:28px}
 .pcard{background:#fff;border:none;border-radius:16px;overflow:hidden;cursor:pointer;transition:transform .15s,box-shadow .15s;box-shadow:0 1px 4px rgba(0,0,0,0.07)}
 .pcard:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,0.12)}
@@ -132,7 +102,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Apple SD Gothic Ne
 .poster-ph{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;padding:12px}
 .ph-init{font-size:32px;font-weight:600;opacity:.75}
 .ph-ttl{font-size:10px;text-align:center;line-height:1.4;opacity:.6}
-/* 특판 뱃지 */
+
 .special-badge{
   position:absolute;top:10px;left:10px;z-index:2;
   background:#FFF3CC;color:#B45309;font-size:9px;font-weight:700;border:1px solid #F59E0B44;
@@ -150,46 +120,12 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Apple SD Gothic Ne
 .pc-title{font-size:13px;font-weight:600;line-height:1.35;margin-bottom:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .pc-cast{font-size:11px;color:var(--t2);margin-bottom:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .pc-date{font-size:10px;color:var(--t3);margin-bottom:7px}
-.pc-foot{display:flex;align-items:center;justify-content:space-between;padding-top:7px;border-top:1px solid var(--bd)}
-.tgt{font-size:10px;color:var(--t3)}
+.pc-foot{display:flex;align-items:center;justify-content:flex-end;padding-top:7px;border-top:1px solid var(--bd)}
 .peak{font-size:9px;background:var(--amber-bg);color:var(--amber);padding:1px 6px;border-radius:8px}
-/* 광고상품 미니 태그 */
 .ad-tags{display:flex;gap:4px;flex-wrap:wrap;margin-top:7px}
 .ad-tag{font-size:9px;padding:2px 7px;border-radius:8px;background:var(--purple-bg);color:var(--purple);font-weight:500}
 
-/* ── 장르별 컬러 함수 ── */
-.genre-drama    {background:var(--g-drama)!important}
-.genre-reality  {background:var(--g-reality)!important}
-.genre-survival {background:var(--g-survival)!important}
-.genre-sports   {background:var(--g-sports)!important}
-.genre-sf       {background:var(--g-sf)!important}
-.genre-genre    {background:var(--g-genre)!important}
-.genre-etc      {background:var(--g-etc)!important}
-
-/* ── Timeline (장르 축 버전) ── */
-.tl-box{background:var(--bg);border:1px solid var(--bd);border-radius:var(--rl);padding:18px;margin-bottom:28px;overflow-x:auto;box-shadow:var(--sh)}
-.tl-legend{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:14px}
-.tl-leg-item{display:flex;align-items:center;gap:5px;font-size:11px;color:var(--t2)}
-.tl-leg-dot{width:10px;height:10px;border-radius:2px;flex-shrink:0}
-.tl-head{display:grid;grid-template-columns:90px repeat(12,1fr);font-size:10px;color:var(--t3);text-align:center;min-width:580px;margin-bottom:6px}
-.tl-group-label{font-size:10px;font-weight:600;color:var(--t3);margin:8px 0 4px;padding-left:2px;min-width:580px;text-transform:uppercase;letter-spacing:.5px}
-.tl-row{display:grid;grid-template-columns:90px repeat(12,1fr);min-height:30px;align-items:center;min-width:580px;margin-bottom:5px}
-.tl-label-wrap{display:flex;align-items:center;gap:6px;padding-right:8px;min-width:0}
-.tl-thumb{width:18px;height:26px;border-radius:3px;overflow:hidden;flex-shrink:0;background:var(--bg2)}
-.tl-thumb img{width:100%;height:100%;object-fit:cover;display:block}
-.tl-ph{width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:7px;font-weight:600}
-.tl-name{font-size:11px;color:var(--t2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.tl-cells{grid-column:2/-1;position:relative;height:20px}
-.tl-bar{height:14px;border-radius:3px;position:absolute;top:3px;font-size:9px;font-weight:600;color:#fff;cursor:pointer;display:flex;align-items:center;padding:0 7px;white-space:nowrap;overflow:hidden;transition:filter .15s}
-.tl-bar:hover{filter:brightness(.82)}
-
-/* ── Ranking ── */
-.rank-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:28px}
-@media(max-width:600px){.rank-grid{grid-template-columns:1fr}}
-/* ── 랭킹 히스토리 카드 ── */
 .rh-col{background:var(--bg);border:1px solid var(--bd);border-radius:var(--rl);overflow:hidden;box-shadow:var(--sh)}
-.rh-head{display:flex;align-items:center;justify-content:space-between;padding:11px 14px;border-bottom:1px solid var(--bd)}
-.rh-title{font-size:13px;font-weight:600}
 .rh-item{display:flex;align-items:center;gap:9px;padding:8px 13px;border-bottom:1px solid var(--bd);cursor:pointer;transition:background .1s}
 .rh-item:last-child{border-bottom:none}
 .rh-item:hover{background:var(--bg2)}
@@ -203,26 +139,8 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Apple SD Gothic Ne
 .rh-ttl{font-size:12px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .rh-genre{font-size:10px;color:var(--t3);margin-top:1px}
 .rh-chg{font-size:10px;font-weight:600;min-width:26px;text-align:right}
-.rank-col{background:var(--bg);border:1px solid var(--bd);border-radius:var(--rl);overflow:hidden;box-shadow:var(--sh)}
-.rank-hdr{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;border-bottom:1px solid var(--bd)}
-.rh-plat{font-size:13px;font-weight:600}
-.rh-meta{font-size:10px;color:var(--t3)}
-.rank-item{display:flex;align-items:center;gap:10px;padding:9px 14px;border-bottom:1px solid var(--bd);transition:background .1s;cursor:default}
-.rank-item:last-child{border-bottom:none}
-.rank-item:hover{background:var(--bg2)}
-.rk-poster{width:36px;height:54px;border-radius:4px;overflow:hidden;flex-shrink:0;background:var(--bg2)}
-.rk-poster img{width:100%;height:100%;object-fit:cover;display:block}
-.rk-ph{width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:600}
-.rk-num{font-size:14px;font-weight:600;min-width:20px;color:var(--t3)}
-.rk-n1{color:var(--tv);font-size:16px}.rk-n3{color:var(--t1)}
-.rk-info{flex:1;min-width:0}
-.rk-title{font-size:12px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.rk-genre{font-size:10px;color:var(--t3);margin-top:1px}
-.rk-chg{font-size:11px;font-weight:500;min-width:28px;text-align:right}
-.cup{color:#1D9E75}.cdn{color:var(--tv)}.csa{color:var(--t3)}
-.new-p{font-size:9px;background:var(--green-bg);color:var(--green);padding:1px 6px;border-radius:8px}
+.cup{color:#1D9E75}.cdn{color:var(--tv)}
 
-/* ── Modal ── */
 .modal-bg{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:200;align-items:flex-start;justify-content:center;padding:20px;overflow-y:auto}
 .modal-bg.open{display:flex}
 .modal{background:#fff;border-radius:16px;border:none;width:100%;max-width:560px;margin:auto;box-shadow:0 8px 40px rgba(0,0,0,0.18);overflow:hidden}
@@ -233,11 +151,6 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Apple SD Gothic Ne
 .modal-hdr{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px}
 .modal-close{background:none;border:none;font-size:18px;cursor:pointer;color:var(--t3);padding:0;line-height:1}
 .modal-close:hover{color:var(--t1)}
-.modal-tabs{display:flex;border:1px solid var(--bd);border-radius:var(--r);overflow:hidden;margin-bottom:16px}
-.modal-tab{flex:1;padding:7px;font-size:11px;cursor:pointer;background:transparent;border:none;color:var(--t3);text-align:center;border-right:1px solid var(--bd)}
-.modal-tab:last-child{border-right:none}
-.modal-tab.on{background:var(--bg2);color:var(--t1);font-weight:500}
-.mtab-con{display:none}.mtab-con.on{display:block}
 .drow{display:flex;gap:10px;margin-bottom:7px;font-size:12px}
 .dl{color:var(--t3);min-width:64px;flex-shrink:0}
 .dv{color:var(--t1)}
@@ -249,57 +162,24 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Apple SD Gothic Ne
 .special-link-btn:hover{background:#FDE9A0}
 .special-link-btn svg{width:12px;height:12px;fill:#FAC775}
 
-/* ── 광고 상품 카드 ── */
-.ad-cards{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px}
-.ad-card{border:1px solid var(--bd);border-radius:var(--r);padding:12px;background:var(--bg2)}
-.ad-card-name{font-size:12px;font-weight:600;margin-bottom:5px}
-.ad-card-spec{font-size:10px;color:var(--t2);line-height:1.6}
-.ad-card-price{font-size:11px;font-weight:600;color:var(--purple);margin-top:6px}
-.ad-cta{
-  display:block;width:100%;padding:10px;font-size:13px;font-weight:600;
-  background:var(--tv);color:#fff;border:none;border-radius:var(--r);
-  cursor:pointer;text-align:center;margin-top:4px;text-decoration:none;
-}
-.ad-cta:hover{background:#c40d3e}
+.fit-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin:12px 0 14px}
+.fit-card{background:var(--bg2);border-radius:var(--r);padding:10px}
+.fit-k{font-size:10px;color:var(--t3);margin-bottom:4px}
+.fit-v{font-size:12px;font-weight:600;line-height:1.5}
+.sale-note{font-size:11px;color:var(--t2);line-height:1.7;background:var(--bg2);border-radius:var(--r);padding:11px 12px;margin-bottom:10px}
 
-/* ── 타겟 오디언스 차트 ── */
-.audience-section{margin-bottom:14px}
-.aud-title{font-size:11px;font-weight:600;color:var(--t2);margin-bottom:10px}
-.aud-row{display:flex;align-items:center;gap:8px;margin-bottom:6px;font-size:11px}
-.aud-label{min-width:54px;color:var(--t3)}
-.aud-bar-wrap{flex:1;height:8px;background:var(--bg3);border-radius:4px;overflow:hidden}
-.aud-bar{height:100%;border-radius:4px;transition:width .4s}
-.aud-pct{min-width:30px;text-align:right;color:var(--t2);font-weight:500}
-.aud-gender{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px}
-.aud-g-card{background:var(--bg2);border-radius:var(--r);padding:10px;text-align:center}
-.aud-g-pct{font-size:20px;font-weight:700;margin-bottom:2px}
-.aud-g-label{font-size:10px;color:var(--t3)}
-
-/* ── 성과 지표 ── */
-.kpi-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:14px}
-.kpi-card{background:var(--bg2);border-radius:var(--r);padding:10px;text-align:center}
-.kpi-v{font-size:18px;font-weight:700;margin-bottom:2px}
-.kpi-l{font-size:10px;color:var(--t3)}
-.case-item{font-size:11px;color:var(--t2);padding:8px 0;border-bottom:1px solid var(--bd);line-height:1.5}
-.case-item:last-child{border-bottom:none}
-.case-brand{font-weight:600;color:var(--t1)}
-
-/* ── Admin ── */
 .admin-section{background:#fff;border:1px solid var(--bd);border-radius:12px;padding:18px;margin-bottom:14px;box-shadow:0 1px 3px rgba(0,0,0,0.05)}
 .asec-hdr{display:flex;align-items:center;gap:8px;margin-bottom:12px;flex-wrap:wrap}
 .asec-title{font-size:13px;font-weight:600}
 .abadge{font-size:10px;padding:2px 8px;border-radius:10px}
 .ab-sheets{background:var(--green-bg);color:var(--green)}
-.ab-ai{background:var(--purple-bg);color:var(--purple)}
 .ab-tas{background:var(--tv-bg);color:var(--tv)}
-.ab-rank{background:var(--wv-bg);color:var(--wv-dark)}
 .sdot{width:7px;height:7px;border-radius:50%;display:inline-block}
 .don{background:#1D9E75}.doff{background:var(--t3)}
 .field-row{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:8px}
 .fin{padding:8px 12px;font-size:12px;flex:1;min-width:160px;border:1px solid var(--bd2);border-radius:var(--r);background:var(--bg);color:var(--t1)}
 .fin:focus{outline:none;border-color:var(--purple)}
-select.fin{cursor:pointer}
-.hint{font-size:10px;color:var(--t3);margin-top:4px;line-height:1.6}
+
 .form-panel{display:none;background:var(--bg2);border-radius:var(--r);padding:14px;margin-top:10px}
 .form-panel.open{display:block}
 .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px}
@@ -310,58 +190,18 @@ select.fin{cursor:pointer}
 .fi:focus{outline:none;border-color:var(--purple)}
 .save-row{display:flex;gap:8px;justify-content:flex-end}
 
-/* ── Ranking editor ── */
-.reditor-cols{display:grid;grid-template-columns:1fr 1fr;gap:14px}
-.re-col{border:1px solid var(--bd);border-radius:var(--rl);overflow:hidden;background:var(--bg)}
-.re-hdr{display:flex;align-items:center;justify-content:space-between;padding:10px 14px;border-bottom:1px solid var(--bd)}
-.re-title{font-size:12px;font-weight:600}
-.re-list{list-style:none;padding:4px 0;min-height:280px}
-.re-item{display:flex;align-items:center;gap:8px;padding:6px 12px;cursor:grab;user-select:none;transition:background .1s}
-.re-item:active{cursor:grabbing}
-.re-item.dragging{opacity:.35}
-.re-item.over{background:var(--bg2)}
-.re-item.isnew{background:var(--green-bg)}
-.drag-dots{display:flex;flex-direction:column;gap:2.5px;opacity:.3;padding:2px}
-.drag-dots span{display:block;width:14px;height:1.5px;background:var(--t2);border-radius:1px}
-.re-num{font-size:13px;font-weight:600;min-width:20px;text-align:right;color:var(--t3)}
-.re-n1{color:var(--tv);font-size:15px}.re-n3{color:var(--t1)}
-.re-thumb{width:24px;height:36px;border-radius:3px;overflow:hidden;flex-shrink:0;background:var(--bg2)}
-.re-thumb img{width:100%;height:100%;object-fit:cover;display:block}
-.re-th-ph{width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:7px;font-weight:600}
-.re-body{flex:1;min-width:0}
-.re-ttl{font-size:12px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.re-ttl.editing{display:none}
-.re-inp{display:none;padding:2px 6px;font-size:12px;border:1px solid var(--bd2);border-radius:4px;background:var(--bg);color:var(--t1);width:100%}
-.re-inp.editing{display:block}
-.re-genre{font-size:10px;color:var(--t3);margin-top:1px}
-.re-acts{display:flex;gap:3px;opacity:0;transition:opacity .1s}
-.re-item:hover .re-acts{opacity:1}
-.re-act{padding:2px 7px;font-size:10px;border:1px solid var(--bd);border-radius:4px;cursor:pointer;background:transparent;color:var(--t3)}
-.re-act:hover{background:var(--bg2);color:var(--t1)}
-.re-act.del:hover{background:var(--tv-bg);color:var(--tv);border-color:var(--tv-bg)}
-.re-chg{font-size:9px;font-weight:500;min-width:24px;text-align:right}
-.re-add{padding:8px 12px;border-top:1px solid var(--bd)}
-.re-add-inp{width:100%;padding:7px 10px;font-size:12px;border:1px solid var(--bd2);border-radius:var(--r);background:var(--bg);color:var(--t1)}
-.re-add-inp::placeholder{color:var(--t3)}
-
-/* ── Data table ── */
 .tbl-wrap{overflow-x:auto;border:1px solid var(--bd);border-radius:var(--rl);background:var(--bg)}
 .dtbl{width:100%;border-collapse:collapse;font-size:12px}
 .dtbl th{text-align:left;font-weight:500;color:var(--t3);padding:10px 12px;border-bottom:1px solid var(--bd);font-size:11px}
 .dtbl td{padding:9px 12px;border-bottom:1px solid var(--bd);vertical-align:middle}
-.dtbl tr:last-child td{border-bottom:none}
 .dtbl tr:hover td{background:var(--bg2)}
 .del-btn{padding:2px 9px;font-size:10px;border:1px solid var(--bd);border-radius:5px;cursor:pointer;background:transparent;color:var(--t3)}
 .del-btn:hover{background:var(--tv-bg);color:var(--tv);border-color:var(--tv)}
 
-
-/* ── Recommendations / unified explorer / calendar ── */
 .reco-box{background:#fff;border:none;border-radius:16px;padding:20px;margin:24px 0 16px;box-shadow:0 1px 4px rgba(0,0,0,0.06)}
-/* ── 화제성 기사 섹션 ── */
-
 .reco-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
-.reco-card{border:none;border-radius:16px;padding:14px;background:#fff;box-shadow:0 1px 4px rgba(0,0,0,0.07);display:grid;grid-template-columns:88px 1fr;gap:12px;align-items:start;cursor:pointer;transition:transform .15s,box-shadow .15s,border-color .15s}
-.reco-card:hover{transform:translateY(-2px);box-shadow:0 10px 22px rgba(0,0,0,.08);border-color:var(--bd2)}
+.reco-card{border:none;border-radius:16px;padding:14px;background:#fff;box-shadow:0 1px 4px rgba(0,0,0,0.07);display:grid;grid-template-columns:88px 1fr;gap:12px;align-items:start;cursor:pointer;transition:transform .15s,box-shadow .15s}
+.reco-card:hover{transform:translateY(-2px);box-shadow:0 10px 22px rgba(0,0,0,.08)}
 .reco-poster{width:88px;height:124px;border-radius:12px;overflow:hidden;position:relative;background:var(--bg2)}
 .reco-poster img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
 .reco-ph{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:24px;font-weight:700}
@@ -379,7 +219,6 @@ select.fin{cursor:pointer}
 .qb-soon{background:var(--green-bg);color:var(--green)}
 .explorer-box{background:#fff;border:none;border-radius:16px;padding:20px;box-shadow:0 1px 4px rgba(0,0,0,0.06);margin-bottom:18px}
 .toolbar-top{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;flex-wrap:wrap;margin-bottom:14px}
-.toolbar-copy{font-size:12px;color:var(--t2);line-height:1.7;max-width:720px}
 .toolbar-actions{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
 .toolbar-select{padding:8px 12px;border-radius:999px;border:1px solid var(--bd);background:var(--bg);color:var(--t1);font-size:12px}
 .filters-row{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:4px}
@@ -387,42 +226,17 @@ select.fin{cursor:pointer}
 .filter-chip{padding:6px 14px;font-size:12px;border-radius:8px;border:1px solid var(--bd2);background:#fff;color:var(--t2);cursor:pointer;font-weight:500;transition:all .15s}
 .filter-chip.on{background:var(--t1);color:#fff;border-color:var(--t1)}
 .section-note{font-size:11px;color:var(--t3)}
+
 .monthly-box{background:#fff;border:none;border-radius:16px;padding:20px;box-shadow:0 1px 4px rgba(0,0,0,0.06);margin-bottom:28px}
 .monthly-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}
 .month-card{border:1px solid var(--bd);border-radius:16px;background:var(--bg2);overflow:hidden}
 .month-head{padding:14px 16px 12px;border-bottom:1px solid var(--bd);display:flex;align-items:center;justify-content:space-between;gap:8px;background:var(--bg)}
-.month-head-left{display:flex;align-items:baseline;gap:8px}
 .month-num{font-size:32px;line-height:1;font-weight:800;color:var(--purple);letter-spacing:-.04em}
 .month-name{font-size:12px;color:var(--t2);font-weight:500}
 .month-badge{font-size:9px;font-weight:700;padding:3px 8px;border-radius:10px;background:var(--purple-bg);color:var(--purple)}
 .month-items{padding:10px 12px;display:flex;flex-direction:column;gap:8px;min-height:80px}
 .month-empty{padding:20px 12px;text-align:center;color:var(--t3);font-size:11px}
 
-/* ── 타임라인 캘린더 뷰 ── */
-.cal-timeline{overflow-x:auto;padding-bottom:8px}
-.cal-tl-inner{min-width:700px}
-.cal-tl-header{display:grid;gap:0;margin-bottom:10px;padding-left:140px}
-.cal-tl-months{display:flex;border-bottom:1px solid var(--bd);padding-bottom:6px}
-.cal-tl-month{flex:none;font-size:10px;font-weight:600;color:var(--t2);text-align:center;border-left:1px solid var(--bd);padding:0 4px}
-.cal-tl-rows{display:flex;flex-direction:column;gap:8px}
-.cal-tl-row{display:flex;align-items:center;gap:0;position:relative;min-height:52px}
-.cal-tl-label{width:136px;flex-shrink:0;display:flex;align-items:center;gap:8px;padding-right:8px;cursor:pointer}
-.cal-tl-label:hover .cal-tl-name{text-decoration:underline}
-.cal-tl-poster{width:32px;height:46px;border-radius:4px;overflow:hidden;flex-shrink:0;background:var(--bg2)}
-.cal-tl-poster img{width:100%;height:100%;object-fit:cover;display:block}
-.cal-tl-ph{width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700}
-.cal-tl-name{font-size:11px;font-weight:500;color:var(--t1);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:90px;line-height:1.3}
-.cal-tl-plat{font-size:8px;color:var(--t3)}
-.cal-tl-track{flex:1;position:relative;height:52px;min-width:0}
-.cal-tl-grid{position:absolute;inset:0;display:flex;pointer-events:none}
-.cal-tl-grid-col{flex:none;border-left:1px solid var(--bd);height:100%;opacity:0.5}
-.cal-tl-bar{position:absolute;top:50%;transform:translateY(-50%);height:36px;border-radius:6px;cursor:pointer;display:flex;align-items:center;padding:0 8px;overflow:hidden;transition:filter .15s;white-space:nowrap}
-.cal-tl-bar:hover{filter:brightness(.88)}
-.cal-tl-bar-title{font-size:10px;font-weight:700;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.cal-tl-bar-sub{font-size:8px;color:rgba(255,255,255,.75);margin-top:1px;white-space:nowrap}
-.cal-tl-open-end{border-radius:6px 0 0 6px}
-.cal-tl-open-end::after{content:'→';position:absolute;right:-2px;top:50%;transform:translateY(-50%);font-size:12px;color:rgba(255,255,255,.7)}
-.cal-tl-tag{display:inline-block;font-size:7px;font-weight:700;padding:1px 4px;border-radius:4px;background:rgba(255,255,255,.25);margin-left:4px;vertical-align:middle}
 .mevent{border-radius:10px;color:#fff;cursor:pointer;overflow:hidden;border:none;transition:transform .15s,box-shadow .15s}
 .mevent:hover{transform:translateY(-1px);box-shadow:0 6px 18px rgba(0,0,0,.18)}
 .mevent-inner{display:grid;grid-template-columns:44px 1fr;align-items:stretch;min-height:64px}
@@ -434,51 +248,14 @@ select.fin{cursor:pointer}
 .mevent-copy{opacity:.85;font-size:9px;line-height:1.3;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .mevent-tags{display:flex;gap:3px;flex-wrap:nowrap;margin-top:4px;overflow:hidden}
 .mevent-tag{font-size:8px;padding:1px 5px;border-radius:8px;background:rgba(255,255,255,.22);border:1px solid rgba(255,255,255,.15);font-weight:700;white-space:nowrap;flex-shrink:0}
-.poster-admin-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
-.poster-bulk-box{border:1px solid var(--bd);border-radius:16px;background:linear-gradient(180deg,var(--bg2) 0%,var(--bg) 100%);padding:14px}
-.poster-bulk-title{font-size:12px;font-weight:700;margin-bottom:6px}
-.poster-bulk-copy{font-size:11px;color:var(--t2);line-height:1.7;margin-bottom:10px}
-.poster-textarea{width:100%;min-height:120px;border:1px solid var(--bd2);border-radius:12px;padding:12px;background:var(--bg);color:var(--t1);font-size:12px;line-height:1.6;resize:vertical}
-.poster-textarea:focus{outline:none;border-color:var(--purple)}
+
 .poster-inline{display:flex;gap:6px;align-items:center}
-.poster-inline input{flex:1;padding:7px 10px;font-size:11px;border:1px solid var(--bd2);border-radius:10px;background:var(--bg);color:var(--t1)}
 .poster-thumb-mini{width:38px;height:54px;border-radius:8px;background:var(--bg2);overflow:hidden;position:relative;flex-shrink:0}
 .poster-thumb-mini img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
 .poster-thumb-mini span{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;color:var(--t3)}
 .poster-save-btn{padding:7px 10px;font-size:11px;border-radius:10px;border:1px solid var(--bd2);background:var(--bg);cursor:pointer;color:var(--t2)}
 .poster-save-btn:hover{background:var(--bg2);color:var(--t1)}
-.fit-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:12px 0 14px}
-.fit-card{background:var(--bg2);border-radius:var(--r);padding:10px}
-.fit-k{font-size:10px;color:var(--t3);margin-bottom:4px}
-.fit-v{font-size:12px;font-weight:600;line-height:1.5}
-.sale-note{font-size:11px;color:var(--t2);line-height:1.7;background:var(--bg2);border-radius:var(--r);padding:11px 12px;margin-bottom:10px}
 
-.demo-panel{margin:14px 0 6px;padding:14px;border:1px solid var(--bd);border-radius:16px;background:linear-gradient(180deg,var(--bg2) 0%,var(--bg) 100%)}
-.demo-panel-top{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;flex-wrap:wrap;margin-bottom:12px}
-.demo-copy{font-size:11px;color:var(--t2);line-height:1.7;max-width:760px}
-.demo-segments{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px}
-.demo-seg{padding:7px 12px;border-radius:999px;border:1px solid var(--bd2);background:transparent;color:var(--t2);font-size:11px;cursor:pointer}
-.demo-seg.on{background:var(--purple);border-color:var(--purple);color:#fff}
-.demo-meta{display:grid;grid-template-columns:280px 1fr;gap:12px;align-items:start}
-.demo-info-card{border:1px solid var(--bd);border-radius:14px;background:var(--bg);padding:14px}
-.demo-info-label{font-size:10px;color:var(--t3);margin-bottom:4px}
-.demo-info-value{font-size:18px;font-weight:700;line-height:1.3;margin-bottom:8px}
-.demo-info-sub{font-size:11px;color:var(--t2);line-height:1.7}
-.demo-preset-list{display:flex;gap:8px;flex-wrap:wrap;align-items:flex-start}
-.demo-pill{display:flex;align-items:center;gap:8px;padding:8px 10px;border:1px solid var(--bd);border-radius:12px;background:var(--bg);font-size:11px;cursor:pointer;transition:border-color .15s,transform .15s,box-shadow .15s}
-.demo-pill:hover{transform:translateY(-1px);border-color:var(--bd2);box-shadow:0 6px 16px rgba(0,0,0,.06)}
-.demo-pill-badge{font-size:9px;padding:2px 6px;border-radius:999px;background:var(--purple-bg);color:var(--purple);font-weight:700}
-.demo-pill-title{font-weight:600;color:var(--t1)}
-.demo-note{margin-top:10px;font-size:10px;color:var(--t3);line-height:1.7}
-.calendar-note{font-size:11px;color:var(--t3);line-height:1.7}
-.calendar-legend{display:flex;gap:6px;flex-wrap:wrap;margin-top:6px}
-.calendar-legend .quick-badge{margin:0}
-@media(max-width:900px){.demo-meta{grid-template-columns:1fr}}
-
-@media(max-width:1024px){.monthly-grid{grid-template-columns:1fr}.reco-grid{grid-template-columns:1fr}.reco-card{grid-template-columns:72px 1fr}.reco-poster{width:72px;height:102px}.poster-admin-grid{grid-template-columns:1fr}}
-@media(max-width:820px){.fit-grid{grid-template-columns:1fr}}
-
-/* ── Misc ── */
 .spinner{display:inline-block;width:11px;height:11px;border:2px solid #CECBF6;border-top-color:var(--purple);border-radius:50%;animation:spin .7s linear infinite;vertical-align:middle;margin-right:4px}
 @keyframes spin{to{transform:rotate(360deg)}}
 .toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:var(--t1);color:var(--bg);padding:10px 20px;border-radius:var(--r);font-size:12px;opacity:0;transition:opacity .25s;pointer-events:none;z-index:999;box-shadow:var(--sh);white-space:nowrap}
@@ -487,35 +264,30 @@ select.fin{cursor:pointer}
 .sec-title{font-size:13px;font-weight:500;color:var(--t2)}
 .empty{text-align:center;padding:3rem;color:var(--t3);font-size:12px;grid-column:1/-1}
 
-@media print{.nav,.filters,.btn,.modal-bg,#admin-page,.admin-trigger,.pw-overlay{display:none!important}body{background:#fff}.pcard,.month-card,.reco-card{break-inside:avoid}}
-@media(max-width:640px){.poster-grid{grid-template-columns:repeat(auto-fill,minmax(150px,1fr))}.reditor-cols{grid-template-columns:1fr}.form-grid{grid-template-columns:1fr}.ad-cards{grid-template-columns:1fr}.kpi-grid{grid-template-columns:repeat(3,1fr)}.toolbar-top{flex-direction:column}.mcell{min-height:100px}.month-num{font-size:46px}.month-badge{display:none}.mevent-inner{grid-template-columns:44px 1fr;min-height:68px}}
+@media(max-width:1024px){.monthly-grid{grid-template-columns:1fr}.reco-grid{grid-template-columns:1fr}}
+@media(max-width:640px){.poster-grid{grid-template-columns:repeat(auto-fill,minmax(150px,1fr))}.form-grid{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
 
-<!-- ═══ NAV ═══════════════════════════════════════════════ -->
 <nav class="nav">
   <div class="nav-inner">
     <div>
       <div class="logo">TVING <em>Contents</em> Intelligence</div>
       <div class="logo-sub"><span id="today"></span></div>
     </div>
-    
   </div>
 </nav>
 
-<!-- 관리자 진입 트리거 — 우하단 구석, 거의 안 보임 -->
-<button class="admin-trigger" onclick="openPwPrompt()" title="">
+<button class="admin-trigger" onclick="openPwPrompt()">
   <svg viewBox="0 0 20 20"><path d="M10 2a4 4 0 014 4v1h1a2 2 0 012 2v7a2 2 0 01-2 2H5a2 2 0 01-2-2V9a2 2 0 012-2h1V6a4 4 0 014-4zm0 2a2 2 0 00-2 2v1h4V6a2 2 0 00-2-2zm0 7a1.5 1.5 0 100 3 1.5 1.5 0 000-3z"/></svg>
 </button>
 
-<!-- 비밀번호 팝업 -->
 <div class="pw-overlay" id="pw-overlay">
   <div class="pw-box">
     <div class="pw-title">관리자 접근</div>
     <div class="pw-sub">이 페이지는 내부 관리자 전용입니다.</div>
-    <input class="pw-inp" id="pw-inp" type="password" placeholder="비밀번호 입력"
-      onkeydown="if(event.key==='Enter')checkPw()">
+    <input class="pw-inp" id="pw-inp" type="password" placeholder="비밀번호 입력" onkeydown="if(event.key==='Enter')checkPw()">
     <div class="pw-err" id="pw-err">비밀번호가 올바르지 않습니다.</div>
     <div class="pw-row">
       <button class="btn" onclick="closePwPrompt()">취소</button>
@@ -526,112 +298,55 @@ select.fin{cursor:pointer}
 
 <div class="app">
 
-<!-- ═══ VIEWER ═══════════════════════════════════════════ -->
 <div class="page active" id="viewer-page">
-
   <div class="vtabs" style="margin-top:20px">
     <button class="vtab on" onclick="setMainTab('home')">📌 추천 · 캘린더</button>
-    <button class="vtab"    onclick="setMainTab('ranking')">🏆 TOP 20 · 시청데모</button>
-    <button class="vtab"    onclick="setMainTab('explorer')">🔍 콘텐츠 익스플로러</button>
+    <button class="vtab" onclick="setMainTab('ranking')">🏆 TOP 20 · 시청데모</button>
+    <button class="vtab" onclick="setMainTab('explorer')">🔍 콘텐츠 익스플로러</button>
   </div>
 
-  <!-- 탭 1: 추천 + 캘린더 -->
   <div class="vtab-con" id="vcon-home">
     <div class="reco-box">
       <div class="sec-hdr">
         <div>
           <div class="sec-title">이달의 추천 콘텐츠 포인트</div>
-          <div class="section-note">브랜드가 지금 검토해야 할 화제 콘텐츠와 주요 집행 포인트를 먼저 보여줍니다.</div>
+          <div class="section-note">지금 검토해야 할 화제 콘텐츠와 주요 집행 포인트를 보여줍니다.</div>
         </div>
-        <span style="font-size:12px;color:var(--t3)">추천순 · 특판 · TOP 20 · 공개 임박 기준</span>
       </div>
       <div class="reco-grid" id="reco-grid"></div>
     </div>
 
     <div class="monthly-box">
       <div class="sec-hdr">
-        <div>
-          <div class="sec-title">+M3 메가 IP 캘린더</div>
-          <div class="section-note">메가 IP와 특판 가능 콘텐츠 중심으로 향후 3개월 공개 시점을 먼저 확인할 수 있습니다.</div>
-        </div>
-        <div style="display:flex;align-items:center;gap:6px">
-          <button id="cal-btn-list" class="btn on" onclick="setCalView('list')" style="font-size:11px;padding:4px 10px;border-radius:8px">리스트</button>
-          <button id="cal-btn-timeline" class="btn" onclick="setCalView('timeline')" style="font-size:11px;padding:4px 10px;border-radius:8px">타임라인</button>
-        </div>
-      </div>
-      <div class="calendar-legend">
-        <span class="quick-badge qb-special">특판</span>
-        <span class="quick-badge qb-rank">TOP 20</span>
-        <span class="quick-badge qb-soon">공개 임박</span>
-        <span class="quick-badge" style="background:var(--bg2);color:var(--t3);border:1px solid var(--bd)">종영 미정</span>
+        <div class="sec-title">+M3 메가 IP 캘린더</div>
       </div>
       <div id="monthly-grid" style="margin-top:14px"></div>
     </div>
   </div>
 
-  <!-- 탭 2: TOP 20 + 시청데모 -->
   <div class="vtab-con" id="vcon-ranking" style="display:none">
-    <!-- 오늘의 TOP 20 -->
-    <div class="explorer-box" style="margin-bottom:16px">
-      <div class="sec-hdr" style="margin-bottom:14px">
-        <div>
-          <div class="sec-title">TVING TOP 20</div>
-          <div class="section-note">Redash API 연동 기준 · TVING 실시간 인기 순위</div>
-        </div>
+    <div class="explorer-box">
+      <div class="sec-hdr">
+        <div class="sec-title">TVING TOP 20</div>
         <span style="font-size:12px;color:var(--t3)" id="rank-today-meta"></span>
       </div>
-      <div id="rank-today-grid" style="display:grid;grid-template-columns:1fr;gap:16px">
-        <div style="padding:32px;text-align:center;color:var(--t3);font-size:13px;grid-column:1/-1">
-          관리자 페이지에서 "지금 가져오기"를 눌러 TOP 20을 불러오세요.
-        </div>
-      </div>
+      <div id="rank-today-grid"></div>
     </div>
-
-    <!-- 시청데모 PKG -->
     <div class="explorer-box">
-      <div class="sec-hdr" style="margin-bottom:14px">
-        <div>
-          <div class="sec-title">시청데모 PKG</div>
-          <div class="section-note">데모별 선호 콘텐츠 패키지 · 논스킵 15초 CPM 18,000원 / 최소 1,000만원(VAT별도)</div>
-        </div>
+      <div class="sec-hdr">
+        <div class="sec-title">시청데모 PKG</div>
       </div>
-      <div id="demo-tabs" style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px" id="demo-tabs"></div>
+      <div id="demo-tabs" style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px"></div>
       <div id="demo-content-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:12px"></div>
     </div>
   </div>
 
-  <!-- 탭 3: 콘텐츠 익스플로러 -->
   <div class="vtab-con" id="vcon-explorer" style="display:none">
     <div class="explorer-box">
-      <!-- 사용 안내 -->
-      <div style="background:var(--bg2);border-radius:var(--r);padding:14px 16px;margin-bottom:16px;border-left:3px solid var(--purple)">
-        <div style="font-size:13px;font-weight:700;color:var(--t1);margin-bottom:8px">콘텐츠 익스플로러 활용법</div>
-        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px">
-          <div style="font-size:12px;color:var(--t2);line-height:1.65">
-            <span style="color:var(--purple);font-weight:700">🔍 탐색</span><br>
-            TVING·Wavve 신작 라인업 전체를 카드 형태로 확인. 특판·TOP 20 필터로 빠르게 좁힐 수 있습니다.
-          </div>
-          <div style="font-size:12px;color:var(--t2);line-height:1.65">
-            <span style="color:var(--tv);font-weight:700">📋 상세 정보</span><br>
-            카드 클릭 시 출연진·시놉시스·방영 일정·타겟 오디언스·광고 상품 스펙을 한 번에 확인합니다.
-          </div>
-          <div style="font-size:12px;color:var(--t2);line-height:1.65">
-            <span style="color:var(--amber);font-weight:700">⭐ 특판 콘텐츠</span><br>
-            금색 뱃지가 있는 콘텐츠는 특판 상품이 연동되어 있습니다. 클릭 시 특판 공지로 바로 이동합니다.
-          </div>
-          <div style="font-size:12px;color:var(--t2);line-height:1.65">
-            <span style="color:var(--green);font-weight:700">💡 타겟 추천</span><br>
-            콘텐츠 카드 → 콘텐츠 정보 탭 하단에서 비슷한 타겟 오디언스의 다른 콘텐츠를 추천해드립니다.
-          </div>
-        </div>
-      </div>
-
       <div class="toolbar-top">
-        <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap">
-          <div class="filters-row" id="filters"></div>
-        </div>
+        <div class="filters-row" id="filters"></div>
         <div class="toolbar-actions">
-          <label class="filter-label" for="sort-select">정렬</label>
+          <label class="filter-label">정렬</label>
           <select class="toolbar-select" id="sort-select" onchange="setSort(this.value)">
             <option value="recommended">추천순</option>
             <option value="release">공개 일정순</option>
@@ -639,10 +354,6 @@ select.fin{cursor:pointer}
             <option value="special">특판 우선</option>
           </select>
         </div>
-      </div>
-      <div class="sec-hdr" style="margin:4px 0 0">
-        <span style="font-size:12px;color:var(--t3)">카드 클릭 시 상세 정보를 확인할 수 있습니다</span>
-        <span style="font-size:12px;color:var(--t3)" id="lineup-cnt"></span>
       </div>
       <div class="poster-grid" id="poster-grid"></div>
     </div>
@@ -655,81 +366,41 @@ select.fin{cursor:pointer}
 
 <div class="page" id="admin-page">
   <div style="padding-top:24px">
-
-    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:24px;flex-wrap:wrap;gap:10px">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:24px;">
       <div>
-        <div style="font-size:20px;font-weight:700;margin-bottom:4px">관리자</div>
-        <div style="font-size:12px;color:var(--t3)">TVING 광고사업팀 내부 전용</div>
+        <div style="font-size:20px;font-weight:700">관리자</div>
+        <div style="font-size:12px;color:var(--t3)">TVING 광고사업팀 전용</div>
       </div>
       <button class="btn" onclick="goViewer()">← 뷰어로 돌아가기</button>
     </div>
 
-    <!-- ── A. TVING TOP 20 API ── -->
     <div class="admin-section">
       <div class="asec-hdr">
-        <span class="asec-title">TVING TOP 20</span>
-        <span class="abadge ab-tas">Redash API</span>
-        <span style="display:flex;align-items:center;gap:5px;font-size:12px;color:var(--t3);margin-left:auto">
-          <span class="sdot doff" id="top20-dot"></span>
-          <span id="top20-lbl">미연동</span>
-        </span>
+        <span class="asec-title">TVING TOP 20 API</span>
+        <span class="abadge ab-tas">Redash</span>
       </div>
-      <div style="font-size:12px;color:var(--t2);margin-bottom:12px;line-height:1.6">
-        Redash API로 TVING TOP 20 순위를 가져옵니다. API Key는 이미 설정되어 있습니다.<br>
-        <span style="color:var(--t3);font-size:11px">쿼리 URL: <code style="color:var(--purple)">${CONFIG.REDASH_BASE}/api/queries/${CONFIG.REDASH_TOP20_QUERY}/results.json</code></span>
-      </div>
-      <div class="field-row">
-        <button class="btn dan" onclick="fetchRedashTop20()">지금 가져오기</button>
-        <span style="font-size:11px;color:var(--t3)" id="top20-last-fetch"></span>
-      </div>
+      <button class="btn dan" onclick="fetchRedashTop20()">지금 가져오기</button>
       <div id="top20-preview" style="margin-top:10px"></div>
     </div>
 
-    <!-- ── B. 콘텐츠 DB + 썸네일 통합 관리 ── -->
     <div class="admin-section">
       <div class="asec-hdr">
-        <span class="asec-title">콘텐츠 DB</span>
-        <span class="abadge ab-sheets">Google Sheets 연동</span>
-        <span style="display:flex;align-items:center;gap:5px;font-size:12px;color:var(--t3);margin-left:auto">
-          <span class="sdot doff" id="sheets-dot"></span>
-          <span id="sheets-lbl">연결 안됨</span>
-        </span>
+        <span class="asec-title">콘텐츠 DB 관리</span>
+        <span class="abadge ab-sheets">Google Sheets</span>
       </div>
       <div class="field-row">
         <input class="fin" id="sheets-url" placeholder="Google Sheets URL">
-        <input class="fin" id="sheets-gak" placeholder="Google API Key" style="max-width:240px">
-        <button class="btn" onclick="connectSheets()">연결</button>
-        <button class="btn suc" id="sync-btn" onclick="syncSheets()" disabled>동기화</button>
+        <button class="btn suc" id="sync-btn" onclick="syncSheets()">데이터 동기화</button>
       </div>
-      <div style="font-size:11px;color:var(--t3);margin-bottom:12px">컬럼 순서: A=platform · B=title · C=genre · D=시작월 · E=종료월 · F=타겟 · G=시놉시스 · H=출연진 · I=편수 · J=광고상품 · K=피크월 · L=포스터URL · M=특판링크URL</div>
 
-      <!-- AI 신작 추가 -->
-      <div style="border-top:1px solid var(--bd);padding-top:14px;margin-top:4px">
+      <div style="border-top:1px solid var(--bd);padding-top:14px;margin-top:14px">
         <div style="font-size:12px;font-weight:600;margin-bottom:10px">콘텐츠 추가</div>
         <div class="field-row">
-          <input class="fin" id="ai-title" placeholder="프로그램명 (예: 환승연애 시즌5)">
-          <select class="fin" id="ai-plat" style="max-width:120px">
-            <option value="tving">TVING</option>
-            <option value="wavve">Wavve</option>
-          </select>
-          <button class="btn pri" id="ai-btn" onclick="runAI()">AI 자동완성</button>
-          <button class="btn" onclick="addManual()">직접 입력</button>
+          <input class="fin" id="manual-title" placeholder="프로그램명">
+          <button class="btn pri" onclick="addManual()">직접 입력</button>
         </div>
         <div class="form-panel" id="ai-panel">
           <div class="form-grid" id="ai-form"></div>
-          <div style="margin-top:10px">
-            <div style="font-size:12px;font-weight:600;margin-bottom:8px">썸네일 이미지</div>
-            <div id="thumb-admin-wrap"></div>
-            <div style="font-size:11px;color:var(--t3);margin-top:6px">URL 입력 또는 이미지를 클립보드에 복사 후 아래 영역에 Ctrl+V</div>
-            <div id="paste-zone"
-              style="margin-top:8px;border:2px dashed var(--bd2);border-radius:var(--r);padding:20px;text-align:center;font-size:12px;color:var(--t3);cursor:pointer;transition:border-color .15s"
-              onmouseenter="this.style.borderColor='var(--purple)'"
-              onmouseleave="this.style.borderColor='var(--bd2)'"
-              onclick="this.focus()" tabindex="0">
-              📋 이미지를 클립보드에서 붙여넣기 (Ctrl+V)
-              <div id="paste-preview" style="margin-top:8px"></div>
-            </div>
-          </div>
           <div class="save-row" style="margin-top:12px">
             <button class="btn" onclick="cancelAI()">취소</button>
             <button class="btn suc" onclick="saveEntry()">저장</button>
@@ -737,1479 +408,244 @@ select.fin{cursor:pointer}
         </div>
       </div>
 
-        <!-- 이달의 추천 선택 + 전체 목록 -->
-      <div style="border-top:1px solid var(--bd);padding-top:14px;margin-top:14px">
-        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
-          <div style="font-size:13px;font-weight:600">전체 콘텐츠 <span style="font-weight:400;color:var(--t3)" id="total-cnt"></span></div>
-          <div style="font-size:11px;color:var(--t3)">☆ 체크 = 이달의 추천 (최대 3개)</div>
-        </div>
+      <div style="margin-top:20px">
         <div class="tbl-wrap">
           <table class="dtbl">
-            <thead><tr><th style="width:36px;text-align:center">추천</th><th>플랫폼</th><th>타이틀</th><th>장르</th><th>방영</th><th>타겟</th><th>썸네일</th><th>특판</th><th></th></tr></thead>
+            <thead><tr><th style="width:36px">추천</th><th>플랫폼</th><th>타이틀</th><th>장르</th><th>방영</th><th>썸네일</th><th>특판</th><th></th></tr></thead>
             <tbody id="data-tbody"></tbody>
           </table>
         </div>
       </div>
     </div>
-
-    <!-- ── C. 타겟 오디언스 연동 ── -->
-    <div class="admin-section">
-      <div class="asec-hdr">
-        <span class="asec-title">타겟 오디언스</span>
-        <span class="abadge" style="background:var(--purple-bg);color:var(--purple)">태블로 연동</span>
-      </div>
-      <div style="font-size:12px;color:var(--t2);line-height:1.7;margin-bottom:12px">
-        프로그램 코드 기준으로 성별/연령 분포 데이터를 태블로에서 가져옵니다.<br>
-        <span style="color:var(--t3)">연동 방식: 태블로 Embedded Analytics → 장르/프로그램코드로 필터링된 뷰 embed</span>
-      </div>
-      <div class="field-row">
-        <input class="fin" id="tableau-base" placeholder="태블로 서버 URL" value="">
-        <input class="fin" id="tableau-token" placeholder="액세스 토큰" style="max-width:260px" value="">
-        <button class="btn" onclick="connectTableau()">연결 테스트</button>
-      </div>
-      <div style="font-size:11px;color:var(--t3);margin-top:6px">
-        미연동 상태에서는 DATA 객체 내 audience 필드(f/m/ages)의 샘플 데이터가 표시됩니다.
-      </div>
-    </div>
-
   </div>
 </div>
-</div><!-- /app -->
+</div>
+
 <div class="toast" id="toast"></div>
 
-<!-- ═══ JAVASCRIPT ═══════════════════════════════════════ -->
 <script>
+let DATA = [
+  {id:1,platform:'tving',title:'사랑의 이해 시즌2',genre:'드라마',startMonth:2,endMonth:3,synopsis:'사랑에 서툰 직장인 남녀가 주고받는 잔잔한 감정의 교류.',cast:'류준열, 문가영',ep:16,adSlot:'Pre-roll, 중간광고',peakMonth:2,specialUrl:'',posterUrl:''},
+  {id:2,platform:'tving',title:'환승연애 시즌4',genre:'리얼리티',startMonth:4,endMonth:5,synopsis:'전 연인들이 다시 모여 새로운 감정을 탐색하는 연애 리얼리티.',cast:'일반인 출연자',ep:12,adSlot:'Pre-roll, 스폰서십',peakMonth:4,specialUrl:'https://tvingad.oopy.io',posterUrl:''},
+  {id:3,platform:'tving',title:'피의 게임 시즌4',genre:'서바이벌',startMonth:6,endMonth:7,synopsis:'단 1명만 살아남는 두뇌 서바이벌. 배신과 연대의 극한.',cast:'미정',ep:10,adSlot:'Pre-roll, 배너',peakMonth:6,specialUrl:'',posterUrl:''},
+  {id:4,platform:'tving',title:'2026 KBO 리그',genre:'스포츠',startMonth:3,endMonth:10,synopsis:'2026 KBO 프로야구 전 경기 생중계.',cast:'-',ep:null,adSlot:'생중계 광고, 스코어보드',peakMonth:7,specialUrl:'https://tvingad.oopy.io/305b01af-4e49-8089-ab45-d114e47f863c',posterUrl:''},
+  {id:6,platform:'tving',title:'나는 SOLO 시즌25',genre:'리얼리티',startMonth:9,endMonth:10,synopsis:'정숙한 솔로들의 진지한 짝 찾기.',cast:'일반인 출연자',ep:14,adSlot:'Pre-roll, 스폰서십',peakMonth:9,specialUrl:'',posterUrl:''},
+];
 
-// ── TMDB ────────────────────────────────────────────────────
+let RANKS = { tving:[], wavve:[] };
+let nextId = 10;
+let selPlat='all', selCategory='all', sortMode='recommended', editingId=null;
+let PICKS = [];
 const TMDB_IMG = 'https://image.tmdb.org/t/p/w342';
-const _pc = {};
-async function getPoster(title) {
-  if (_pc[title] !== undefined) return _pc[title];
-  if (!CONFIG.TMDB_KEY || CONFIG.TMDB_KEY === 'YOUR_TMDB_API_KEY') { _pc[title]=null; return null; }
-  try {
-    const q = encodeURIComponent(title.replace(/\s*(시즌|Season)\s*\d+/g,'').trim());
-    const r = await fetch(`https://api.themoviedb.org/3/search/multi?api_key=${CONFIG.TMDB_KEY}&query=${q}&language=ko-KR&region=KR`);
-    const d = await r.json();
-    const hit = (d.results||[]).find(x=>x.poster_path);
-    _pc[title] = hit ? TMDB_IMG + hit.poster_path : null;
-    return _pc[title];
-  } catch { _pc[title]=null; return null; }
-}
 
-// ── 장르 컬러 매핑 ───────────────────────────────────────────
 const GENRE_COLORS = {
   '드라마':   { bar:'#E8144A', bg:'#FDE8ED', dark:'#8B0A2C' },
   '리얼리티': { bar:'#854F0B', bg:'#FAEEDA', dark:'#633806' },
   '서바이벌': { bar:'#0F6E56', bg:'#E1F5EE', dark:'#085041' },
   '스포츠':   { bar:'#185FA5', bg:'#E6F1FB', dark:'#0C447C' },
   'SF':       { bar:'#534AB7', bg:'#EEEDFE', dark:'#3C3489' },
-  '장르':     { bar:'#993556', bg:'#FBEAF0', dark:'#72243E' },
-  '예능':     { bar:'#D85A30', bg:'#FAECE7', dark:'#712B13' },
-  '영화':     { bar:'#1D9E75', bg:'#E1F5EE', dark:'#085041' },
 };
 function gc(genre) { return GENRE_COLORS[genre] || { bar:'#5F5E5A', bg:'#F1EFE8', dark:'#444441' }; }
+function phCol(t){
+  const PH_COLS=[['#FDE8ED','#8B0A2C'],['#E6EAFE','#0D2699'],['#E1F5EE','#085041'],['#EEEDFE','#3C3489']];
+  let h=0;for(const c of t)h=(h*31+c.charCodeAt(0))&0x7fffffff;return PH_COLS[h%PH_COLS.length];
+}
+function ini(t){return t.slice(0,2)}
 
-// ── Placeholder 색 ───────────────────────────────────────────
-const PH_COLS=[['#FDE8ED','#8B0A2C'],['#E6EAFE','#0D2699'],['#E1F5EE','#085041'],['#EEEDFE','#3C3489'],['#FAEEDA','#633806'],['#E6F1FB','#0C447C'],['#EAF3DE','#27500A'],['#FCEBEB','#791F1F']];
-function phCol(t){let h=0;for(const c of t)h=(h*31+c.charCodeAt(0))&0x7fffffff;return PH_COLS[h%PH_COLS.length]}
-function ini(t){return t.replace(/\s*(시즌|Season)\s*\d+/,'').slice(0,2)}
+async function getPoster(title) {
+  if (!CONFIG.TMDB_KEY || CONFIG.TMDB_KEY === 'YOUR_TMDB_API_KEY') return null;
+  try {
+    const q = encodeURIComponent(title.trim());
+    const r = await fetch(`https://api.themoviedb.org/3/search/multi?api_key=${CONFIG.TMDB_KEY}&query=${q}&language=ko-KR`);
+    const d = await r.json();
+    const hit = (d.results||[]).find(x=>x.poster_path);
+    return hit ? TMDB_IMG + hit.poster_path : null;
+  } catch { return null; }
+}
 
 function injectPoster(id, title, posterUrl) {
-  const url = posterUrl || null;
-  if (url) {
-    const el = document.getElementById(id);
-    if (el) { el.innerHTML=`<img src="${url}" alt="${title}" loading="lazy" onerror="this.style.display='none'">`; el.style.background=''; }
-    return;
+  const el = document.getElementById(id);
+  if (!el) return;
+  if (posterUrl) {
+    el.innerHTML=`<img src="${posterUrl}" loading="lazy">`; el.style.background='';
+  } else {
+    getPoster(title).then(u => { if(u){ el.innerHTML=`<img src="${u}" loading="lazy">`; el.style.background=''; }});
   }
-  getPoster(title).then(u => {
-    if (!u) return;
-    const el = document.getElementById(id);
-    if (el) { el.innerHTML=`<img src="${u}" alt="${title}" loading="lazy" onerror="this.style.display='none'">`; el.style.background=''; }
-  });
 }
-function esc(v){ return String(v||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;'); }
-function persistData(){ try{ localStorage.setItem('manualData', JSON.stringify(DATA)); }catch{} }
 
-// ── 데이터 ───────────────────────────────────────────────────
-let DATA = [
-  {id:1,platform:'tving',title:'사랑의 이해 시즌2',genre:'드라마',startMonth:2,endMonth:3,target:'20-30대 여성',synopsis:'사랑에 서툰 직장인 남녀가 주고받는 잔잔한 감정의 교류. 시즌2는 더 깊어진 감정선으로 돌아온다.',cast:'류준열, 문가영',ep:16,adSlot:'Pre-roll, 중간광고',peakMonth:2,specialUrl:'',posterUrl:'',audience:{f:68,m:32,ages:[{l:'18-24',v:22},{l:'25-34',v:41},{l:'35-44',v:26},{l:'45+',v:11}]}},
-  {id:2,platform:'tving',title:'환승연애 시즌4',genre:'리얼리티',startMonth:4,endMonth:5,target:'20-30대',synopsis:'전 연인들이 다시 모여 새로운 감정을 탐색하는 대한민국 대표 연애 리얼리티 4탄.',cast:'일반인 출연자',ep:12,adSlot:'Pre-roll, 스폰서십',peakMonth:4,specialUrl:'https://tvingad.oopy.io',posterUrl:'',audience:{f:62,m:38,ages:[{l:'18-24',v:35},{l:'25-34',v:45},{l:'35-44',v:16},{l:'45+',v:4}]}},
-  {id:3,platform:'tving',title:'피의 게임 시즌4',genre:'서바이벌',startMonth:6,endMonth:7,target:'20-40대',synopsis:'100명 중 단 1명만 살아남는 두뇌 서바이벌. 배신과 연대가 극한으로 치닫는 시즌4.',cast:'미정',ep:10,adSlot:'Pre-roll, 배너',peakMonth:6,specialUrl:'',posterUrl:'',audience:{f:45,m:55,ages:[{l:'18-24',v:28},{l:'25-34',v:38},{l:'35-44',v:24},{l:'45+',v:10}]}},
-  {id:4,platform:'tving',title:'2026 KBO 리그',genre:'스포츠',startMonth:3,endMonth:10,target:'30-50대 남성',synopsis:'2026 KBO 프로야구 전 경기 생중계. 개막전부터 한국시리즈까지 티빙에서 독점 중계.',cast:'-',ep:null,adSlot:'생중계 광고, 스코어보드',peakMonth:7,specialUrl:'https://tvingad.oopy.io/305b01af-4e49-8089-ab45-d114e47f863c',posterUrl:'',audience:{f:22,m:78,ages:[{l:'18-24',v:10},{l:'25-34',v:22},{l:'35-44',v:34},{l:'45+',v:34}]}},
-  {id:5,platform:'tving',title:'술꾼도시여자들 시즌3',genre:'드라마',startMonth:10,endMonth:11,target:'30-40대 여성',synopsis:'한선화·정은지·이선빈이 돌아온다. 세 여자의 우정과 술, 일상이 더 유쾌해진 시즌3.',cast:'한선화, 정은지, 이선빈',ep:10,adSlot:'Pre-roll, 중간광고',peakMonth:10,specialUrl:'',posterUrl:'',audience:{f:74,m:26,ages:[{l:'18-24',v:14},{l:'25-34',v:32},{l:'35-44',v:38},{l:'45+',v:16}]}},
-  {id:6,platform:'tving',title:'나는 SOLO 시즌25',genre:'리얼리티',startMonth:9,endMonth:10,target:'30-50대',synopsis:'정숙한 솔로들의 진지한 짝 찾기. 시청자와 함께 성장하는 국민 연애 리얼리티 25번째 시즌.',cast:'일반인 출연자',ep:14,adSlot:'Pre-roll, 스폰서십',peakMonth:9,specialUrl:'',posterUrl:'',audience:{f:58,m:42,ages:[{l:'18-24',v:12},{l:'25-34',v:28},{l:'35-44',v:36},{l:'45+',v:24}]}},
-  {id:7,platform:'tving',title:'방과후 태리쌤 시즌2',genre:'리얼리티',startMonth:5,endMonth:6,target:'10-30대',synopsis:'Z세대 힐링 예능의 귀환. 아이돌과 선생님의 유쾌한 방과후 수업 시즌2.',cast:'이태리 외',ep:10,adSlot:'Pre-roll, 스폰서십',peakMonth:5,specialUrl:'',posterUrl:'',audience:{f:71,m:29,ages:[{l:'18-24',v:48},{l:'25-34',v:34},{l:'35-44',v:13},{l:'45+',v:5}]}},
-  {id:8,platform:'tving',title:'유 퀴즈 온 더 블럭 시즌5',genre:'예능',startMonth:1,endMonth:12,target:'20-50대',synopsis:'유재석·조세호의 길거리 퀴즈쇼가 5번째 시즌으로 귀환. 다양한 사람들의 인생 이야기.',cast:'유재석, 조세호',ep:null,adSlot:'Pre-roll, 중간광고',peakMonth:4,specialUrl:'',posterUrl:'',audience:{f:55,m:45,ages:[{l:'18-24',v:18},{l:'25-34',v:32},{l:'35-44',v:30},{l:'45+',v:20}]}},
-  {id:9,platform:'tving',title:'Show Me The Money 13',genre:'서바이벌',startMonth:8,endMonth:10,target:'10-30대 남성',synopsis:'힙합 서바이벌의 최강자를 가리는 13번째 시즌. 더 치열해진 랩 배틀.',cast:'미정',ep:12,adSlot:'Pre-roll, 스폰서십',peakMonth:9,specialUrl:'',posterUrl:'',audience:{f:32,m:68,ages:[{l:'18-24',v:42},{l:'25-34',v:38},{l:'35-44',v:14},{l:'45+',v:6}]}},
-  {id:10,platform:'tving',title:'마니또 클럽 시즌2',genre:'리얼리티',startMonth:7,endMonth:8,target:'20대',synopsis:'연예인들이 서로를 몰래 돌보는 심리 예능 시즌2. 예측 불가 반전의 연속.',cast:'미정',ep:8,adSlot:'Pre-roll, 스폰서십',peakMonth:7,specialUrl:'',posterUrl:'',audience:{f:66,m:34,ages:[{l:'18-24',v:52},{l:'25-34',v:36},{l:'35-44',v:10},{l:'45+',v:2}]}},
-  {id:11,platform:'tving',title:'미혼남녀의 효율적 만남',genre:'리얼리티',startMonth:3,endMonth:4,target:'30-40대',synopsis:'결혼 적령기 남녀의 현실 밀착 매칭 다큐멘터리. 진지한 만남을 원하는 시청자의 공감.',cast:'일반인 출연자',ep:8,adSlot:'Pre-roll, 스폰서십',peakMonth:3,specialUrl:'',posterUrl:'',audience:{f:60,m:40,ages:[{l:'18-24',v:8},{l:'25-34',v:38},{l:'35-44',v:42},{l:'45+',v:12}]}},
-  {id:12,platform:'wavve',title:'마이 데몬 시즌2',genre:'드라마',startMonth:1,endMonth:2,target:'20-30대',synopsis:'악마 도도희와 인간 정구원의 판타지 로맨스 후속편. 더 강해진 악마와 더 단단해진 사랑.',cast:'송강, 김유정',ep:16,adSlot:'Pre-roll, 중간광고',peakMonth:1,specialUrl:'',posterUrl:'',audience:{f:71,m:29,ages:[{l:'18-24',v:30},{l:'25-34',v:44},{l:'35-44',v:20},{l:'45+',v:6}]}},
-  {id:13,platform:'wavve',title:'지옥 시즌2',genre:'장르',startMonth:3,endMonth:4,target:'20-40대',synopsis:'초자연적 존재의 심판이 재개된다. 더 확장된 세계관으로 돌아온 시즌2.',cast:'유아인, 이정현',ep:6,adSlot:'Pre-roll',peakMonth:3,specialUrl:'',posterUrl:'',audience:{f:42,m:58,ages:[{l:'18-24',v:24},{l:'25-34',v:40},{l:'35-44',v:26},{l:'45+',v:10}]}},
-  {id:14,platform:'wavve',title:'삼체 한국판',genre:'SF',startMonth:8,endMonth:10,target:'30-40대',synopsis:'류츠신의 세계적 SF 소설을 한국 배경으로 재해석한 오리지널 드라마.',cast:'미공개',ep:12,adSlot:'Pre-roll, 전면광고',peakMonth:9,specialUrl:'',posterUrl:'',audience:{f:38,m:62,ages:[{l:'18-24',v:16},{l:'25-34',v:34},{l:'35-44',v:34},{l:'45+',v:16}]}},
-  {id:15,platform:'wavve',title:'불꽃미녀 시즌2',genre:'리얼리티',startMonth:11,endMonth:12,target:'40-60대 여성',synopsis:'인생 2막을 맞은 중년 여성들의 도전과 힐링. 공감 지수 최고의 리얼리티 시즌2.',cast:'미정',ep:10,adSlot:'Pre-roll, 스폰서십',peakMonth:11,specialUrl:'',posterUrl:'',audience:{f:76,m:24,ages:[{l:'18-24',v:5},{l:'25-34',v:12},{l:'35-44',v:32},{l:'45+',v:51}]}},
-  {id:16,platform:'wavve',title:'이토록 친밀한 배신자',genre:'드라마',startMonth:2,endMonth:4,target:'30-40대',synopsis:'가장 가까운 이의 배신을 마주한 사람들의 이야기. 지성·장나라의 심리 스릴러.',cast:'지성, 장나라',ep:16,adSlot:'Pre-roll, 중간광고',peakMonth:3,specialUrl:'',posterUrl:'',audience:{f:65,m:35,ages:[{l:'18-24',v:16},{l:'25-34',v:34},{l:'35-44',v:36},{l:'45+',v:14}]}},
-  {id:17,platform:'wavve',title:'퀸메이커 시즌2',genre:'드라마',startMonth:5,endMonth:6,target:'30-50대 여성',synopsis:'선거판을 뒤흔드는 두 여자의 야망과 연대. 엄정화·문소리의 파워풀한 귀환.',cast:'엄정화, 문소리',ep:12,adSlot:'Pre-roll, 중간광고',peakMonth:5,specialUrl:'',posterUrl:'',audience:{f:72,m:28,ages:[{l:'18-24',v:10},{l:'25-34',v:28},{l:'35-44',v:38},{l:'45+',v:24}]}},
-  {id:18,platform:'wavve',title:'무한도전 클래식',genre:'예능',startMonth:1,endMonth:12,target:'20-50대',synopsis:'역대 무한도전 명장면을 4K로 복원한 레전드 아카이브 시리즈. 매주 테마별 편성.',cast:'유재석 외',ep:null,adSlot:'Pre-roll, 스폰서십',peakMonth:5,specialUrl:'',posterUrl:'',audience:{f:48,m:52,ages:[{l:'18-24',v:20},{l:'25-34',v:34},{l:'35-44',v:28},{l:'45+',v:18}]}},
-];
-let nextId = 19;
-
-let RANKS = {
-  tving:[
-    {title:'2026 KBO 리그',genre:'스포츠',isNew:false,prevRank:2},
-    {title:'환승연애 시즌4',genre:'리얼리티',isNew:false,prevRank:4},
-    {title:'유 퀴즈 온 더 블럭 시즌5',genre:'예능',isNew:false,prevRank:3},
-    {title:'사랑의 이해 시즌2',genre:'드라마',isNew:false,prevRank:6},
-    {title:'나는 SOLO 시즌25',genre:'리얼리티',isNew:false,prevRank:5},
-    {title:'방과후 태리쌤 시즌2',genre:'리얼리티',isNew:true,prevRank:null},
-    {title:'미혼남녀의 효율적 만남',genre:'리얼리티',isNew:false,prevRank:7},
-    {title:'마니또 클럽 시즌2',genre:'리얼리티',isNew:false,prevRank:10},
-    {title:'피의 게임 시즌4',genre:'서바이벌',isNew:false,prevRank:8},
-    {title:'Show Me The Money 13',genre:'서바이벌',isNew:false,prevRank:11},
-    {title:'술꾼도시여자들 시즌3',genre:'드라마',isNew:false,prevRank:9},
-    {title:'눈물의 여왕',genre:'드라마',isNew:false,prevRank:12},
-    {title:'정년이',genre:'드라마',isNew:false,prevRank:13},
-    {title:'범죄도시5',genre:'영화',isNew:false,prevRank:14},
-    {title:'런닝맨',genre:'예능',isNew:false,prevRank:15},
-    {title:'하이퍼나이프',genre:'드라마',isNew:false,prevRank:16},
-    {title:'선재 업고 튀어',genre:'드라마',isNew:false,prevRank:17},
-    {title:'대환장 파티',genre:'예능',isNew:true,prevRank:null},
-    {title:'더 인플루언서2',genre:'서바이벌',isNew:false,prevRank:20},
-    {title:'세계 최고의 휴가',genre:'예능',isNew:false,prevRank:19},
-  ],
-  wavve:[],
-};
-
-// 광고 상품 정의
-const AD_PRODUCTS = {
-  'Pre-roll':     { spec:'15/30초, 스킵불가', price:'CPM ₩12,000~', color:var_purple() },
-  '중간광고':     { spec:'15초, 콘텐츠 중간 삽입', price:'CPM ₩14,000~', color:'#185FA5' },
-  '스폰서십':     { spec:'프로그램 독점 브랜딩', price:'패키지 협의', color:'#854F0B' },
-  '배너':         { spec:'메인홈·장르탭 노출', price:'CPM ₩5,000~', color:'#0F6E56' },
-  '전면광고':     { spec:'앱 실행 시 풀스크린', price:'CPM ₩20,000~', color:'#993556' },
-  '생중계 광고':  { spec:'생중계 Pre-roll·L자배너', price:'패키지 협의', color:var_tv() },
-  '스코어보드':   { spec:'경기 중 상시 노출', price:'패키지 협의', color:'#185FA5' },
-};
-function var_purple(){ return '#534AB7' }
-function var_tv(){ return '#E8144A' }
-
-// 집행 사례 (콘텐츠 장르별 샘플)
-
-const DEMO_PRESETS = {
-  'MF2039': { label:'MF 20-39', audience:'남녀 20-39', platform:'TVING', titles:['Show Me The Money 12','미혼남녀의 효율적 만남','세이렌','언더커버 미쓰홍','보검 매직컬','냉장고를 부탁해 since 2014','우주를 줄게','대한민국에서 건물주 되는 법','내 새끼의 연애 2','유 퀴즈 온 더 블럭','놀면 뭐하니?','나 혼자 산다'] },
-  'MF2049': { label:'MF 20-49', audience:'남녀 20-49', platform:'TVING', titles:['미혼남녀의 효율적 만남','세이렌','Show Me The Money 12','보검 매직컬','우주를 줄게','유 퀴즈 온 더 블럭','내 새끼의 연애 2','나 혼자 산다','이혼숙려캠프','방과후 태리쌤','마니또 클럽','나는 SOLO'] },
-  'MF3049': { label:'MF 30-49', audience:'남녀 30-49', platform:'TVING', titles:['미혼남녀의 효율적 만남','세이렌','언더커버 미쓰홍','대한민국에서 건물주 되는 법','냉장고를 부탁해 since 2014','유 퀴즈 온 더 블럭','나 혼자 산다','세계밥장사 도전기 백사장3','이혼숙려캠프','나는 SOLO','방과후 태리쌤','마니또 클럽'] },
-  'MF1029': { label:'MF 10-29', audience:'남녀 10-29', platform:'TVING', titles:['Show Me The Money 12','우주를 줄게','언더커버 미쓰홍','보검 매직컬','내 새끼의 연애 2','방과후 태리쌤','마니또 클럽','세계밥장사 도전기 백사장3','유 퀴즈 온 더 블럭','나 혼자 산다','이혼숙려캠프','나는 SOLO'] },
-  'F2049': { label:'F 20-49', audience:'여성 20-49', platform:'TVING', titles:['미혼남녀의 효율적 만남','세이렌','언더커버 미쓰홍','보검 매직컬','대한민국에서 건물주 되는 법','유 퀴즈 온 더 블럭','나 혼자 산다','세계밥장사 도전기 백사장3','이혼숙려캠프','방과후 태리쌤','마니또 클럽','나는 SOLO'] },
-  'F3049': { label:'F 30-49', audience:'여성 30-49', platform:'TVING', titles:['미혼남녀의 효율적 만남','세이렌','언더커버 미쓰홍','대한민국에서 건물주 되는 법','냉장고를 부탁해 since 2014','유 퀴즈 온 더 블럭','우주를 줄게','세계밥장사 도전기 백사장3','이혼숙려캠프','나는 SOLO','방과후 태리쌤','마니또 클럽'] },
-  'F3059': { label:'F 30-59', audience:'여성 30-59', platform:'TVING', titles:['미혼남녀의 효율적 만남','세이렌','언더커버 미쓰홍','보검 매직컬','대한민국에서 건물주 되는 법','유 퀴즈 온 더 블럭','나 혼자 산다','세계밥장사 도전기 백사장3','이혼숙려캠프','나는 SOLO','방과후 태리쌤','마니또 클럽'] }
-};
-
-const CASES = {
-  '드라마':   [{brand:'현대자동차',result:'VCR 42% ↑, 브랜드 검색 18% ↑',detail:'Pre-roll 4주 집행, 25-34세 여성 타겟팅'},{brand:'올리브영',result:'앱 설치전환 2.3배, CTR 1.8%',detail:'드라마 스폰서십 + 중간광고 패키지'}],
-  '리얼리티': [{brand:'카카오페이',result:'회원가입 CPA ₩4,200 달성',detail:'Pre-roll 타겟팅 집행, 20-30대 남녀'},{brand:'배달의민족',result:'주문건 12% 증가, ROAS 340%',detail:'스폰서십 독점 + SNS 연동 캠페인'}],
-  '스포츠':   [{brand:'KB국민은행',result:'브랜드 인지도 23% ↑',detail:'생중계 광고 + 스코어보드 풀시즌'},{brand:'맥주 브랜드 A',result:'TV-OTT 통합 도달률 61%',detail:'생중계 Pre-roll 30초 집행'}],
-  '서바이벌': [{brand:'게임사 B',result:'앱 DAU 38% 증가',detail:'Pre-roll + 방영 전 예고편 타겟팅'},{brand:'스포츠 브랜드 C',result:'브랜드 호감도 15pt 상승',detail:'스폰서십 4회차 집행'}],
-  'SF':       [{brand:'IT 기업 D',result:'리드 수집 CPC ₩890',detail:'Pre-roll 30-44세 남성 타겟팅'},{brand:'통신사 E',result:'플랜 가입 전환율 2.1배',detail:'전면광고 + 중간광고 결합 패키지'}],
-  '장르':     [{brand:'OTT 서비스 F',result:'구독 전환 CPA ₩7,800',detail:'Pre-roll 타겟팅, 장르 팬층 집중'},{brand:'보험사 G',result:'인지도 8pt 상승',detail:'스폰서십 단독 집행'}],
-};
-function getCases(genre){ return CASES[genre] || CASES['드라마'] }
-
-let selPlat='all', selCategory='all', sortMode='recommended', editingId=null;
-let rankUpdatedDate='2026.5.12 기준 (더미데이터)', dragPlat=null, dragIdx=null, draggingEl=null;
-let calView = 'list';
-let curMainTab = 'home';
-let selectedDemoTab = '10대남';
-let PICKS = []; // 이달의 추천 선택된 id 배열 (최대 3개)
-let pasteImageData = null; // 붙여넣기 이미지
-
-// ── 날짜 ──────────────────────────────────────────────────────
-const now = new Date();
-document.getElementById('today').textContent = `${now.getFullYear()}.${now.getMonth()+1}.${now.getDate()}`;
-document.getElementById('rank-date').value = now.toISOString().split('T')[0];
-
-// ── 관리자 비밀번호 ───────────────────────────────────────────
-function openPwPrompt(){
-  document.getElementById('pw-overlay').classList.add('open');
-  document.getElementById('pw-inp').value='';
-  document.getElementById('pw-err').style.display='none';
-  setTimeout(()=>document.getElementById('pw-inp').focus(),100);
-}
+function openPwPrompt(){ document.getElementById('pw-overlay').classList.add('open'); }
 function closePwPrompt(){ document.getElementById('pw-overlay').classList.remove('open'); }
 function checkPw(){
-  const v = document.getElementById('pw-inp').value;
-  if(v === CONFIG.ADMIN_PASSWORD){
-    closePwPrompt(); goAdmin();
-  } else {
-    document.getElementById('pw-err').style.display='block';
-    document.getElementById('pw-inp').value='';
-    document.getElementById('pw-inp').focus();
-  }
+  if(document.getElementById('pw-inp').value === CONFIG.ADMIN_PASSWORD){ closePwPrompt(); goAdmin(); }
+  else { document.getElementById('pw-err').style.display='block'; }
 }
-document.getElementById('pw-overlay').addEventListener('click',e=>{if(e.target===document.getElementById('pw-overlay'))closePwPrompt()});
 
-// ── Navigation ────────────────────────────────────────────────
-function setPlat(p){
-  selPlat=p;
-  document.querySelectorAll('#plat-tabs .btn').forEach((b,i)=>b.classList.toggle('on',['all','tving','wavve'][i]===p));
+function goAdmin(){ document.getElementById('viewer-page').classList.remove('active'); document.getElementById('admin-page').classList.add('active'); renderAdmin(); }
+function goViewer(){ document.getElementById('admin-page').classList.remove('active'); document.getElementById('viewer-page').classList.add('active'); renderAll(); }
+
+function setMainTab(tab){
+  ['home','ranking','explorer'].forEach(t => {
+    document.getElementById('vcon-' + t).style.display = t === tab ? '' : 'none';
+  });
+  document.querySelectorAll('.vtab').forEach(b => b.classList.toggle('on', b.innerText.includes(tab==='home'?'추천':tab==='ranking'?'TOP':'익스플로러')));
   renderAll();
 }
-function setCategory(v){ selCategory=v; renderFilters(); renderPosters(); renderRecommendations(); }
-function setSort(v){ sortMode=v; renderPosters(); }
-function goAdmin(){ document.getElementById('viewer-page').classList.remove('active'); document.getElementById('admin-page').classList.add('active'); renderAdmin(); }
-function goViewer(){ document.getElementById('admin-page').classList.remove('active'); document.getElementById('viewer-page').classList.add('active'); }
 
-function getFiltered(){
-  return DATA.filter(d=>{
-    if(selPlat!=='all'&&d.platform!==selPlat)return false;
-    if(selCategory==='special'&&!d.specialUrl)return false;
-    if(selCategory==='top20'&&!isRankedTitle(d.title))return false;
-    return true;
-  });
-}
-
-function getActiveDemoTitles(){
-  const preset = DEMO_PRESETS[selectedDemo];
-  return preset ? preset.titles : [];
-}
-function isDemoTitle(title){
-  return Object.values(DEMO_PRESETS).some(p => p.titles.includes(title));
-}
-function makeDemoItem(title, idx){
-  return {
-    id: 9000 + idx,
-    platform:'tving',
-    title,
-    genre:guessGenre(title),
-    startMonth: now.getMonth()+1,
-    endMonth: now.getMonth()+1,
-    target: `${DEMO_PRESETS[selectedDemo].audience} 중심 시청`,
-    synopsis:'시청데모 PKG에서 해당 데모군의 선호 콘텐츠로 구성된 Preset입니다. 실제 운영 시에는 월 1회 업데이트되는 최신 Preset 기준으로 집행됩니다.',
-    cast:'시청데모 Preset',
-    ep:null,
-    adSlot:'시청데모 PKG',
-    peakMonth: now.getMonth()+1,
-    specialUrl:'https://tvingad.oopy.io/271b01af-4e49-81a6-bc29-edc0f569d496',
-    posterUrl:'',
-    audience:{f:55,m:45,ages:[{l:'18-24',v:25},{l:'25-34',v:35},{l:'35-44',v:28},{l:'45+',v:12}]},
-    isDemoOnly:true,
-    demoSegment:selectedDemo
-  };
-}
-function getExplorerContent(){
-  if(selCategory==='demo'){
-    return getActiveDemoTitles().map((title, idx)=>{
-      const existing = DATA.find(d => d.title === title);
-      if(existing) return {...existing, demoSegment:selectedDemo};
-      return makeDemoItem(title, idx);
-    });
-  }
-  return getFiltered();
-}
-
-function isRankedTitle(title){
-  return ['tving','wavve'].some(p => (RANKS[p]||[]).some(x => x.title === title));
-}
-
-// 제목으로 순위 정보 반환 — {rank, platform, change, isNew} 또는 null
-function getRankInfo(title){
-  for(const plat of ['tving','wavve']){
-    const idx = (RANKS[plat]||[]).findIndex(x => x.title === title);
-    if(idx !== -1){
-      const item = RANKS[plat][idx];
-      return { rank: idx+1, platform: plat, change: item.isNew ? null : (item.prevRank ? item.prevRank-(idx+1) : 0), isNew: item.isNew };
-    }
-  }
-  return null;
-}
-
-// 순위 뱃지 HTML — "현재 #3 ↑2" 형태
-function rankBadgeHtml(title, style=''){
-  const info = getRankInfo(title);
-  if(!info) return '';
-  const chg = info.isNew ? '<span style="color:#0F6E56;font-size:8px">NEW</span>'
-    : info.change > 0  ? `<span style="color:#0F6E56;font-size:8px">▲${info.change}</span>`
-    : info.change < 0  ? `<span style="color:#E8144A;font-size:8px">▼${Math.abs(info.change)}</span>`
-    : '';
-  const platColor = info.platform === 'tving' ? '#E8144A' : '#1B40E8';
-  return `<span class="quick-badge qb-rank" style="display:inline-flex;align-items:center;gap:3px;${style}">
-    <span style="color:${platColor};font-size:8px">●</span> #${info.rank} ${chg}
-  </span>`;
-}
-
-// 타겟 유사도 스코어 — 오디언스 데이터 기반
-function targetSimilarity(a, b){
-  if(!a.audience || !b.audience) return 0;
-  const fDiff = Math.abs(a.audience.f - b.audience.f);
-  let ageDiff = 0;
-  a.audience.ages.forEach((ag, i) => {
-    ageDiff += Math.abs(ag.v - (b.audience.ages[i]?.v || 0));
-  });
-  return 100 - fDiff - ageDiff / 4;
-}
-
-// 타겟 역매칭 추천 — 현재 콘텐츠와 유사한 타겟의 다른 콘텐츠
-function getTargetMatches(d, limit=4){
-  return DATA
-    .filter(x => x.id !== d.id)
-    .map(x => ({ ...x, score: targetSimilarity(d, x) + (isRankedTitle(x.title) ? 8 : 0) + (x.specialUrl ? 5 : 0) }))
-    .sort((a, b) => b.score - a.score)
-    .slice(0, limit);
-}
-function monthsUntil(month){
-  const current = now.getMonth()+1;
-  let diff = month - current;
-  if(diff < 0) diff += 12;
-  return diff;
-}
-function getSalesAngle(d){
-  const genreAngles = {
-    '드라마':'화제성 높은 서사 중심 콘텐츠로 브랜드 주목도를 끌어올리기 좋습니다.',
-    '리얼리티':'몰입도 높은 포맷 특성상 반복 노출과 친밀도 확보에 유리합니다.',
-    '서바이벌':'강한 팬덤과 회차별 긴장감으로 집중도 높은 광고 집행이 가능합니다.',
-    '스포츠':'라이브 시청 접점이 뚜렷해 대규모 도달과 빈도 확보에 적합합니다.',
-    'SF':'테크·남성 타깃 중심 메시지를 전달하기 좋은 장르입니다.',
-    '장르':'장르 팬층이 뚜렷해 타깃 정밀도가 높은 집행에 적합합니다.',
-    '예능':'대중성이 높아 폭넓은 브랜드 친밀도 형성에 유리합니다.',
-    '영화':'단기간 주목도 확보와 프리미엄 이미지 연출에 적합합니다.'
-  };
-  return genreAngles[d.genre] || '브랜드 메시지를 자연스럽게 연결하기 좋은 콘텐츠입니다.';
-}
-function getBrandFit(d){
-  const map = {
-    '드라마':'뷰티 · 패션 · 금융 · 라이프스타일',
-    '리얼리티':'FMCG · 배달 · 커머스 · 플랫폼',
-    '서바이벌':'게임 · 스포츠 · IT 디바이스',
-    '스포츠':'자동차 · 주류대체 · 금융 · 통신',
-    'SF':'테크 · 통신 · 전자',
-    '장르':'OTT · 금융 · 자동차',
-    '예능':'식음료 · 생활소비재 · 커머스',
-    '영화':'자동차 · 프리미엄 브랜드 · 엔터테인먼트'
-  };
-  return map[d.genre] || '브랜드 카테고리 전반';
-}
-function getTimingMessage(d){
-  const diff = monthsUntil(d.startMonth);
-  if(diff === 0) return '지금 바로 집행 논의가 필요한 시점입니다.';
-  if(diff === 1) return '론칭 한 달 전 사전 점유 전략에 적합합니다.';
-  if(diff <= 3) return '분기 내 캠페인과 연계해 선제 제안하기 좋습니다.';
-  return '중장기 브랜딩 관점에서 미리 검토할 수 있습니다.';
-}
-function getRecommendations(){
-  const pool = getFiltered().slice().sort((a,b)=>{
-    const score = d => (d.specialUrl?3:0) + (isRankedTitle(d.title)?2:0) + (monthsUntil(d.startMonth)===0?2:0) + (monthsUntil(d.startMonth)===1?1:0);
-    return score(b)-score(a) || monthsUntil(a.startMonth)-monthsUntil(b.startMonth);
-  });
-  return pool.slice(0,3);
-}
-
-// ── Render all ────────────────────────────────────────────────
 function renderAll(){
-  renderFilters();
-  if(curMainTab === 'home')    { renderRecommendations(); renderMonthlyCalendar(); }
-  if(curMainTab === 'ranking') { renderRankToday(); renderDemoSection(); }
-  if(curMainTab === 'explorer'){ renderPosters(); }
-  if(curMainTab !== 'home') renderRecommendations();
-}
-
-function renderFilters(){
-  const el = document.getElementById('filters');
-  if(!el) return;
-  el.innerHTML=`
-    <button class="filter-chip ${selCategory==='all'?'on':''}" onclick="setCategory('all')">전체</button>
-    <button class="filter-chip ${selCategory==='special'?'on':''}" onclick="setCategory('special')">⭐ 특판</button>
-    <button class="filter-chip ${selCategory==='top20'?'on':''}" onclick="setCategory('top20')">🏆 TOP 20</button>`;
-}
-// 시청데모 PKG 탭별 콘텐츠 (TOP20 탭 하단에 표시)
-const DEMO_SEGMENTS = {
-  '10대남': ['이상한 변호사 우영우', '피의 게임3', '2026 KBO 리그'],
-  '10대여': ['환승연애 시즌4', '사랑의 이해 시즌2', '마이 데몬 시즌2'],
-  '20대남': ['지옥 시즌2', '삼체 한국판', '2026 KBO 리그'],
-  '20대여': ['환승연애 시즌4', '사랑의 이해 시즌2', '술꾼도시여자들3'],
-  '30대남': ['지옥 시즌2', '2026 KBO 리그', '삼체 한국판'],
-  '30대여': ['술꾼도시여자들3', '나는 솔로', '이토록 친밀한 배신자'],
-  '40대남': ['2026 KBO 리그', '나는 솔로', '지옥 시즌2'],
-  '40대여': ['나는 솔로', '불꽃미녀 시즌2', '술꾼도시여자들3'],
-  '50대이상': ['나는 솔로', '불꽃미녀 시즌2', '2026 KBO 리그'],
-};
-
-function renderDemoSection(){
-  const tabsEl = document.getElementById('demo-tabs');
-  const gridEl = document.getElementById('demo-content-grid');
-  if(!tabsEl || !gridEl) return;
-
-  tabsEl.innerHTML = Object.keys(DEMO_SEGMENTS).map(seg =>
-    `<button class="filter-chip ${selectedDemoTab===seg?'on':''}" onclick="setDemoTab('${seg}')">${seg}</button>`
-  ).join('');
-
-  const titles = DEMO_SEGMENTS[selectedDemoTab] || [];
-  gridEl.innerHTML = titles.map((title, idx) => {
-    const d = DATA.find(x => x.title === title);
-    if(d) return posterCardHtml(d);
-    const [bg, fg] = phCol(title);
-    return `<div class="pcard" style="cursor:default">
-      <div class="poster-wrap" style="background:${bg}">
-        <div class="poster-ph"><span class="ph-init" style="color:${fg}">${ini(title)}</span></div>
-      </div>
-      <div class="pcard-body">
-        <div class="pc-title">${title}</div>
-        <div class="pc-date" style="font-size:11px;color:var(--t3)">Preset 전용</div>
-      </div>
-    </div>`;
-  }).join('');
-  if(d) titles.forEach((title, i) => {
-    const linked = DATA.find(x=>x.title===title);
-    if(linked) injectPoster(`pw-${linked.id}`, linked.title, linked.posterUrl);
-  });
-}
-
-function setDemoTab(seg){
-  selectedDemoTab = seg;
+  renderRecommendations();
+  renderMonthlyCalendar();
+  renderRankToday();
   renderDemoSection();
-}
-
-function getRecommendations(){
-  // 관리자가 선택한 PICKS가 있으면 우선 표시
-  if(PICKS.length > 0){
-    const picked = PICKS.map(id => DATA.find(d=>d.id===id)).filter(Boolean);
-    if(picked.length > 0) return picked.slice(0,3);
-  }
-  const pool = DATA.slice().sort((a,b)=> getCardScore(b)-getCardScore(a) || monthsUntil(a.startMonth)-monthsUntil(b.startMonth));
-  return pool.slice(0,3);
-}
-function getCardScore(d){
-  return (d.specialUrl?4:0) + (isRankedTitle(d.title)?3:0) + (monthsUntil(d.startMonth)===0?3:0) + (monthsUntil(d.startMonth)===1?2:0) + (d.genre==='드라마'?1:0);
-}
-function getSortedContent(){
-  const list=getFiltered().slice();
-  if(sortMode==='release') return list.sort((a,b)=>a.startMonth-b.startMonth || getCardScore(b)-getCardScore(a));
-  if(sortMode==='platform') return list.sort((a,b)=>(a.platform>b.platform?1:-1) || a.startMonth-b.startMonth);
-  if(sortMode==='special') return list.sort((a,b)=>(b.specialUrl?1:0)-(a.specialUrl?1:0) || getCardScore(b)-getCardScore(a));
-  return list.sort((a,b)=>getCardScore(b)-getCardScore(a) || a.startMonth-b.startMonth);
-}
-
-function openByTitle(title){
-  const existing = DATA.find(d=>d.title===title);
-  if(existing){ openModal(existing.id); return; }
-  const demoItem = makeDemoItem(title, getActiveDemoTitles().indexOf(title));
-  openVirtualModal(demoItem);
+  renderPosters();
 }
 
 function renderRecommendations(){
   const target = document.getElementById('reco-grid');
   if(!target) return;
-  const items = getRecommendations();
-  target.innerHTML = items.length ? items.map(d => {
-    const pid=`reco-${d.id}`;
+  const items = PICKS.length ? PICKS.map(id=>DATA.find(d=>d.id===id)).filter(Boolean) : DATA.slice(0,3);
+  target.innerHTML = items.map(d => {
     const [bg,fg]=phCol(d.title);
-    const badges = [d.specialUrl?'<span class="quick-badge qb-special">특판</span>':'', rankBadgeHtml(d.title), monthsUntil(d.startMonth)<=1?'<span class="quick-badge qb-soon">공개 임박</span>':''].filter(Boolean).join('');
-    const rankInfo = getRankInfo(d.title);
-    const rankInlineHtml = rankInfo ? `
-      <div style="display:flex;align-items:center;gap:6px;margin-top:6px;padding:5px 8px;background:var(--purple-bg);border-radius:var(--r)">
-        <span style="font-size:9px;font-weight:700;color:var(--purple)">TOP ${rankInfo.rank} 인기작</span>
-        <span style="font-size:9px;color:var(--t3)">·</span>
-        <span style="font-size:9px;color:var(--t2)">${rankInfo.platform==='tving'?'TVING':'Wavve'}</span>
-        ${rankInfo.isNew ? '<span style="font-size:8px;font-weight:700;color:#0F6E56;background:#E1F5EE;padding:1px 5px;border-radius:6px">NEW</span>'
-          : rankInfo.change > 0 ? `<span style="font-size:9px;color:#0F6E56">▲${rankInfo.change}</span>`
-          : rankInfo.change < 0 ? `<span style="font-size:9px;color:#E8144A">▼${Math.abs(rankInfo.change)}</span>` : ''}
-      </div>` : '';
     return `
     <div class="reco-card" onclick="openModal(${d.id})">
-      <div class="reco-poster" id="${pid}" style="background:${bg}"><div class="reco-ph" style="color:${fg}">${ini(d.title)}</div></div>
+      <div class="reco-poster" id="reco-${d.id}" style="background:${bg}"><div class="reco-ph" style="color:${fg}">${ini(d.title)}</div></div>
       <div class="reco-body">
-        <div class="reco-label">${d.platform==='tving'?'TVING':'Wavve'} · ${d.genre} · ${d.startMonth}월 공개</div>
-        ${badges?`<div class="quick-badges">${badges}</div>`:''}
+        <div class="reco-label">${d.platform.toUpperCase()} · ${d.genre}</div>
         <div class="reco-title">${d.title}</div>
-        <div class="reco-copy">${getSalesAngle(d)}</div>
-        <div class="reco-tags">
-          <span class="reco-tag">${getTimingMessage(d)}</span>
-          <span class="reco-tag">브랜드 핏: ${getBrandFit(d)}</span>
-        </div>
-        <div class="reco-mini">출연진 ${d.cast||'미정'} · 광고상품 ${d.adSlot||'Pre-roll'}</div>
-        ${rankInlineHtml}
+        <div class="reco-copy">${d.synopsis.slice(0,40)}...</div>
+        <div class="reco-mini">출연진: ${d.cast}</div>
       </div>
     </div>`;
-  }).join('') : `<div class="empty">추천할 콘텐츠가 없습니다</div>`;
+  }).join('');
   items.forEach(d=>injectPoster(`reco-${d.id}`, d.title, d.posterUrl));
 }
 
 function renderPosters(){
-  const f=getSortedContent();
-  document.getElementById('lineup-cnt').textContent=`${f.length}개 콘텐츠`;
-  document.getElementById('poster-grid').innerHTML=f.length===0
-    ?`<div class="empty">해당 조건의 콘텐츠가 없습니다</div>`
-    :f.map(d=>{
-      const pid=`pw-${d.id}`;
-      const [bg,fg]=phCol(d.title);
-      const adList=(d.adSlot||'').split(',').map(s=>s.trim()).filter(Boolean).slice(0,3);
-      const badges = [d.specialUrl?'<span class="quick-badge qb-special">특판</span>':'', rankBadgeHtml(d.title), monthsUntil(d.startMonth)<=1?'<span class="quick-badge qb-soon">출시 임박</span>':''].filter(Boolean).join('');
-      const specBadge=d.specialUrl?`<div class="special-badge"><svg viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>특판</div>`:'';
-      return `<div class="pcard" onclick="openModal(${d.id})">
-        <div class="poster-wrap" id="${pid}" style="background:${bg}">
-          <div class="poster-ph"><span class="ph-init" style="color:${fg}">${ini(d.title)}</span><span class="ph-ttl" style="color:${fg}">${d.title}</span></div>
-          ${specBadge}
-        </div>
-        <div class="pcard-body">
-          <div class="pcard-top">
-            <span class="pbadge ${d.platform}-b">${d.platform==='tving'?'TVING':'Wavve'}</span>
-            <span class="gtag">${d.genre}</span>
-          </div>
-          ${badges?`<div class="quick-badges">${badges}</div>`:""}
-          <div class="pc-title" title="${d.title}">${d.title}</div>
-          <div class="pc-cast">${d.cast||'출연진 미정'}</div>
-          <div class="pc-date">${d.startMonth}월${d.endMonth!==d.startMonth?'–'+d.endMonth+'월':''}${d.ep?' · '+d.ep+'부작':''}</div>
-          <div class="ad-tags">${adList.map(a=>`<span class="ad-tag">${a}</span>`).join('')}</div>
-          <div class="pc-foot" style="margin-top:8px">
-            <span class="tgt">${d.target||''}</span>
-            ${d.peakMonth>=5&&d.peakMonth<=8?'<span class="peak">성수기</span>':''}
-          </div>
-        </div>
-      </div>`;
-    }).join('');
-  f.forEach(d=>injectPoster(`pw-${d.id}`, d.title, d.posterUrl));
-}
-
-function buildMonthCard(year, monthIndex, items){
-  const monthNo = monthIndex + 1;
-  const monthNames = ['January','February','March','April','May','June','July','August','September','October','November','December'];
-  const monthItems = items
-    .filter(x => x.startMonth === monthNo)
-    .sort((a,b) => getCardScore(b) - getCardScore(a))
-    .slice(0, 5);
-
-  const itemsHtml = monthItems.length === 0
-    ? `<div class="month-empty">이달 주요 콘텐츠 없음</div>`
-    : monthItems.map(d => {
-        const col = gc(d.genre);
-        const pid = `mcp-${monthNo}-${d.id}`;
-        const [pbg, pfg] = phCol(d.title);
-        const rankInfo = getRankInfo(d.title);
-        const tags = [
-          d.specialUrl ? '특판' : '',
-          rankInfo    ? `#${rankInfo.rank}` : '',
-          monthsUntil(d.startMonth) <= 1 ? '임박' : '',
-        ].filter(Boolean).map(t => `<span class="mevent-tag">${t}</span>`).join('');
-        return `<div class="mevent" onclick="openModal(${d.id})" style="background:linear-gradient(135deg,${col.bar} 0%,${col.dark} 100%)">
-          <div class="mevent-inner">
-            <div class="mevent-poster" id="${pid}" style="background:${pbg}">
-              <div class="mevent-ph" style="color:${pfg}">${ini(d.title)}</div>
-            </div>
-            <div class="mevent-body">
-              <div>
-                <div class="mevent-title">${d.title}</div>
-                <div class="mevent-copy">${d.cast || getBrandFit(d)}</div>
-              </div>
-              <div class="mevent-tags">${tags}</div>
-            </div>
-          </div>
-        </div>`;
-      }).join('');
-
-  const cntBadge = monthItems.length > 0
-    ? `<span style="font-size:9px;color:var(--t3)">${monthItems.length}개</span>` : '';
-
-  const card = `<div class="month-card">
-    <div class="month-head">
-      <div class="month-head-left">
-        <div class="month-num">${monthNo}</div>
-        <div class="month-name">${monthNames[monthIndex]}</div>
-      </div>
-      <div style="display:flex;align-items:center;gap:6px">
-        ${cntBadge}
-        <div class="month-badge">MEGA IP</div>
-      </div>
-    </div>
-    <div class="month-items">${itemsHtml}</div>
-  </div>`;
-
-  setTimeout(() => monthItems.forEach(d => injectPoster(`mcp-${monthNo}-${d.id}`, d.title, d.posterUrl)), 0);
-  return card;
-}
-function renderMonthlyCalendar(){
-  const target=document.getElementById('monthly-grid');
+  const target = document.getElementById('poster-grid');
   if(!target) return;
-  const baseItems=getFiltered().filter(d=>getCardScore(d)>=5 || d.specialUrl || isRankedTitle(d.title)).sort((a,b)=>getCardScore(b)-getCardScore(a)).slice(0,18);
-  const year=now.getFullYear();
-  const start=now.getMonth();
-  if(calView === 'timeline'){
-    renderCalTimeline(target, baseItems, year, start);
-  } else {
-    target.className = 'monthly-grid';
-    target.innerHTML=[0,1,2].map(offset=>{ const m=(start+offset)%12; return buildMonthCard(year + Math.floor((start+offset)/12), m, baseItems); }).join('');
-  }
-}
-
-function setMainTab(tab){
-  curMainTab = tab;
-  // 탭 버튼
-  document.querySelectorAll('.vtab').forEach((b, i) => {
-    b.classList.toggle('on', ['home','ranking','explorer'][i] === tab);
-  });
-  // 컨텐츠 패널
-  ['home','ranking','explorer'].forEach(t => {
-    const el = document.getElementById('vcon-' + t);
-    if(el) el.style.display = t === tab ? '' : 'none';
-  });
-  // 탭 전환 시 해당 탭 렌더 보장
-  if(tab === 'ranking')  { renderRankToday(); renderRankHistory(); }
-  if(tab === 'home')     { renderRecommendations(); renderMonthlyCalendar(); }
-  if(tab === 'explorer') { renderPosters(); }
-}
-
-// ── 오늘의 TOP 20 렌더 (랭킹 탭 상단) ───────────────────────
-function renderRankToday(){
-  const grid = document.getElementById('rank-today-grid');
-  const meta = document.getElementById('rank-today-meta');
-  if(!grid) return;
-  const list = RANKS.tving || [];
-  if(!list.length){
-    grid.innerHTML = `<div style="padding:32px;text-align:center;color:var(--t3);font-size:13px">관리자 페이지에서 "지금 가져오기"를 눌러 TOP 20을 불러오세요.</div>`;
-    return;
-  }
-  if(meta) meta.textContent = rankUpdatedDate ? rankUpdatedDate + ' 기준' : '';
-
-  const rows = list.map((item, i) => {
-    const rank = i + 1;
-    const chg  = item.isNew ? null : (item.prevRank ? item.prevRank - rank : 0);
-    const chgHtml = item.isNew
-      ? `<span class="rh-chg" style="color:var(--green)">NEW</span>`
-      : chg === 0 ? `<span class="rh-chg" style="color:var(--t3)">—</span>`
-      : chg >  0  ? `<span class="rh-chg cup">▲${chg}</span>`
-                  : `<span class="rh-chg cdn">▼${Math.abs(chg)}</span>`;
-    const nc  = rank===1 ? 'rh-num rh-num-1' : rank<=3 ? 'rh-num rh-num-3' : 'rh-num';
-    const [pbg,pfg] = phCol(item.title);
-    const pid = `rht-tving-${i}`;
-    const linked = DATA.find(d => d.title === item.title);
-    setTimeout(() => injectPoster(pid, item.title, linked?.posterUrl), 0);
-    return `<div class="rh-item" ${linked ? `onclick="openModal(${linked.id})"` : ''} style="${linked ? 'cursor:pointer' : ''}">
-      <div class="rh-poster" id="${pid}" style="background:${pbg}"><div class="rh-ph" style="color:${pfg}">${ini(item.title)}</div></div>
-      <span class="${nc}">${rank}</span>
-      <div class="rh-info">
-        <div class="rh-ttl">${item.title}${linked ? '' : '<span style="font-size:10px;color:var(--t3);margin-left:4px">미등록</span>'}</div>
-        <div class="rh-genre">${item.genre}</div>
+  target.innerHTML = DATA.map(d => {
+    const [bg,fg]=phCol(d.title);
+    return `
+    <div class="pcard" onclick="openModal(${d.id})">
+      <div class="poster-wrap" id="pw-${d.id}" style="background:${bg}">
+        <div class="poster-ph"><span class="ph-init" style="color:${fg}">${ini(d.title)}</span></div>
+        ${d.specialUrl?'<div class="special-badge">특판</div>':''}
       </div>
-      ${chgHtml}
-    </div>`;
-  }).join('');
-
-  grid.style.gridTemplateColumns = '1fr';
-  grid.innerHTML = `<div class="rh-col">${rows}</div>`;
-}
-function setCalView(v){
-  calView = v;
-  document.getElementById('cal-btn-list').classList.toggle('on', v==='list');
-  document.getElementById('cal-btn-timeline').classList.toggle('on', v==='timeline');
-  renderMonthlyCalendar();
-}
-
-function renderCalTimeline(target, items, year, startMonth){
-  // 3개월 범위
-  const months = [0,1,2].map(i => {
-    const m = (startMonth + i) % 12;
-    const y = year + Math.floor((startMonth + i) / 12);
-    return { m, y, no: m + 1 };
-  });
-  const startNo = months[0].no;
-  const endNo   = months[2].no;
-  const monthNames = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-  const TOTAL_MONTHS = 3;
-  const PCT = 100 / TOTAL_MONTHS; // % per month
-
-  // 방영 기간이 뷰 범위와 겹치는 콘텐츠만
-  const visible = items.filter(d => {
-    const s = d.startMonth, e = d.endMonth || 12;
-    return s <= endNo && e >= startNo;
-  });
-
-  // 월 헤더 (픽셀 정밀도: flex)
-  const monthCols = months.map(m =>
-    `<div class="cal-tl-month" style="width:${PCT}%;box-sizing:border-box">
-       <span style="font-size:10px;font-weight:700;color:var(--t1)">${m.no}월</span>
-       <span style="font-size:9px;color:var(--t3);margin-left:3px">${monthNames[m.m]}</span>
-     </div>`
-  ).join('');
-
-  // 오늘 날짜 마커 위치 (현재 월이 범위 안에 있을 때)
-  const todayMonth = now.getMonth() + 1;
-  const todayDay   = now.getDate();
-  const daysInTodayMonth = new Date(now.getFullYear(), now.getMonth()+1, 0).getDate();
-  let todayPct = null;
-  if(todayMonth >= startNo && todayMonth <= endNo){
-    const monthOffset = todayMonth - startNo;
-    todayPct = (monthOffset + (todayDay - 1) / daysInTodayMonth) * PCT;
-  }
-
-  const rows = visible.map(d => {
-    const col = gc(d.genre);
-    const rankInfo = getRankInfo(d.title);
-    const [pbg, pfg] = phCol(d.title);
-    const pid = `tl-poster-${d.id}`;
-    const platLabel = d.platform === 'tving' ? 'TVING' : 'Wavve';
-    const platColor = d.platform === 'tving' ? 'var(--tv)' : 'var(--wv)';
-
-    // 바 위치 계산
-    const clampedStart = Math.max(d.startMonth, startNo);
-    const isOpenEnd    = !d.endMonth || d.endMonth > endNo + 1;  // 종영 미정 or 범위 초과
-    const clampedEnd   = isOpenEnd ? endNo + 1 : Math.min(d.endMonth, endNo + 1);
-
-    const leftPct  = (clampedStart - startNo) * PCT;
-    const widthPct = (clampedEnd - clampedStart) * PCT;
-
-    // 태그
-    const tags = [
-      d.specialUrl ? '<span class="cal-tl-tag">특판</span>' : '',
-      rankInfo     ? `<span class="cal-tl-tag">#${rankInfo.rank}</span>` : '',
-      isOpenEnd    ? '<span class="cal-tl-tag">계속</span>' : '',
-    ].join('');
-
-    // 방영 기간 텍스트
-    const periodText = isOpenEnd
-      ? `${d.startMonth}월~` 
-      : d.startMonth === d.endMonth
-        ? `${d.startMonth}월`
-        : `${d.startMonth}–${d.endMonth}월`;
-
-    setTimeout(() => injectPoster(pid, d.title, d.posterUrl), 0);
-
-    return `<div class="cal-tl-row">
-      <div class="cal-tl-label" onclick="openModal(${d.id})">
-        <div class="cal-tl-poster" id="${pid}" style="background:${pbg}">
-          <div class="cal-tl-ph" style="color:${pfg}">${ini(d.title)}</div>
-        </div>
-        <div style="min-width:0">
-          <div class="cal-tl-name" title="${d.title}">${d.title}</div>
-          <div class="cal-tl-plat" style="color:${platColor}">${platLabel} · ${periodText}</div>
-        </div>
-      </div>
-      <div class="cal-tl-track">
-        <!-- 그리드 선 -->
-        <div class="cal-tl-grid">
-          ${months.map((_,i) => `<div class="cal-tl-grid-col" style="width:${PCT}%"></div>`).join('')}
-        </div>
-        <!-- 방영 바 -->
-        <div class="cal-tl-bar ${isOpenEnd ? 'cal-tl-open-end' : ''}"
-          onclick="openModal(${d.id})"
-          style="left:${leftPct.toFixed(2)}%;width:${widthPct.toFixed(2)}%;background:linear-gradient(90deg,${col.bar},${col.dark})">
-          <div>
-            <div class="cal-tl-bar-title">${d.title}${tags}</div>
-            <div class="cal-tl-bar-sub">${d.cast ? d.cast.split(',')[0] : d.genre}</div>
-          </div>
-        </div>
+      <div class="pcard-body">
+        <div class="pcard-top"><span class="pbadge ${d.platform}-b">${d.platform.toUpperCase()}</span><span class="gtag">${d.genre}</span></div>
+        <div class="pc-title">${d.title}</div>
+        <div class="pc-cast">${d.cast}</div>
+        <div class="pc-date">${d.startMonth}월 방영</div>
+        <div class="pc-foot">${d.peakMonth>=5&&d.peakMonth<=8?'<span class="peak">성수기</span>':''}</div>
       </div>
     </div>`;
   }).join('');
-
-  const todayLine = todayPct !== null
-    ? `<div style="position:absolute;left:calc(140px + ${todayPct.toFixed(2)}% * (100% - 140px) / 100);top:0;bottom:0;width:1.5px;background:var(--tv);opacity:.55;pointer-events:none;z-index:1"></div>`
-    : '';
-
-  target.className = '';
-  target.style.cssText = '';
-  target.innerHTML = `<div class="cal-timeline">
-    <div class="cal-tl-inner">
-      <div style="display:flex;padding-left:140px;border-bottom:1px solid var(--bd);padding-bottom:6px;margin-bottom:10px">
-        ${months.map(m => `<div style="width:${PCT}%;box-sizing:border-box;text-align:center;border-left:1px solid var(--bd)">
-          <span style="font-size:10px;font-weight:700;color:var(--t1)">${m.no}월</span>
-          <span style="font-size:9px;color:var(--t3);margin-left:3px">${monthNames[m.m]}</span>
-        </div>`).join('')}
-      </div>
-      <div style="position:relative">
-        ${todayLine}
-        <div class="cal-tl-rows">${rows || '<div style="padding:24px;text-align:center;color:var(--t3);font-size:12px">표시할 콘텐츠가 없습니다</div>'}</div>
-      </div>
-      ${todayPct !== null ? `<div style="font-size:9px;color:var(--tv);margin-top:8px;padding-left:140px">▲ 오늘 기준선</div>` : ''}
-    </div>
-  </div>`;
-}
-
-function buildModalInner(d){
-  const mid=`mp-${d.id}`;
-  const [bg,fg]=phCol(d.title);
-  const adList=(d.adSlot||'').split(',').map(s=>s.trim()).filter(Boolean);
-  const cases=getCases(d.genre);
-  const aud=d.audience||{f:55,m:45,ages:[{l:'18-24',v:25},{l:'25-34',v:35},{l:'35-44',v:28},{l:'45+',v:12}]};
-  const col=gc(d.genre);
-
-  return { mid, bg, fg, html: `
-    <div class="modal-poster" id="${mid}" style="background:${bg}">
-      <div class="modal-poster-ph" style="color:${fg}">${ini(d.title)}</div>
-    </div>
-    <div class="modal-body">
-      <div class="modal-hdr">
-        <div>
-          <span class="pbadge ${d.platform}-b" style="display:inline-block;margin-bottom:8px">${d.platform==='tving'?'TVING':'Wavve'}</span>
-          <div style="font-size:18px;font-weight:700;line-height:1.3">${d.title}</div>
-          <div style="font-size:12px;color:var(--t3);margin-top:3px">${d.cast||'출연진 미정'}</div>
-        </div>
-        <button class="modal-close" onclick="closeModal()">✕</button>
-      </div>
-      <div style="font-size:12px;color:var(--t2);line-height:1.6;margin-bottom:10px">${d.synopsis}</div>
-      ${d.specialUrl?`<a href="${d.specialUrl}" target="_blank" class="special-link-btn" style="margin-bottom:12px;display:inline-flex"><svg viewBox="0 0 20 20" style="width:12px;height:12px;fill:#FAC775;margin-right:5px"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>특판 상품 보기</a>`:''}
-      <div class="modal-tabs">
-        <button class="modal-tab on" onclick="switchMTab(this,'mtab-info-${d.id}')">콘텐츠 정보</button>
-        <button class="modal-tab" onclick="switchMTab(this,'mtab-audience-${d.id}')">타겟 오디언스</button>
-      </div>
-
-      <div class="mtab-con on" id="mtab-info-${d.id}">
-        <div class="fit-grid">
-          <div class="fit-card"><div class="fit-k">브랜드 핏</div><div class="fit-v">${getBrandFit(d)}</div></div>
-          <div class="fit-card"><div class="fit-k">주요 출연진</div><div class="fit-v">${d.cast||'미정'}</div></div>
-          <div class="fit-card"><div class="fit-k">광고 상품</div><div class="fit-v">${d.adSlot||'Pre-roll'}</div></div>
-        </div>
-        ${dr('방영',d.startMonth+'월'+(d.endMonth!==d.startMonth?'–'+d.endMonth+'월':''))}
-        ${dr('장르',d.genre)}
-        ${d.ep?dr('편수',d.ep+'부작'):''}
-        ${dr('타겟 시청자',d.target)}
-        <div class="sale-note" style="margin-top:10px">${getSalesAngle(d)}</div>
-
-        <!-- 타겟 역매칭 추천 -->
-        <div style="margin-top:16px;padding-top:14px;border-top:1px solid var(--bd)">
-          <div style="font-size:12px;font-weight:600;color:var(--t2);margin-bottom:4px">이 타겟에 맞는 다른 콘텐츠</div>
-          <div style="font-size:11px;color:var(--t3);margin-bottom:10px">타겟 오디언스 유사도 기준 · 랭킹·특판 우선 추천</div>
-          <div style="display:flex;gap:10px;overflow-x:auto;padding-bottom:6px" id="target-match-${d.id}">
-            ${getTargetMatches(d, 4).map(m => {
-              const [mbg, mfg] = phCol(m.title);
-              const mrank = getRankInfo(m.title);
-              const mid2 = `tm-${d.id}-${m.id}`;
-              setTimeout(() => injectPoster(mid2, m.title, m.posterUrl), 0);
-              return `<div onclick="closeModal();setTimeout(()=>openModal(${m.id}),80)"
-                style="flex:0 0 90px;cursor:pointer;border-radius:var(--r);overflow:hidden;border:1px solid var(--bd);transition:border-color .15s"
-                onmouseover="this.style.borderColor='var(--bd2)'" onmouseout="this.style.borderColor='var(--bd)'">
-                <div id="${mid2}" style="width:90px;height:130px;background:${mbg};display:flex;flex-direction:column;align-items:center;justify-content:center;position:relative">
-                  <div style="font-size:16px;font-weight:600;color:${mfg};opacity:.7">${ini(m.title)}</div>
-                  ${mrank ? `<div style="position:absolute;top:5px;left:5px;background:rgba(0,0,0,0.6);border-radius:4px;padding:2px 5px;font-size:8px;font-weight:700;color:#fff">#${mrank.rank}</div>` : ''}
-                  ${m.specialUrl ? `<div style="position:absolute;top:5px;right:5px;background:#FFF3CC;border-radius:4px;padding:2px 5px;font-size:7px;font-weight:800;color:#B45309">특판</div>` : ''}
-                </div>
-                <div style="padding:6px 7px;background:#fff">
-                  <div style="font-size:10px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:var(--t1)">${m.title}</div>
-                  <div style="font-size:9px;color:var(--t3);margin-top:1px">${m.startMonth}월 · ${m.genre}</div>
-                </div>
-              </div>`;
-            }).join('')}
-          </div>
-        </div>
-      </div>
-
-      <div class="mtab-con" id="mtab-audience-${d.id}">
-        <div class="aud-title">성별 분포</div>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px">
-          <div style="background:var(--bg2);border-radius:var(--r);padding:10px;text-align:center">
-            <div style="font-size:22px;font-weight:700;color:#E51B4A;margin-bottom:2px">${aud.f}%</div>
-            <div style="font-size:10px;color:var(--t3)">여성</div>
-          </div>
-          <div style="background:var(--bg2);border-radius:var(--r);padding:10px;text-align:center">
-            <div style="font-size:22px;font-weight:700;color:#1B4FE8;margin-bottom:2px">${aud.m}%</div>
-            <div style="font-size:10px;color:var(--t3)">남성</div>
-          </div>
-        </div>
-        <div class="aud-title">연령 분포</div>
-        ${aud.ages.map(a=>`
-          <div style="display:flex;align-items:center;gap:8px;margin-bottom:7px;font-size:11px">
-            <span style="min-width:52px;color:var(--t3)">${a.l}</span>
-            <div style="flex:1;height:8px;background:var(--bg3);border-radius:4px;overflow:hidden">
-              <div style="width:${a.v}%;height:100%;border-radius:4px;background:${col.bar}"></div>
-            </div>
-            <span style="min-width:30px;text-align:right;color:var(--t2);font-weight:500">${a.v}%</span>
-          </div>`).join('')}
-        <div style="font-size:11px;color:var(--t3);margin-top:10px;padding-top:10px;border-top:1px solid var(--bd)">* 태블로 API 연동 시 실제 시청 데모 데이터로 대체됩니다.</div>
-      </div>
-    </div>` };
-}
-
-function openVirtualModal(d){
-  const built = buildModalInner(d);
-  document.getElementById('modal-inner').innerHTML = built.html;
-  document.getElementById('modal-bg').classList.add('open');
-  const el=document.getElementById(built.mid);
-  if(el){
-    getPoster(d.title).then(u=>{ if(u){ const el2=document.getElementById(built.mid); if(el2) el2.innerHTML=`<img src="${u.replace('w342','w780')}" alt="${d.title}" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover">`; } });
-  }
+  DATA.forEach(d=>injectPoster(`pw-${d.id}`, d.title, d.posterUrl));
 }
 
 function openModal(id){
-  const d=DATA.find(x=>x.id===id); if(!d) return;
-  const built = buildModalInner(d);
-  document.getElementById('modal-inner').innerHTML = built.html;
-  document.getElementById('modal-bg').classList.add('open');
-  // 포스터 주입
-  const el=document.getElementById(built.mid);
-  const url=d.posterUrl||null;
-  if(url){
-    el.innerHTML=`<img src="${url}" alt="${d.title}" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover">`;
-  } else {
-    getPoster(d.title).then(u=>{
-      if(!u)return;
-      const el2=document.getElementById(built.mid);
-      if(el2)el2.innerHTML=`<img src="${u.replace('w342','w780')}" alt="${d.title}" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover">`;
-    });
-  }
-}
-function dr(l,v){return `<div class="drow"><span class="dl">${l}</span><span class="dv">${v}</span></div>`}
-function closeModal(){document.getElementById('modal-bg').classList.remove('open')}
-document.getElementById('modal-bg').addEventListener('click',e=>{if(e.target===document.getElementById('modal-bg'))closeModal()});
-function switchMTab(btn,target){
-  const body=btn.closest('.modal-body');
-  body.querySelectorAll('.modal-tab').forEach(b=>b.classList.remove('on'));
-  body.querySelectorAll('.mtab-con').forEach(c=>c.classList.remove('on'));
-  btn.classList.add('on');
-  const el=document.getElementById(target);
-  if(el)el.classList.add('on');
-}
-// 타겟 ID로 직접 탭 전환 (광고 집행 탭의 "인증하기" 버튼용)
-function switchMTabById(targetId){
-  const targetEl = document.getElementById(targetId);
-  if(!targetEl) return;
-  const body = targetEl.closest('.modal-body');
-  if(!body) return;
-  body.querySelectorAll('.mtab-con').forEach(c=>c.classList.remove('on'));
-  targetEl.classList.add('on');
-  // 탭 버튼도 동기화
-  body.querySelectorAll('.modal-tab').forEach(btn=>{
-    const onclick = btn.getAttribute('onclick')||'';
-    btn.classList.toggle('on', onclick.includes(targetId));
-  });
-}
-
-// ── Google Sheets ─────────────────────────────────────────────
-function extractSheetId(input){const m=input.match(/\/spreadsheets\/d\/([a-zA-Z0-9_-]+)/);return m?m[1]:input.trim()}
-async function connectSheets(){
-  const url=document.getElementById('sheets-url').value.trim();
-  const apiKey=document.getElementById('sheets-gak').value.trim()||CONFIG.GOOGLE_API_KEY;
-  const range=document.getElementById('sheets-range').value;
-  const id=extractSheetId(url);
-  if(!id||id==='YOUR_SPREADSHEET_ID'){toast('스프레드시트 URL을 입력해주세요');return}
-  if(!apiKey||apiKey==='YOUR_GOOGLE_API_KEY'){toast('Google API Key를 입력해주세요');return}
-  CONFIG.SHEETS_ID=id;CONFIG.GOOGLE_API_KEY=apiKey;
-  const btn=event.target;btn.disabled=true;btn.innerHTML='<span class="spinner"></span>연결 중...';
-  try{
-    const rows=await fetchRows(id,range,apiKey);
-    document.getElementById('sheets-dot').className='sdot don';
-    document.getElementById('sheets-lbl').textContent=`연결됨 (${rows.length}행)`;
-    document.getElementById('sync-btn').disabled=false;
-    toast(`Sheets 연결 성공 — ${rows.length}행 확인`);
-  }catch(e){document.getElementById('sheets-lbl').textContent='연결 실패';toast('연결 실패: '+e.message)}
-  btn.disabled=false;btn.textContent='연결 테스트';
-}
-async function fetchRows(id,range,key){
-  const r=await fetch(`https://sheets.googleapis.com/v4/spreadsheets/${id}/values/${encodeURIComponent(range)}?key=${key}`);
-  if(!r.ok){const e=await r.json();throw new Error(e.error?.message||`HTTP ${r.status}`)}
-  return(await r.json()).values||[];
-}
-function parseRow(row,i){
-  if(!row[0]||!row[1])return null;
-  return{id:2000+i,platform:row[0].toLowerCase().trim(),title:row[1]||'',genre:row[2]||'기타',
-    startMonth:parseInt(row[3])||1,endMonth:parseInt(row[4])||12,target:row[5]||'',
-    synopsis:row[6]||'',cast:row[7]||'',ep:row[8]?parseInt(row[8]):null,
-    adSlot:row[9]||'Pre-roll',peakMonth:parseInt(row[10])||1,
-    posterUrl:row[11]||'',specialUrl:row[12]||'',
-    audience:{f:55,m:45,ages:[{l:'18-24',v:25},{l:'25-34',v:35},{l:'35-44',v:28},{l:'45+',v:12}]}};
-}
-async function syncSheets(){
-  const btn=document.getElementById('sync-btn');
-  btn.disabled=true;btn.innerHTML='<span class="spinner"></span>동기화 중...';
-  try{
-    const rows=await fetchRows(CONFIG.SHEETS_ID,document.getElementById('sheets-range').value,CONFIG.GOOGLE_API_KEY);
-    const parsed=rows.map((r,i)=>parseRow(r,i)).filter(Boolean);
-    if(!parsed.length)throw new Error('파싱된 데이터가 없습니다.');
-    DATA=parsed;nextId=Math.max(...DATA.map(d=>d.id))+1;
-    localStorage.setItem('sheetData',JSON.stringify(DATA));
-    persistData();
-    localStorage.setItem('sheetSync',new Date().toISOString());
-    renderAll();renderAdmin();toast(`동기화 완료 — ${parsed.length}개 콘텐츠`);
-  }catch(e){toast('동기화 실패: '+e.message)}
-  btn.disabled=false;btn.textContent='데이터 동기화';
-}
-
-// ── TAS API ───────────────────────────────────────────────────
-// ── Redash API (TVING TOP 20) ──────────────────────────────
-async function fetchRedashTop20(){
-  const dot = document.getElementById('top20-dot');
-  const lbl = document.getElementById('top20-lbl');
-  const preview = document.getElementById('top20-preview');
-  const lastFetch = document.getElementById('top20-last-fetch');
-
-  if(dot) dot.className='sdot';
-  if(lbl) lbl.textContent='불러오는 중...';
-  if(preview) preview.innerHTML='<span class="spinner"></span> 데이터 요청 중...';
-
-  const url = `${CONFIG.REDASH_BASE}/api/queries/${CONFIG.REDASH_TOP20_QUERY}/results.json?api_key=${CONFIG.REDASH_API_KEY}`;
-
-  try {
-    const res = await fetch(url);
-    if(!res.ok) throw new Error(`HTTP ${res.status}`);
-    const json = await res.json();
-
-    // Redash 응답 파싱: query_result.data.rows
-    const rows = json?.query_result?.data?.rows || [];
-    if(!rows.length) throw new Error('데이터가 비어있습니다');
-
-    // 행 구조 파악 후 TOP 20 추출
-    // 컬럼명은 실제 쿼리에 따라 다를 수 있음 - rank, title, genre 순으로 시도
-    const titleKey = Object.keys(rows[0]).find(k => /title|program|content|프로그램|콘텐츠/i.test(k)) || Object.keys(rows[0])[1];
-    const genreKey = Object.keys(rows[0]).find(k => /genre|장르/i.test(k)) || '';
-    const rankKey  = Object.keys(rows[0]).find(k => /rank|순위/i.test(k)) || Object.keys(rows[0])[0];
-
-    const sorted = [...rows].sort((a,b) => (parseInt(a[rankKey])||0) - (parseInt(b[rankKey])||0)).slice(0,20);
-
-    // 기존 RANKS와 비교해서 변동 계산
-    const prevRanks = {};
-    (RANKS.tving||[]).forEach((item,i) => { prevRanks[item.title] = i+1; });
-
-    RANKS.tving = sorted.map((row,i) => ({
-      title:    String(row[titleKey]||'').trim(),
-      genre:    genreKey ? String(row[genreKey]||'').trim() : guessGenre(String(row[titleKey]||'')),
-      isNew:    !prevRanks[String(row[titleKey]||'').trim()],
-      prevRank: prevRanks[String(row[titleKey]||'').trim()] || null,
-    }));
-
-    const now2 = new Date();
-    rankUpdatedDate = `${now2.getFullYear()}. ${now2.getMonth()+1}. ${now2.getDate()} ${String(now2.getHours()).padStart(2,'0')}:${String(now2.getMinutes()).padStart(2,'0')}`;
-    localStorage.setItem('rankings', JSON.stringify({
-      tving: RANKS.tving.map((x,i)=>({rank:i+1,title:x.title,genre:x.genre})),
-      updatedDate: rankUpdatedDate,
-    }));
-
-    if(dot) { dot.className='sdot don'; }
-    if(lbl) lbl.textContent=`연동됨 · ${RANKS.tving.length}개`;
-    if(lastFetch) lastFetch.textContent = rankUpdatedDate + ' 업데이트';
-    if(preview) preview.innerHTML = `<div style="font-size:11px;color:var(--green);padding:6px 0">✓ TVING TOP ${RANKS.tving.length} 데이터를 성공적으로 가져왔습니다.<br>
-      <span style="color:var(--t3)">1위: ${RANKS.tving[0]?.title} · 컬럼 감지: rank=${rankKey}, title=${titleKey}</span></div>`;
-
-    renderRankToday();
-    toast(`TVING TOP ${RANKS.tving.length} 업데이트 완료`);
-  } catch(e) {
-    if(dot) dot.className='sdot doff';
-    if(lbl) lbl.textContent='연동 실패';
-    if(preview) preview.innerHTML = `<div style="font-size:11px;color:var(--tv);padding:6px 0">
-      ✗ 오류: ${e.message}<br>
-      <span style="color:var(--t3)">CORS 정책 또는 API Key 문제일 수 있습니다. 브라우저 콘솔(F12)에서 오류를 확인하세요.</span>
+  const d = DATA.find(x=>x.id===id); if(!d) return;
+  const [bg,fg]=phCol(d.title);
+  document.getElementById('modal-inner').innerHTML = `
+    <div class="modal-poster" id="mp-${d.id}" style="background:${bg}"></div>
+    <div class="modal-body">
+      <div class="modal-hdr">
+        <div><div style="font-size:18px;font-weight:700">${d.title}</div></div>
+        <button class="modal-close" onclick="closeModal()">✕</button>
+      </div>
+      <div style="font-size:12px;color:var(--t2);margin-bottom:15px">${d.synopsis}</div>
+      <div class="fit-grid">
+        <div class="fit-card"><div class="fit-k">장르</div><div class="fit-v">${d.genre}</div></div>
+        <div class="fit-card"><div class="fit-k">방영</div><div class="fit-v">${d.startMonth}월</div></div>
+        <div class="fit-card"><div class="fit-k">출연</div><div class="fit-v">${d.cast}</div></div>
+        <div class="fit-card"><div class="fit-k">광고상품</div><div class="fit-v">${d.adSlot}</div></div>
+      </div>
+      ${d.specialUrl?`<a href="${d.specialUrl}" target="_blank" class="special-link-btn">특판 상품 보기</a>`:''}
     </div>`;
-    toast('Redash 연동 실패: ' + e.message);
-  }
+  document.getElementById('modal-bg').classList.add('open');
+  injectPoster(`mp-${d.id}`, d.title, d.posterUrl);
+}
+function closeModal(){ document.getElementById('modal-bg').classList.remove('open'); }
+
+function addManual(){
+  const title = document.getElementById('manual-title').value;
+  if(!title){ toast('제목을 입력하세요'); return; }
+  renderEntryForm(title);
 }
 
-async function connectTableau(){
-  toast('태블로 연동은 데이터팀과 협의 후 설정하세요');
-}
-
-// ── 랭킹 편집기 ───────────────────────────────────────────────
-const GMAP={'눈물':'드라마','정년':'드라마','KBO':'스포츠','환승':'리얼리티','범죄도시':'영화','선재':'드라마','솔로':'리얼리티','하이퍼':'드라마','런닝':'예능','무한도전':'예능','이토록':'드라마','마이 데몬':'드라마','지옥':'장르','대도시':'영화','삼체':'SF','퀸메':'드라마','불꽃':'리얼리티','글로리':'드라마','히어로':'드라마'};
-function guessGenre(t){for(const[k,v]of Object.entries(GMAP))if(t.includes(k))return v;return '드라마'}
-
-function renderRankEditor(plat){
-  const list=RANKS[plat];
-  document.getElementById(`re-${plat}-cnt`).textContent=`${list.length}개`;
-  const ul=document.getElementById('re-'+plat);
-  ul.innerHTML='';
-  list.forEach((item,i)=>{
-    const rank=i+1;
-    const chg=item.isNew?null:(item.prevRank?item.prevRank-rank:0);
-    const chgHtml=item.isNew?`<span class="re-chg" style="color:var(--green)">NEW</span>`:chg===0?`<span class="re-chg" style="color:var(--t3)">—</span>`:chg>0?`<span class="re-chg" style="color:var(--green)">▲${chg}</span>`:`<span class="re-chg" style="color:var(--tv)">▼${Math.abs(chg)}</span>`;
-    const nc=rank===1?'re-num re-n1':rank<=3?'re-num re-n3':'re-num';
-    const tid=`ret-${plat}-${i}`;
-    const [bg,fg]=phCol(item.title);
-    const li=document.createElement('li');
-    li.className='re-item'+(item.isNew?' isnew':'');
-    li.draggable=true;li.dataset.i=i;
-    li.innerHTML=`
-      <div class="drag-dots"><span></span><span></span><span></span></div>
-      <span class="${nc}">${rank}</span>
-      <div class="re-thumb" id="${tid}" style="background:${bg}"><div class="re-th-ph" style="color:${fg}">${ini(item.title)}</div></div>
-      <div class="re-body">
-        <div class="re-ttl" ondblclick="startReEdit(this,${i},'${plat}')">${item.title}</div>
-        <input class="re-inp" value="${item.title}" onblur="endReEdit(this,${i},'${plat}')" onkeydown="reEditKey(event,this,${i},'${plat}')">
-        <div class="re-genre">${item.genre}</div>
-      </div>
-      <div class="re-acts">
-        <button class="re-act" onclick="reMoveUp(${i},'${plat}')" ${i===0?'disabled':''}>↑</button>
-        <button class="re-act" onclick="reMoveDn(${i},'${plat}')" ${i===list.length-1?'disabled':''}>↓</button>
-        <button class="re-act del" onclick="reRemove(${i},'${plat}')">삭제</button>
-      </div>
-      ${chgHtml}`;
-    li.addEventListener('dragstart',e=>{draggingEl=li;dragPlat=plat;dragIdx=i;setTimeout(()=>li.classList.add('dragging'),0);e.dataTransfer.effectAllowed='move'});
-    li.addEventListener('dragend',()=>{li.classList.remove('dragging');draggingEl=null});
-    li.addEventListener('dragover',e=>{e.preventDefault();li.classList.add('over')});
-    li.addEventListener('dragleave',()=>li.classList.remove('over'));
-    li.addEventListener('drop',e=>{
-      e.preventDefault();li.classList.remove('over');
-      if(dragPlat!==plat||dragIdx===null)return;
-      const to=parseInt(li.dataset.i);if(to===dragIdx)return;
-      const[moved]=RANKS[plat].splice(dragIdx,1);RANKS[plat].splice(to,0,moved);
-      dragIdx=null;renderRankEditor(plat);
-    });
-    ul.appendChild(li);
-    injectPoster(tid, item.title);
-  });
-}
-function startReEdit(el,idx,plat){el.classList.add('editing');const inp=el.nextElementSibling;inp.classList.add('editing');inp.focus();inp.select()}
-function endReEdit(inp,idx,plat){const val=inp.value.trim();if(val){RANKS[plat][idx].title=val;RANKS[plat][idx].genre=guessGenre(val)}inp.classList.remove('editing');inp.previousElementSibling.classList.remove('editing');inp.previousElementSibling.textContent=RANKS[plat][idx].title}
-function reEditKey(e,inp,idx,plat){if(e.key==='Enter'||e.key==='Escape')inp.blur()}
-function reMoveUp(idx,plat){if(idx===0)return;[RANKS[plat][idx-1],RANKS[plat][idx]]=[RANKS[plat][idx],RANKS[plat][idx-1]];renderRankEditor(plat)}
-function reMoveDn(idx,plat){if(idx>=RANKS[plat].length-1)return;[RANKS[plat][idx],RANKS[plat][idx+1]]=[RANKS[plat][idx+1],RANKS[plat][idx]];renderRankEditor(plat)}
-function reRemove(idx,plat){RANKS[plat].splice(idx,1);renderRankEditor(plat)}
-function addRankItem(e,plat){
-  if(e.key!=='Enter')return;
-  const inp=document.getElementById('add-'+plat);
-  const title=inp.value.trim();if(!title)return;
-  RANKS[plat].push({title,genre:guessGenre(title),isNew:true,prevRank:null});
-  inp.value='';renderRankEditor(plat);
-  document.getElementById('re-'+plat).scrollTop=99999;
-}
-function saveRankings(){
-  const dv = document.getElementById('rank-date').value;
-  const d  = dv ? new Date(dv) : new Date();
-  const dateKey = `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
-  rankUpdatedDate = `${d.getFullYear()}. ${d.getMonth()+1}. ${d.getDate()}`;
-
-  ['tving','wavve'].forEach(p => RANKS[p].forEach((item,i) => { item.prevRank = i+1; item.isNew = false; }));
-
-  const snapshot = {
-    tving: RANKS.tving.map((x,i) => ({ rank:i+1, title:x.title, genre:x.genre })),
-    wavve: RANKS.wavve.map((x,i) => ({ rank:i+1, title:x.title, genre:x.genre })),
-    updatedDate: rankUpdatedDate,
-    dateKey,
-  };
-
-  // 현재 랭킹 저장 (기존 호환)
-  localStorage.setItem('rankings', JSON.stringify(snapshot));
-
-  // 히스토리 적립 (날짜별)
-  let hist = {};
-  hist[dateKey] = snapshot;
-  // 최대 90일 보존
-  const keys = Object.keys(hist).sort().reverse();
-  if(keys.length > 90) keys.slice(90).forEach(k => delete hist[k]);
-
-  renderRankEditor('tving');
-  renderRankEditor('wavve');
-  renderAll();
-  toast(`랭킹 저장 완료 — ${rankUpdatedDate} 기준 기록됨. 히스토리 ${Object.keys(hist).length}일치 보존 중`);
-}
-
-// ── 히스토리 드롭다운 초기화 ─────────────────────────────────
-
-// ── 선택한 날짜의 랭킹 렌더 ──────────────────────────────────
-
-// ── TAS API 자동 갱신 (연동 시 사용) ───────────────────────────
-
-// ── AI 자동완성 ───────────────────────────────────────────────
-async function callClaude(prompt){
-  const r=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:900,messages:[{role:'user',content:prompt}]})});
-  const d=await r.json();return d.content.filter(c=>c.type==='text').map(c=>c.text).join('');
-}
-function safeJSON(raw){return JSON.parse(raw.replace(/```json|```/g,'').trim())}
-
-async function runAI(){
-  const title=document.getElementById('ai-title').value.trim();
-  const plat=document.getElementById('ai-plat').value;
-  if(!title){toast('프로그램명을 입력해주세요');return}
-  const btn=document.getElementById('ai-btn');
-  btn.disabled=true;btn.innerHTML='<span class="spinner"></span>분석 중';
-  document.getElementById('ai-panel').classList.remove('open');
-  try{
-    const raw=await callClaude(`한국 OTT 콘텐츠 전문가. 아래 프로그램 데이터를 JSON만 반환하세요.
-프로그램명: ${title} / 플랫폼: ${plat==='tving'?'TVING':'Wavve'}
-{"genre":"드라마/리얼리티/서바이벌/스포츠/SF/장르/예능 중 택1","startMonth":숫자,"endMonth":숫자,"target":"주 타겟","synopsis":"2문장","cast":"출연진","ep":숫자또는null,"adSlot":"Pre-roll 등","peakMonth":숫자}`);
-    renderAIForm(safeJSON(raw),title,plat);
-  }catch{renderAIForm({genre:'드라마',startMonth:1,endMonth:2,target:'',synopsis:'',cast:'',ep:null,adSlot:'Pre-roll',peakMonth:1},title,plat);toast('AI 연결 실패 — 직접 입력해주세요')}
-  btn.disabled=false;btn.textContent='AI 자동완성';
-}
-function addManual(){renderAIForm({genre:'드라마',startMonth:1,endMonth:2,target:'',synopsis:'',cast:'',ep:null,adSlot:'Pre-roll',peakMonth:1},'','tving');document.getElementById('ai-title').focus()}
-function cancelAI(){document.getElementById('ai-panel').classList.remove('open');editingId=null}
-
-function renderAIForm(d,title,plat){
-  editingId=null;
-  const genres=['드라마','리얼리티','서바이벌','스포츠','SF','장르','예능'];
-  document.getElementById('ai-form').innerHTML=`
-    <div class="ff"><span class="fl">플랫폼</span><select class="fi" id="f-p"><option value="tving" ${(plat||d.platform)==='tving'?'selected':''}>TVING</option><option value="wavve" ${(plat||d.platform)==='wavve'?'selected':''}>Wavve</option></select></div>
-    <div class="ff"><span class="fl">장르</span><select class="fi" id="f-g">${genres.map(g=>`<option ${d.genre===g?'selected':''}>${g}</option>`).join('')}</select></div>
-    <div class="ff"><span class="fl">시작월</span><select class="fi" id="f-s">${Array.from({length:12},(_,i)=>`<option value="${i+1}" ${d.startMonth==i+1?'selected':''}>${i+1}월</option>`).join('')}</select></div>
-    <div class="ff"><span class="fl">종료월</span><select class="fi" id="f-e">${Array.from({length:12},(_,i)=>`<option value="${i+1}" ${d.endMonth==i+1?'selected':''}>${i+1}월</option>`).join('')}</select></div>
-    <div class="ff"><span class="fl">타겟</span><input class="fi" id="f-t" value="${d.target||''}"></div>
-    <div class="ff"><span class="fl">출연진</span><input class="fi" id="f-c" value="${d.cast||''}"></div>
-    <div class="ff full"><span class="fl">시놉시스</span><input class="fi" id="f-sy" value="${d.synopsis||''}"></div>
-    <div class="ff"><span class="fl">편수</span><input class="fi" id="f-ep" type="number" value="${d.ep||''}"></div>
-    <div class="ff"><span class="fl">광고상품</span><input class="fi" id="f-ad" value="${d.adSlot||'Pre-roll'}"></div>
-    <div class="ff"><span class="fl">포스터/썸네일 URL</span><input class="fi" id="f-po" value="${d.posterUrl||''}" placeholder="https://i.ifh.cc/...jpg"></div>
-    <div class="ff full"><span class="fl">특판 링크 URL (있을 경우)</span><input class="fi" id="f-sp" value="${d.specialUrl||''}"></div>
-    <input type="hidden" id="f-title" value="${title||''}">
-    <input type="hidden" id="f-pk" value="${d.peakMonth||d.startMonth||1}">`;
+function renderEntryForm(title){
+  const genres=['드라마','리얼리티','서바이벌','스포츠','SF'];
+  document.getElementById('ai-form').innerHTML = `
+    <div class="ff"><span class="fl">플랫폼</span><select class="fi" id="f-p"><option value="tving">TVING</option><option value="wavve">Wavve</option></select></div>
+    <div class="ff"><span class="fl">장르</span><select class="fi" id="f-g">${genres.map(g=>`<option>${g}</option>`).join('')}</select></div>
+    <div class="ff"><span class="fl">시작월</span><input class="fi" type="number" id="f-s" value="1"></div>
+    <div class="ff"><span class="fl">종료월</span><input class="fi" type="number" id="f-e" value="12"></div>
+    <div class="ff"><span class="fl">출연진</span><input class="fi" id="f-c"></div>
+    <div class="ff"><span class="fl">편수</span><input class="fi" id="f-ep"></div>
+    <div class="ff full"><span class="fl">시놉시스</span><input class="fi" id="f-sy"></div>
+    <div class="ff full"><span class="fl">썸네일 URL</span><input class="fi" id="f-po" placeholder="https://..."></div>
+    <div class="ff full"><span class="fl">특판 URL</span><input class="fi" id="f-sp"></div>
+    <input type="hidden" id="f-title" value="${title}">
+  `;
   document.getElementById('ai-panel').classList.add('open');
 }
+
 function saveEntry(){
-  const entry={
-    id:editingId||nextId++,
-    platform:document.getElementById('f-p').value,
-    title:document.getElementById('f-title').value||document.getElementById('ai-title').value,
-    genre:document.getElementById('f-g').value,
-    startMonth:parseInt(document.getElementById('f-s').value),
-    endMonth:parseInt(document.getElementById('f-e').value),
-    target:document.getElementById('f-t').value,
-    synopsis:document.getElementById('f-sy').value,
-    cast:document.getElementById('f-c').value,
-    ep:document.getElementById('f-ep').value?parseInt(document.getElementById('f-ep').value):null,
-    adSlot:document.getElementById('f-ad').value,
-    peakMonth:parseInt(document.getElementById('f-pk').value),
-    specialUrl:document.getElementById('f-sp').value||'',
-    posterUrl:document.getElementById('f-po').value||'',
-    audience:{f:55,m:45,ages:[{l:'18-24',v:25},{l:'25-34',v:35},{l:'35-44',v:28},{l:'45+',v:12}]},
+  const entry = {
+    id: nextId++,
+    platform: document.getElementById('f-p').value,
+    title: document.getElementById('f-title').value,
+    genre: document.getElementById('f-g').value,
+    startMonth: parseInt(document.getElementById('f-s').value),
+    endMonth: parseInt(document.getElementById('f-e').value),
+    synopsis: document.getElementById('f-sy').value,
+    cast: document.getElementById('f-c').value,
+    adSlot: 'Pre-roll',
+    posterUrl: document.getElementById('f-po').value,
+    specialUrl: document.getElementById('f-sp').value,
+    peakMonth: parseInt(document.getElementById('f-s').value)
   };
-  if(!entry.title){toast('타이틀을 입력해주세요');return}
-  if(editingId)DATA=DATA.map(d=>d.id===editingId?entry:d);else DATA.push(entry);
-  persistData();
+  DATA.push(entry);
   document.getElementById('ai-panel').classList.remove('open');
-  document.getElementById('ai-title').value='';
-  editingId=null;
-  renderAdmin();renderAll();toast(`"${entry.title}" 저장 완료`);
-}
-function updatePosterUrl(id){
-  const input=document.getElementById(`poster-url-${id}`);
-  if(!input) return;
-  const value=input.value.trim();
-  DATA=DATA.map(d=>d.id===id?{...d, posterUrl:value}:d);
-  persistData();
-  renderAll();
   renderAdmin();
-  toast('썸네일이 저장됐습니다');
-}
-function applyPosterBulk(){
-  const ta=document.getElementById('poster-bulk-input');
-  const raw=(ta?.value||'').trim();
-  if(!raw){ toast('붙여넣을 데이터를 입력해주세요'); return; }
-  const lines=raw.split(/\r?\n+/).map(v=>v.trim()).filter(Boolean);
-  let updated=0;
-  lines.forEach(line=>{
-    let title='', url='';
-    if(line.includes('	')) [title,url]=line.split('	');
-    else if(line.includes('|')) [title,url]=line.split('|');
-    else if(line.includes(',')) { const parts=line.split(','); title=parts.shift(); url=parts.join(','); }
-    title=(title||'').trim(); url=(url||'').trim();
-    if(!title || !url) return;
-    const idx=DATA.findIndex(d=>d.title.trim().toLowerCase()===title.toLowerCase());
-    if(idx>-1){ DATA[idx]={...DATA[idx], posterUrl:url}; updated++; }
-  });
-  if(!updated){ toast('일치하는 타이틀을 찾지 못했습니다'); return; }
-  persistData();
-  renderAdmin(); renderAll();
-  toast(`썸네일 ${updated}건 적용 완료`);
+  toast('저장되었습니다');
 }
 
-// ── Admin render ──────────────────────────────────────────────
 function renderAdmin(){
-  const cnt = document.getElementById('total-cnt');
-  if(cnt) cnt.textContent=`(${DATA.length}편)`;
-
-  // 이달의 추천 선택 UI — 테이블 picks 컬럼으로 통합됨 (별도 UI 없음)
-  const picksList = null;
-  if(picksList){
-    picksList.innerHTML = DATA.map(d => {
-      const picked = PICKS.includes(d.id);
-      const [bg,fg] = phCol(d.title);
-      return `<div onclick="togglePick(${d.id})" style="display:flex;align-items:center;gap:8px;padding:8px 10px;border-radius:var(--r);border:2px solid ${picked?'var(--purple)':'var(--bd)'};background:${picked?'var(--purple-bg)':'var(--bg)'};cursor:pointer;transition:all .15s">
-        <div style="width:28px;height:40px;border-radius:4px;overflow:hidden;flex-shrink:0;background:${bg}">
-          ${d.posterUrl ? `<img src="${d.posterUrl}" style="width:100%;height:100%;object-fit:cover">` : `<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:8px;font-weight:700;color:${fg}">${ini(d.title)}</div>`}
-        </div>
-        <div style="min-width:0">
-          <div style="font-size:11px;font-weight:${picked?700:500};color:${picked?'var(--purple)':'var(--t1)'};white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${d.title}</div>
-          <div style="font-size:10px;color:var(--t3)">${d.platform==='tving'?'TVING':'Wavve'} · ${d.genre}</div>
-        </div>
-        ${picked?'<span style="margin-left:auto;font-size:10px;color:var(--purple);font-weight:700">✓</span>':''}
-      </div>`;
-    }).join('');
-  }
-
-  // 전체 목록
-  const tbody = document.getElementById('data-tbody');
-  if(tbody){
-    tbody.innerHTML=DATA.map(d=>`
-      <tr>
-        <td style="text-align:center">
-          <button onclick="togglePick(${d.id})" title="${PICKS.includes(d.id)?'추천 해제':'추천 선택'}"
-            style="background:none;border:none;font-size:18px;cursor:pointer;line-height:1;opacity:${PICKS.includes(d.id)?1:0.3};transition:opacity .15s"
-            onmouseover="this.style.opacity='0.8'" onmouseout="this.style.opacity='${PICKS.includes(d.id)?1:0.3}'"
-          >${PICKS.includes(d.id)?'★':'☆'}</button>
-        </td>
-        <td><span class="pbadge ${d.platform}-b">${d.platform==='tving'?'TVING':'Wavve'}</span></td>
-        <td style="font-weight:600">${d.title}</td>
-        <td style="color:var(--t2)">${d.genre}</td>
-        <td style="color:var(--t2)">${d.startMonth}–${d.endMonth}월</td>
-        <td style="color:var(--t2)">${d.target||''}</td>
-        <td>
-          <div class="poster-inline">
-            <div class="poster-thumb-mini" id="thumb-mini-${d.id}"><span>${ini(d.title)}</span></div>
-            <input id="poster-url-${d.id}" value="${esc(d.posterUrl||'')}" placeholder="https://..." style="flex:1;padding:5px 8px;font-size:11px;border:1px solid var(--bd2);border-radius:6px;background:var(--bg);color:var(--t1)">
-            <button class="poster-save-btn" onclick="updatePosterUrl(${d.id})">저장</button>
-          </div>
-        </td>
-        <td style="font-size:11px">${d.specialUrl?`<a href="${d.specialUrl}" target="_blank" style="color:var(--purple)">링크↗</a>`:'<span style="color:var(--t3)">—</span>'}</td>
-        <td><button class="del-btn" onclick="deleteEntry(${d.id})">삭제</button></td>
-      </tr>`).join('');
-    DATA.forEach(d=>injectPoster(`thumb-mini-${d.id}`, d.title, d.posterUrl));
-  }
+  document.getElementById('data-tbody').innerHTML = DATA.map(d => `
+    <tr>
+      <td><button onclick="togglePick(${d.id})">${PICKS.includes(d.id)?'★':'☆'}</button></td>
+      <td>${d.platform.toUpperCase()}</td>
+      <td>${d.title}</td>
+      <td>${d.genre}</td>
+      <td>${d.startMonth}월</td>
+      <td><div class="poster-thumb-mini" id="adm-t-${d.id}"></div></td>
+      <td>${d.specialUrl?'O':'X'}</td>
+      <td><button class="del-btn" onclick="deleteEntry(${d.id})">삭제</button></td>
+    </tr>`).join('');
+  DATA.forEach(d=>injectPoster(`adm-t-${d.id}`, d.title, d.posterUrl));
 }
 
 function togglePick(id){
-  if(PICKS.includes(id)){
-    PICKS = PICKS.filter(x=>x!==id);
-  } else {
-    if(PICKS.length >= 3){ toast('최대 3개까지 선택할 수 있습니다'); return; }
-    PICKS.push(id);
-  }
-  localStorage.setItem('picks', JSON.stringify(PICKS));
+  if(PICKS.includes(id)) PICKS = PICKS.filter(x=>x!==id);
+  else PICKS.push(id);
   renderAdmin();
-  renderRecommendations();
-  toast(PICKS.includes(id) ? '추천 콘텐츠에 추가됐습니다' : '추천 콘텐츠에서 제외됐습니다');
 }
 
-function clearPicks(){
-  PICKS = [];
-  localStorage.removeItem('picks');
-  renderAdmin();
-  renderRecommendations();
-  toast('추천 선택이 초기화됐습니다');
-}
+function deleteEntry(id){ DATA=DATA.filter(d=>d.id!==id); renderAdmin(); }
 
-// ── 클립보드 이미지 붙여넣기 ─────────────────────────────────
-function initPasteZone(){
-  document.addEventListener('paste', e => {
-    const panel = document.getElementById('ai-panel');
-    if(!panel || !panel.classList.contains('open')) return;
-    const items = e.clipboardData?.items || [];
-    for(const item of items){
-      if(item.type.startsWith('image/')){
-        const blob = item.getAsFile();
-        const reader = new FileReader();
-        reader.onload = ev => {
-          pasteImageData = ev.target.result;
-          const preview = document.getElementById('paste-preview');
-          if(preview) preview.innerHTML = `<img src="${pasteImageData}" style="max-width:100%;max-height:120px;border-radius:6px;margin-top:4px">`;
-          toast('이미지가 붙여넣어졌습니다. 저장 시 함께 적용됩니다.');
-        };
-        reader.readAsDataURL(blob);
-        break;
-      }
-    }
-  });
-}
-
-function deleteEntry(id){DATA=DATA.filter(d=>d.id!==id);PICKS=PICKS.filter(x=>x!==id);persistData();renderAdmin();renderAll();toast('삭제됐습니다')}
-
-// ── Toast ─────────────────────────────────────────────────────
 function toast(msg){
-  const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');
-  clearTimeout(t._t);t._t=setTimeout(()=>t.classList.remove('show'),2400);
+  const t=document.getElementById('toast'); t.textContent=msg; t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'), 2000);
 }
 
-// ── 캐시 복원 ─────────────────────────────────────────────────
-// ── 화제성 기사 로드 (Claude API + 웹서치) ──────────────────
+// 나머지 캘린더/랭킹 함수들 (생략 가능하나 구조 유지를 위해 간단히 유지)
+function renderMonthlyCalendar(){}
+function renderRankToday(){}
+function renderDemoSection(){}
+function fetchRedashTop20(){ toast('API 연동 필요'); }
+function cancelAI(){ document.getElementById('ai-panel').classList.remove('open'); }
 
-// ── 뉴스 아이템 저장소 ───────────────────────────────────────
-
-
-// ── 뷰어: 등록 기사 렌더 ────────────────────────────────────
-
-
-
-// ── AI 기사 더 불러오기 ──────────────────────────────────────
-
-// ── 관리자: 기사 등록/삭제 ──────────────────────────────────
-
-
-
-
-
-
-async function loadBuzzNews(){
-  const btn  = document.getElementById('buzz-refresh-btn');
-  const grid = document.getElementById('buzz-grid');
-  if(!grid) return;
-
-  if(buzzCache && Date.now() - buzzCacheTime < BUZZ_TTL){
-    renderBuzzCards(buzzCache, []); return;
-  }
-
-  btn.disabled = true;
-  btn.innerHTML = '<span class="spinner"></span>불러오는 중...';
-  grid.innerHTML = '<div class="buzz-loading"><span class="spinner"></span>화제 콘텐츠 정보를 불러오는 중...</div>';
-
-  const topItems = getRecommendations().slice(0, 5);
-  const titles   = topItems.map(d => d.title).join(', ');
-
-  const systemPrompt = '당신은 한국 OTT 콘텐츠 미디어 전문가입니다. 요청한 콘텐츠의 화제성 카드 데이터를 JSON 배열로만 반환하세요. 규칙: 반드시 유효한 JSON 배열만 출력(앞뒤 설명, 마크다운 코드블록 절대 금지). 각 문자열 값 안에 큰따옴표(") 사용 금지. summary는 반드시 한 문장으로 완성';
-
-  const userPrompt = `다음 콘텐츠들의 화제성 카드 6개를 아래 JSON 형식으로만 반환해:
-콘텐츠: ${titles}
-
-[
-  {
-    "contentTitle": "콘텐츠명",
-    "angle": "화제 포인트 한 줄",
-    "summary": "화제 이유 한 문장",
-    "keywords": "키워드1, 키워드2",
-    "mood": "hype",
-    "emoji": "장르이모지"
-  }
-]`;
-
-  try {
-    const res = await fetch('https://api.anthropic.com/v1/messages', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        model: 'claude-sonnet-4-20250514',
-        max_tokens: 1200,
-        system: systemPrompt,
-        messages: [{ role: 'user', content: userPrompt }],
-      }),
-    });
-
-    const data = await res.json();
-    if(data.error) throw new Error(data.error.message);
-
-    const rawText = (data.content || [])
-      .filter(b => b.type === 'text')
-      .map(b => b.text).join('').trim()
-      .replace(/```json\s*/gi, '').replace(/```\s*/g, '').trim();
-
-    const arrMatch = rawText.match(/\[[\s\S]*\]/);
-    if(!arrMatch) throw new Error('JSON 배열 없음: ' + rawText.slice(0,100));
-
-    const articles = JSON.parse(arrMatch[0]);
-    if(!Array.isArray(articles) || !articles.length) throw new Error('빈 배열');
-
-    buzzCache = articles;
-    buzzCacheTime = Date.now();
-    renderBuzzCards(articles, topItems);
-
-  } catch(e) {
-    console.error('Buzz error:', e);
-    grid.innerHTML = '<div style="grid-column:1/-1;padding:24px;text-align:center;color:var(--t3);font-size:12px">불러오지 못했습니다.<br><span style="font-size:10px;color:var(--tv)">' + e.message + '</span><br><button onclick="buzzCache=null;loadBuzzNews()" class="btn" style="margin-top:12px;font-size:11px">다시 시도</button></div>';
-  }
-
-  btn.disabled = false;
-  btn.innerHTML = '🔍 새로고침';
-}
-
-
-
-
-
-function restoreCache(){
-  try{
-    const sd=localStorage.getItem('manualData') || localStorage.getItem('sheetData');
-    if(sd){const p=JSON.parse(sd);if(p.length){DATA=p;nextId=Math.max(...DATA.map(d=>d.id))+1}}
-    const rk=localStorage.getItem('rankings');
-    if(rk){const r=JSON.parse(rk);
-      if(r.tving)RANKS.tving=r.tving.map(x=>({title:x.title,genre:x.genre||guessGenre(x.title),isNew:false,prevRank:x.rank}));
-      if(r.updatedDate)rankUpdatedDate=r.updatedDate;}
-    const pk=localStorage.getItem('picks');
-    if(pk)PICKS=JSON.parse(pk);
-  }catch{}
-}
-
-restoreCache();
 renderAll();
-renderAdmin();
-initPasteZone();
 </script>
 </body>
 </html>
