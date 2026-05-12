@@ -7,48 +7,55 @@
 
 <script>
 const CONFIG = {
-  TMDB_KEY:        'YOUR_TMDB_API_KEY',
-  SHEETS_ID:       'YOUR_SPREADSHEET_ID',
-  GOOGLE_API_KEY:  'YOUR_GOOGLE_API_KEY',
-  TAS_API_BASE:    '',
-  TAS_API_KEY:     '',
-  TAS_API_ENABLED: false,
-  ADMIN_PASSWORD:  'tving2026',
-  DEMO_PASSWORD:   'tvingdemo',  // 타겟 오디언스 데이터 열람 비밀번호 (광고주·대행사 전달용)
+  TMDB_KEY:           'YOUR_TMDB_API_KEY',
+  SHEETS_ID:          'YOUR_SPREADSHEET_ID',
+  GOOGLE_API_KEY:     'YOUR_GOOGLE_API_KEY',
+  ADMIN_PASSWORD:     'tving2026',
+  // TVING Redash API (TOP 20)
+  REDASH_BASE:        'https://prod-redash-ext.tving-data.com',
+  REDASH_TOP20_QUERY: '1438',
+  REDASH_API_KEY:     '8Smmffh6rvxRICbOszmirHZnis82M2PgfMdbbE6W',
+  // 타겟 오디언스 태블로 (추후 연동)
+  TABLEAU_BASE:       '',
+  TABLEAU_TOKEN:      '',
 };
 </script>
 
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
-  --tv:#E8144A; --tv-bg:#FDE8ED; --tv-dark:#8B0A2C;
-  --wv:#1B40E8; --wv-bg:#E6EAFE; --wv-dark:#0D2699;
-  --green:#0F6E56; --green-bg:#E1F5EE;
-  --purple:#534AB7; --purple-bg:#EEEDFE;
-  --amber:#854F0B; --amber-bg:#FAEEDA;
-  --bg:#FFFFFF; --bg2:#F7F7F5; --bg3:#F0EEE8;
-  --t1:#1A1A2E; --t2:#5F5E5A; --t3:#888780;
-  --bd:rgba(0,0,0,0.10); --bd2:rgba(0,0,0,0.20);
-  --r:8px; --rl:12px; --sh:0 1px 4px rgba(0,0,0,0.07);
+  /* ── 브랜드 컬러 (다크에서 더 선명하게) ── */
+  --tv:#FF2D55;     --tv-bg:#3D0B18;   --tv-dark:#FF6B8A;
+  --wv:#4D8EFF;     --wv-bg:#0A1F4D;   --wv-dark:#8AB4FF;
+  --green:#2DD4A0;  --green-bg:#062E22; 
+  --purple:#A78BFA; --purple-bg:#1E1540;
+  --amber:#FBBF24;  --amber-bg:#2D1F04;
 
-  /* 장르 컬러 팔레트 */
-  --g-drama:#E8144A;   --g-drama-bg:#FDE8ED;   --g-drama-dark:#8B0A2C;
-  --g-reality:#854F0B; --g-reality-bg:#FAEEDA; --g-reality-dark:#633806;
-  --g-survival:#0F6E56;--g-survival-bg:#E1F5EE;--g-survival-dark:#085041;
-  --g-sports:#185FA5;  --g-sports-bg:#E6F1FB;  --g-sports-dark:#0C447C;
-  --g-sf:#534AB7;      --g-sf-bg:#EEEDFE;      --g-sf-dark:#3C3489;
-  --g-genre:#993556;   --g-genre-bg:#FBEAF0;   --g-genre-dark:#72243E;
-  --g-etc:#5F5E5A;     --g-etc-bg:#F1EFE8;     --g-etc-dark:#444441;
-}
-@media(prefers-color-scheme:dark){
-  :root{
-    --bg:#1A1A2E;--bg2:#26215C;--bg3:#2C2C2A;
-    --t1:#F1EFE8;--t2:#B4B2A9;--t3:#888780;
-    --bd:rgba(255,255,255,0.10);--bd2:rgba(255,255,255,0.20);
-    --tv-bg:#4B1528;--tv-dark:#F4C0D1;
-    --wv-bg:#042C53;--wv-dark:#B5D4F4;
-    --green-bg:#04342C;--purple-bg:#26215C;--amber-bg:#412402;
-  }
+  /* ── 배경 ── */
+  --bg:#0F1117;    /* 카드·모달·nav */
+  --bg2:#1A1D27;   /* 섹션 배경 */
+  --bg3:#13151E;   /* 페이지 배경 */
+
+  /* ── 텍스트 ── */
+  --t1:#F0EEF8;    /* 메인 텍스트 */
+  --t2:#A8A5B8;    /* 서브 텍스트 */
+  --t3:#5C5975;    /* 뮤트 텍스트 */
+
+  /* ── 보더 ── */
+  --bd:rgba(255,255,255,0.08);
+  --bd2:rgba(255,255,255,0.16);
+
+  /* ── 기타 ── */
+  --r:8px; --rl:12px; --sh:0 2px 12px rgba(0,0,0,0.4);
+
+  /* ── 장르 컬러 팔레트 (다크용) ── */
+  --g-drama:#FF2D55;   --g-drama-bg:#3D0B18;   --g-drama-dark:#FF6B8A;
+  --g-reality:#F59E0B; --g-reality-bg:#2D1A04; --g-reality-dark:#FCD34D;
+  --g-survival:#10B981;--g-survival-bg:#062E22;--g-survival-dark:#6EE7B7;
+  --g-sports:#4D8EFF;  --g-sports-bg:#0A1F4D;  --g-sports-dark:#93C5FD;
+  --g-sf:#A78BFA;      --g-sf-bg:#1E1540;      --g-sf-dark:#C4B5FD;
+  --g-genre:#F472B6;   --g-genre-bg:#2D0A1E;   --g-genre-dark:#F9A8D4;
+  --g-etc:#6B7280;     --g-etc-bg:#1F2128;     --g-etc-dark:#9CA3AF;
 }
 
 body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Apple SD Gothic Neo",sans-serif;font-size:14px;line-height:1.6;background:var(--bg3);color:var(--t1);min-height:100vh}
@@ -126,7 +133,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Apple SD Gothic Ne
 /* 특판 뱃지 */
 .special-badge{
   position:absolute;top:10px;left:10px;z-index:2;
-  background:#1A1A2E;color:#FAC775;font-size:9px;font-weight:700;
+  background:#2D2208;color:#FBBF24;font-size:9px;font-weight:700;border:1px solid #FBBF2444;
   padding:3px 8px;border-radius:10px;letter-spacing:.3px;
   display:flex;align-items:center;gap:4px;
 }
@@ -235,9 +242,9 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Apple SD Gothic Ne
 .special-link-btn{
   display:inline-flex;align-items:center;gap:6px;margin-top:6px;
   padding:7px 14px;font-size:12px;border-radius:20px;
-  background:#1A1A2E;color:#FAC775;border:none;cursor:pointer;font-weight:500;text-decoration:none;
+  background:#2D2208;color:#FBBF24;border:1px solid #FBBF2444;cursor:pointer;font-weight:500;text-decoration:none;
 }
-.special-link-btn:hover{background:#26215C}
+.special-link-btn:hover{background:#3D2E08}
 .special-link-btn svg{width:12px;height:12px;fill:#FAC775}
 
 /* ── 광고 상품 카드 ── */
@@ -349,21 +356,7 @@ select.fin{cursor:pointer}
 /* ── Recommendations / unified explorer / calendar ── */
 .reco-box{background:var(--bg);border:1px solid var(--bd);border-radius:18px;padding:18px;margin:24px 0 16px;box-shadow:0 14px 34px rgba(0,0,0,.08)}
 /* ── 화제성 기사 섹션 ── */
-.buzz-box{background:var(--bg);border:1px solid var(--bd);border-radius:18px;padding:18px;margin-bottom:20px;box-shadow:var(--sh)}
-.buzz-card{background:var(--bg2);border:1px solid var(--bd);border-radius:var(--rl);overflow:hidden;cursor:pointer;transition:border-color .15s,box-shadow .15s;display:flex;flex-direction:column}
-.buzz-card:hover{border-color:var(--bd2);box-shadow:0 4px 16px rgba(0,0,0,0.10)}
-.buzz-card-thumb{width:100%;padding-top:52%;position:relative;background:var(--bg3);overflow:hidden;flex-shrink:0}
-.buzz-card-thumb-ph{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:28px;opacity:.25}
-.buzz-card-body{padding:12px 13px 13px;flex:1;display:flex;flex-direction:column}
-.buzz-card-tags{display:flex;gap:5px;margin-bottom:7px;flex-wrap:wrap}
-.buzz-tag-title{font-size:10px;font-weight:700;padding:2px 7px;border-radius:8px}
-.buzz-tag-media{font-size:9px;color:var(--t3);padding:2px 0}
-.buzz-card-headline{font-size:12px;font-weight:600;line-height:1.4;color:var(--t1);margin-bottom:6px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
-.buzz-card-summary{font-size:10px;color:var(--t2);line-height:1.55;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;flex:1}
-.buzz-card-foot{display:flex;align-items:center;justify-content:space-between;margin-top:10px;padding-top:8px;border-top:1px solid var(--bd)}
-.buzz-card-date{font-size:9px;color:var(--t3)}
-.buzz-card-link{font-size:9px;color:var(--purple);font-weight:600}
-.buzz-loading{display:flex;align-items:center;justify-content:center;gap:10px;padding:32px;color:var(--t3);font-size:12px;grid-column:1/-1}
+
 .reco-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
 .reco-card{border:1px solid var(--bd);border-radius:16px;padding:12px;background:linear-gradient(180deg,var(--bg) 0%,var(--bg2) 100%);display:grid;grid-template-columns:88px 1fr;gap:12px;align-items:start;cursor:pointer;transition:transform .15s,box-shadow .15s,border-color .15s}
 .reco-card:hover{transform:translateY(-2px);box-shadow:0 10px 22px rgba(0,0,0,.08);border-color:var(--bd2)}
@@ -379,7 +372,7 @@ select.fin{cursor:pointer}
 .reco-mini{font-size:11px;color:var(--t2);line-height:1.6}
 .quick-badges{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:8px}
 .quick-badge{font-size:9px;font-weight:700;padding:3px 7px;border-radius:999px;letter-spacing:.02em}
-.qb-special{background:#1A1A2E;color:#FAC775}
+.qb-special{background:#2D2208;color:#FBBF24;border:1px solid #FBBF2433}
 .qb-rank{background:var(--purple-bg);color:var(--purple)}
 .qb-soon{background:var(--green-bg);color:var(--green)}
 .explorer-box{background:var(--bg);border:1px solid var(--bd);border-radius:18px;padding:18px;box-shadow:var(--sh);margin-bottom:18px}
@@ -541,14 +534,13 @@ select.fin{cursor:pointer}
 <!-- ═══ VIEWER ═══════════════════════════════════════════ -->
 <div class="page active" id="viewer-page">
 
-  <!-- ── 메인 탭 ── -->
   <div class="vtabs" style="margin-top:20px">
     <button class="vtab on" onclick="setMainTab('home')">📌 추천 · 캘린더</button>
-    <button class="vtab"    onclick="setMainTab('ranking')">🏆 TOP 20 랭킹</button>
+    <button class="vtab"    onclick="setMainTab('ranking')">🏆 TOP 20 · 시청데모</button>
     <button class="vtab"    onclick="setMainTab('explorer')">🔍 콘텐츠 익스플로러</button>
   </div>
 
-  <!-- ── 탭 1: 추천 + 캘린더 ── -->
+  <!-- 탭 1: 추천 + 캘린더 -->
   <div class="vtab-con" id="vcon-home">
     <div class="reco-box">
       <div class="sec-hdr">
@@ -556,27 +548,9 @@ select.fin{cursor:pointer}
           <div class="sec-title">이달의 추천 콘텐츠 포인트</div>
           <div class="section-note">브랜드가 지금 검토해야 할 화제 콘텐츠와 주요 집행 포인트를 먼저 보여줍니다.</div>
         </div>
-        <span style="font-size:11px;color:var(--t3)">추천순 · 특판 · TOP 20 · 공개 임박 기준</span>
+        <span style="font-size:12px;color:var(--t3)">추천순 · 특판 · TOP 20 · 공개 임박 기준</span>
       </div>
       <div class="reco-grid" id="reco-grid"></div>
-    </div>
-
-    <!-- ── 화제성 기사 섹션 ── -->
-    <div class="buzz-box" id="buzz-box">
-      <div class="sec-hdr" style="margin-bottom:14px">
-        <div>
-          <div class="sec-title">📰 화제성 · 기대작 미디어 반응</div>
-          <div class="section-note">담당자가 선별한 화제 기사 · 보도자료를 확인하세요.</div>
-        </div>
-        <button class="btn pri" id="buzz-more-btn" onclick="loadBuzzMore()" style="font-size:11px;white-space:nowrap">
-          ✨ AI 기사 더 불러오기
-        </button>
-      </div>
-      <div id="buzz-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:14px">
-        <div style="grid-column:1/-1;padding:32px;text-align:center;color:var(--t3);font-size:12px">
-          관리자 페이지에서 화제 기사를 등록하면 여기에 표시됩니다.
-        </div>
-      </div>
     </div>
 
     <div class="monthly-box">
@@ -586,8 +560,8 @@ select.fin{cursor:pointer}
           <div class="section-note">메가 IP와 특판 가능 콘텐츠 중심으로 향후 3개월 공개 시점을 먼저 확인할 수 있습니다.</div>
         </div>
         <div style="display:flex;align-items:center;gap:6px">
-          <button id="cal-btn-list" class="btn on" onclick="setCalView('list')" style="font-size:10px;padding:4px 10px;border-radius:8px">리스트</button>
-          <button id="cal-btn-timeline" class="btn" onclick="setCalView('timeline')" style="font-size:10px;padding:4px 10px;border-radius:8px">타임라인</button>
+          <button id="cal-btn-list" class="btn on" onclick="setCalView('list')" style="font-size:11px;padding:4px 10px;border-radius:8px">리스트</button>
+          <button id="cal-btn-timeline" class="btn" onclick="setCalView('timeline')" style="font-size:11px;padding:4px 10px;border-radius:8px">타임라인</button>
         </div>
       </div>
       <div class="calendar-legend">
@@ -596,56 +570,70 @@ select.fin{cursor:pointer}
         <span class="quick-badge qb-soon">공개 임박</span>
         <span class="quick-badge" style="background:var(--bg2);color:var(--t3);border:1px solid var(--bd)">종영 미정</span>
       </div>
-      <div class="calendar-note" style="margin-top:10px">월간 캘린더에는 주요 셀링 포인트가 있는 메가 IP만 선별해 배치했습니다. 전체 라인업은 콘텐츠 익스플로러 탭에서 확인하세요.</div>
       <div id="monthly-grid" style="margin-top:14px"></div>
     </div>
   </div>
 
-  <!-- ── 탭 2: TOP 20 랭킹 ── -->
+  <!-- 탭 2: TOP 20 + 시청데모 -->
   <div class="vtab-con" id="vcon-ranking" style="display:none">
-    <div class="explorer-box" style="margin-bottom:18px">
+    <!-- 오늘의 TOP 20 -->
+    <div class="explorer-box" style="margin-bottom:16px">
       <div class="sec-hdr" style="margin-bottom:14px">
         <div>
-          <div class="sec-title">오늘의 TOP 20</div>
-          <div class="section-note">TVING · Wavve 현재 인기 순위. 순위 변동은 직전 저장 기록 대비 자동 계산됩니다.</div>
+          <div class="sec-title">TVING TOP 20</div>
+          <div class="section-note">Redash API 연동 기준 · TVING 실시간 인기 순위</div>
         </div>
-        <span style="font-size:11px;color:var(--t3)" id="rank-today-meta"></span>
+        <span style="font-size:12px;color:var(--t3)" id="rank-today-meta"></span>
       </div>
-      <div id="rank-today-grid" style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
-        <div style="padding:32px;text-align:center;color:var(--t3);font-size:12px;grid-column:1/-1">
-          관리자 페이지에서 TOP 20을 저장하면 여기에 표시됩니다.
+      <div id="rank-today-grid" style="display:grid;grid-template-columns:1fr;gap:16px">
+        <div style="padding:32px;text-align:center;color:var(--t3);font-size:13px;grid-column:1/-1">
+          관리자 페이지에서 "지금 가져오기"를 눌러 TOP 20을 불러오세요.
         </div>
       </div>
     </div>
 
+    <!-- 시청데모 PKG -->
     <div class="explorer-box">
-      <div class="toolbar-top" style="margin-bottom:14px">
+      <div class="sec-hdr" style="margin-bottom:14px">
         <div>
-          <div class="sec-title">랭킹 히스토리</div>
-          <div class="section-note">날짜를 선택해 과거 순위를 조회합니다. 이전 저장일 대비 순위 변동이 자동 계산됩니다.</div>
-        </div>
-        <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
-          <select id="rank-hist-date" class="toolbar-select" onchange="renderRankHistory()" style="font-size:11px;padding:5px 10px">
-            <option value="">날짜 선택</option>
-          </select>
-          <span style="font-size:10px;color:var(--t3)" id="rank-hist-meta"></span>
+          <div class="sec-title">시청데모 PKG</div>
+          <div class="section-note">데모별 선호 콘텐츠 패키지 · 논스킵 15초 CPM 18,000원 / 최소 1,000만원(VAT별도)</div>
         </div>
       </div>
-      <div id="rank-history-grid" style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
-        <div style="padding:32px;text-align:center;color:var(--t3);font-size:12px;grid-column:1/-1">
-          저장된 랭킹 기록이 없습니다.
-        </div>
-      </div>
+      <div id="demo-tabs" style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px" id="demo-tabs"></div>
+      <div id="demo-content-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:12px"></div>
     </div>
   </div>
 
-  <!-- ── 탭 3: 콘텐츠 익스플로러 ── -->
+  <!-- 탭 3: 콘텐츠 익스플로러 -->
   <div class="vtab-con" id="vcon-explorer" style="display:none">
     <div class="explorer-box">
+      <!-- 사용 안내 -->
+      <div style="background:var(--bg2);border-radius:var(--r);padding:14px 16px;margin-bottom:16px;border-left:3px solid var(--purple)">
+        <div style="font-size:13px;font-weight:700;color:var(--t1);margin-bottom:8px">콘텐츠 익스플로러 활용법</div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px">
+          <div style="font-size:12px;color:var(--t2);line-height:1.65">
+            <span style="color:var(--purple);font-weight:700">🔍 탐색</span><br>
+            TVING·Wavve 신작 라인업 전체를 카드 형태로 확인. 특판·TOP 20 필터로 빠르게 좁힐 수 있습니다.
+          </div>
+          <div style="font-size:12px;color:var(--t2);line-height:1.65">
+            <span style="color:var(--tv);font-weight:700">📋 상세 정보</span><br>
+            카드 클릭 시 출연진·시놉시스·방영 일정·타겟 오디언스·광고 상품 스펙을 한 번에 확인합니다.
+          </div>
+          <div style="font-size:12px;color:var(--t2);line-height:1.65">
+            <span style="color:var(--amber);font-weight:700">⭐ 특판 콘텐츠</span><br>
+            금색 뱃지가 있는 콘텐츠는 특판 상품이 연동되어 있습니다. 클릭 시 특판 공지로 바로 이동합니다.
+          </div>
+          <div style="font-size:12px;color:var(--t2);line-height:1.65">
+            <span style="color:var(--green);font-weight:700">💡 타겟 추천</span><br>
+            콘텐츠 카드 → 콘텐츠 정보 탭 하단에서 비슷한 타겟 오디언스의 다른 콘텐츠를 추천해드립니다.
+          </div>
+        </div>
+      </div>
+
       <div class="toolbar-top">
-        <div>
-          <div class="sec-title">콘텐츠 익스플로러</div>
-          <div class="toolbar-copy">특판, TOP 20, 시청데모 패키지까지 하나의 화면에서 보고 공개 일정·플랫폼·장르·구분 기준으로 빠르게 탐색할 수 있습니다.</div>
+        <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap">
+          <div class="filters-row" id="filters"></div>
         </div>
         <div class="toolbar-actions">
           <label class="filter-label" for="sort-select">정렬</label>
@@ -653,16 +641,13 @@ select.fin{cursor:pointer}
             <option value="recommended">추천순</option>
             <option value="release">공개 일정순</option>
             <option value="platform">플랫폼순</option>
-            <option value="genre">장르순</option>
             <option value="special">특판 우선</option>
           </select>
         </div>
       </div>
-      <div class="filters-row" id="filters"></div>
-      <div class="demo-panel" id="demo-panel" style="display:none"></div>
-      <div class="sec-hdr" style="margin:10px 0 0">
-        <span class="section-note">콘텐츠를 클릭하면 출연진, 브랜드 핏, 노출 가능한 광고 상품까지 함께 볼 수 있습니다.</span>
-        <span style="font-size:11px;color:var(--t3)" id="lineup-cnt"></span>
+      <div class="sec-hdr" style="margin:4px 0 0">
+        <span style="font-size:12px;color:var(--t3)">카드 클릭 시 상세 정보를 확인할 수 있습니다</span>
+        <span style="font-size:12px;color:var(--t3)" id="lineup-cnt"></span>
       </div>
       <div class="poster-grid" id="poster-grid"></div>
     </div>
@@ -673,646 +658,136 @@ select.fin{cursor:pointer}
   </div>
 </div>
 
-<!-- ═══ ADMIN ═══════════════════════════════════════════ -->
 <div class="page" id="admin-page">
   <div style="padding-top:24px">
 
-    <!-- ── 관리자 헤더 ── -->
-    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;flex-wrap:wrap;gap:10px">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:24px;flex-wrap:wrap;gap:10px">
       <div>
-        <div style="font-size:18px;font-weight:600;margin-bottom:3px">관리자 대시보드</div>
-        <div style="font-size:11px;color:var(--t3)">TVING 광고사업팀 내부 전용 · 외부 공유 금지</div>
+        <div style="font-size:20px;font-weight:700;margin-bottom:4px">관리자</div>
+        <div style="font-size:12px;color:var(--t3)">TVING 광고사업팀 내부 전용</div>
       </div>
       <button class="btn" onclick="goViewer()">← 뷰어로 돌아가기</button>
-      <button class="btn suc" onclick="exportFile()" style="font-weight:600">⬇ 파일 내보내기 (GitHub 배포용)</button>
     </div>
 
-    <!-- ── 운영 가이드 요약 ── -->
-    <div style="background:var(--purple-bg);border:1px solid var(--purple);border-radius:var(--rl);padding:14px 16px;margin-bottom:14px">
-      <div style="font-size:12px;font-weight:600;color:var(--purple);margin-bottom:8px">📋 주간 운영 체크리스트</div>
-      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:8px">
-        <div style="background:var(--bg);border-radius:var(--r);padding:10px 12px">
-          <div style="font-size:11px;font-weight:600;color:var(--t1);margin-bottom:3px">🗓️ 매주 월요일</div>
-          <div style="font-size:10px;color:var(--t2);line-height:1.6">티빙·웨이브 앱에서 TOP 20 확인 → 아래 랭킹 편집기에서 순서 정렬 → 저장 (약 5분)</div>
-        </div>
-        <div style="background:var(--bg);border-radius:var(--r);padding:10px 12px">
-          <div style="font-size:11px;font-weight:600;color:var(--t1);margin-bottom:3px">📺 신작 발표 시</div>
-          <div style="font-size:10px;color:var(--t2);line-height:1.6">AI 자동완성으로 프로그램명 입력 → 정보 확인 → 저장. Google Sheets 연동 시 시트에만 추가해도 자동 반영</div>
-        </div>
-        <div style="background:var(--bg);border-radius:var(--r);padding:10px 12px">
-          <div style="font-size:11px;font-weight:600;color:var(--t1);margin-bottom:3px">⭐ 특판 상품 출시 시</div>
-          <div style="font-size:10px;color:var(--t2);line-height:1.6">아래 콘텐츠 목록에서 해당 콘텐츠 찾아 특판 URL 입력 → 뷰어에 즉시 금색 특판 뱃지 표시</div>
-        </div>
-        <div style="background:var(--bg);border-radius:var(--r);padding:10px 12px">
-          <div style="font-size:11px;font-weight:600;color:var(--t1);margin-bottom:3px">🖼️ 포스터 업데이트</div>
-          <div style="font-size:10px;color:var(--t2);line-height:1.6">썸네일 일괄 입력 섹션에 「제목 | URL」 형식으로 붙여넣기 → 일괄 적용 버튼. TMDB 자동 매칭이 안 된 경우에만 필요</div>
-        </div>
-      </div>
-    </div>
-
-    <!-- ── 데모 비밀번호 관리 ── -->
-    <div style="background:var(--bg);border:1px solid var(--bd);border-radius:var(--rl);padding:14px 16px;margin-bottom:20px;box-shadow:var(--sh)">
-      <div style="display:flex;align-items:center;gap:8px;margin-bottom:12px;flex-wrap:wrap">
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--t2)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
-        <span style="font-size:13px;font-weight:600">타겟 오디언스 데이터 열람 비밀번호</span>
-        <span style="font-size:10px;padding:2px 8px;border-radius:10px;background:var(--tv-bg);color:var(--tv);font-weight:600">광고주 공유용</span>
-        <span style="font-size:10px;color:var(--t3);margin-left:auto" id="demo-pw-status"></span>
-      </div>
-      <div style="font-size:10px;color:var(--t2);line-height:1.7;background:var(--bg2);border-radius:var(--r);padding:10px 12px;margin-bottom:12px">
-        이 비밀번호는 광고주·대행사에게 <strong>개별 전달</strong>하는 용도입니다. 콘텐츠 카드 → 타겟 오디언스 탭에서 입력 시 시청 데모 데이터가 열람됩니다.<br>
-        <span style="color:var(--tv)">⚠️ 외부에 공개된 URL과 함께 노출되지 않도록 주의하세요.</span>
-        비밀번호는 브라우저 로컬스토리지에 저장되며, 파일을 새로 배포하면 초기화됩니다.
-      </div>
-      <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
-        <div style="flex:1;min-width:200px;position:relative">
-          <input type="password" id="demo-pw-current" placeholder="현재 비밀번호 확인용"
-            style="width:100%;padding:8px 12px;font-size:12px;border:1px solid var(--bd2);border-radius:var(--r);background:var(--bg);color:var(--t1)">
-        </div>
-        <div style="flex:1;min-width:200px">
-          <input type="password" id="demo-pw-new" placeholder="새 비밀번호 입력"
-            style="width:100%;padding:8px 12px;font-size:12px;border:1px solid var(--bd2);border-radius:var(--r);background:var(--bg);color:var(--t1)"
-            onkeydown="if(event.key==='Enter')changeDemoPw()">
-        </div>
-        <div style="flex:1;min-width:200px">
-          <input type="password" id="demo-pw-confirm" placeholder="새 비밀번호 확인"
-            style="width:100%;padding:8px 12px;font-size:12px;border:1px solid var(--bd2);border-radius:var(--r);background:var(--bg);color:var(--t1)"
-            onkeydown="if(event.key==='Enter')changeDemoPw()">
-        </div>
-        <button onclick="changeDemoPw()" class="btn suc" style="white-space:nowrap">비밀번호 변경</button>
-        <button onclick="showDemoPw()" class="btn" style="white-space:nowrap">현재 비번 확인</button>
-      </div>
-      <div id="demo-pw-feedback" style="font-size:11px;margin-top:8px;display:none"></div>
-    </div>
-
-    <!-- ══════════════════════════════════════════
-         STEP 1. Google Sheets 연동
-    ══════════════════════════════════════════ -->
+    <!-- ── A. TVING TOP 20 API ── -->
     <div class="admin-section">
       <div class="asec-hdr">
-        <span style="font-size:11px;font-weight:700;color:var(--green);background:var(--green-bg);padding:2px 8px;border-radius:10px;margin-right:4px">STEP 1</span>
-        <span class="asec-title">Google Sheets 연동</span>
-        <span class="abadge ab-sheets">Sheets API</span>
-        <span style="display:flex;align-items:center;gap:5px;font-size:11px;color:var(--t3);margin-left:auto">
-          <span class="sdot doff" id="sheets-dot"></span><span id="sheets-lbl">연결 안됨</span>
+        <span class="asec-title">TVING TOP 20</span>
+        <span class="abadge ab-tas">Redash API</span>
+        <span style="display:flex;align-items:center;gap:5px;font-size:12px;color:var(--t3);margin-left:auto">
+          <span class="sdot doff" id="top20-dot"></span>
+          <span id="top20-lbl">미연동</span>
         </span>
       </div>
-
-      <!-- 설정 단계 안내 -->
-      <div style="background:var(--bg2);border-radius:var(--r);padding:12px 14px;margin-bottom:12px;border-left:3px solid var(--green)">
-        <div style="font-size:11px;font-weight:600;color:var(--t1);margin-bottom:8px">최초 1회 설정 방법</div>
-        <div style="display:flex;flex-direction:column;gap:6px">
-          <div style="font-size:10px;color:var(--t2);display:flex;gap:8px;align-items:flex-start">
-            <span style="font-size:9px;font-weight:700;background:var(--green);color:#fff;border-radius:50%;width:16px;height:16px;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px">1</span>
-            <span><strong>Google Sheets 템플릿 복사</strong> — 아래 컬럼 순서에 맞춰 시트를 만들거나, 기존 시트를 그대로 사용</span>
-          </div>
-          <div style="font-size:10px;color:var(--t2);display:flex;gap:8px;align-items:flex-start">
-            <span style="font-size:9px;font-weight:700;background:var(--green);color:#fff;border-radius:50%;width:16px;height:16px;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px">2</span>
-            <span><strong>Sheets 공개 설정</strong> — 파일 → 공유 → "링크가 있는 모든 사용자" → 뷰어 권한으로 설정 (편집자 불필요)</span>
-          </div>
-          <div style="font-size:10px;color:var(--t2);display:flex;gap:8px;align-items:flex-start">
-            <span style="font-size:9px;font-weight:700;background:var(--green);color:#fff;border-radius:50%;width:16px;height:16px;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px">3</span>
-            <span><strong>Google API Key 발급</strong> — <a href="https://console.cloud.google.com/apis/credentials" target="_blank" style="color:var(--green)">Google Cloud Console</a> → 사용자 인증 정보 → API 키 만들기 → Google Sheets API 사용 설정</span>
-          </div>
-          <div style="font-size:10px;color:var(--t2);display:flex;gap:8px;align-items:flex-start">
-            <span style="font-size:9px;font-weight:700;background:var(--green);color:#fff;border-radius:50%;width:16px;height:16px;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px">4</span>
-            <span><strong>아래에 URL과 API Key 입력 후 "연결 테스트"</strong> → 성공 시 "데이터 동기화" 버튼 활성화</span>
-          </div>
-        </div>
+      <div style="font-size:12px;color:var(--t2);margin-bottom:12px;line-height:1.6">
+        Redash API로 TVING TOP 20 순위를 가져옵니다. API Key는 이미 설정되어 있습니다.<br>
+        <span style="color:var(--t3);font-size:11px">쿼리 URL: <code style="color:var(--purple)">${CONFIG.REDASH_BASE}/api/queries/${CONFIG.REDASH_TOP20_QUERY}/results.json</code></span>
       </div>
-
       <div class="field-row">
-        <input class="fin" id="sheets-url" placeholder="Google Sheets URL 전체 붙여넣기 (예: https://docs.google.com/spreadsheets/d/xxxx/edit)">
+        <button class="btn dan" onclick="fetchRedashTop20()">지금 가져오기</button>
+        <span style="font-size:11px;color:var(--t3)" id="top20-last-fetch"></span>
+      </div>
+      <div id="top20-preview" style="margin-top:10px"></div>
+    </div>
+
+    <!-- ── B. 콘텐츠 DB + 썸네일 통합 관리 ── -->
+    <div class="admin-section">
+      <div class="asec-hdr">
+        <span class="asec-title">콘텐츠 DB</span>
+        <span class="abadge ab-sheets">Google Sheets 연동</span>
+        <span style="display:flex;align-items:center;gap:5px;font-size:12px;color:var(--t3);margin-left:auto">
+          <span class="sdot doff" id="sheets-dot"></span>
+          <span id="sheets-lbl">연결 안됨</span>
+        </span>
+      </div>
+      <div class="field-row">
+        <input class="fin" id="sheets-url" placeholder="Google Sheets URL">
         <input class="fin" id="sheets-gak" placeholder="Google API Key" style="max-width:240px">
-        <select class="fin" id="sheets-range" style="max-width:150px">
-          <option value="Sheet1!A2:M">Sheet1</option>
-          <option value="콘텐츠!A2:M">콘텐츠</option>
-          <option value="lineup!A2:M">lineup</option>
-        </select>
+        <button class="btn" onclick="connectSheets()">연결</button>
+        <button class="btn suc" id="sync-btn" onclick="syncSheets()" disabled>동기화</button>
       </div>
-      <div class="field-row">
-        <button class="btn" onclick="connectSheets()">연결 테스트</button>
-        <button class="btn suc" id="sync-btn" onclick="syncSheets()" disabled>데이터 동기화</button>
-      </div>
+      <div style="font-size:11px;color:var(--t3);margin-bottom:12px">컬럼 순서: A=platform · B=title · C=genre · D=시작월 · E=종료월 · F=타겟 · G=시놉시스 · H=출연진 · I=편수 · J=광고상품 · K=피크월 · L=포스터URL · M=특판링크URL</div>
 
-      <!-- 컬럼 스펙 표 -->
-      <div style="margin-top:10px;overflow-x:auto">
-        <div style="font-size:11px;font-weight:600;color:var(--t2);margin-bottom:6px">Sheets 컬럼 순서 (1행=헤더, 2행부터 데이터)</div>
-        <table style="border-collapse:collapse;font-size:10px;min-width:600px;width:100%">
-          <thead>
-            <tr style="background:var(--bg2)">
-              <th style="padding:6px 10px;text-align:left;border:1px solid var(--bd);color:var(--t2);font-weight:600">열</th>
-              <th style="padding:6px 10px;text-align:left;border:1px solid var(--bd);color:var(--t2);font-weight:600">항목</th>
-              <th style="padding:6px 10px;text-align:left;border:1px solid var(--bd);color:var(--t2);font-weight:600">입력 형식</th>
-              <th style="padding:6px 10px;text-align:left;border:1px solid var(--bd);color:var(--t2);font-weight:600">예시</th>
-              <th style="padding:6px 10px;text-align:center;border:1px solid var(--bd);color:var(--t2);font-weight:600">필수</th>
-            </tr>
-          </thead>
-          <tbody>
-              <tr>
-                <td style="padding:5px 10px;border:1px solid var(--bd);font-weight:700;color:var(--purple);text-align:center">A</td>
-                <td style="padding:5px 10px;border:1px solid var(--bd);font-weight:500;color:var(--t1)">platform</td>
-                <td style="padding:5px 10px;border:1px solid var(--bd);color:var(--t2)">tving 또는 wavve (소문자)</td>
-                <td style="padding:5px 10px;border:1px solid var(--bd);color:var(--t3);font-style:italic">tving</td>
-                <td style="padding:5px 10px;border:1px solid var(--bd);text-align:center">✅</td>
-              </tr>
-              <tr>
-                <td style="padding:5px 10px;border:1px solid var(--bd);font-weight:700;color:var(--purple);text-align:center">B</td>
-                <td style="padding:5px 10px;border:1px solid var(--bd);font-weight:500;color:var(--t1)">title</td>
-                <td style="padding:5px 10px;border:1px solid var(--bd);color:var(--t2)">프로그램 정식 명칭</td>
-                <td style="padding:5px 10px;border:1px solid var(--bd);color:var(--t3);font-style:italic">환승연애 시즌4</td>
-                <td style="padding:5px 10px;border:1px solid var(--bd);text-align:center">✅</td>
-              </tr>
-              <tr>
-                <td style="padding:5px 10px;border:1px solid var(--bd);font-weight:700;color:var(--purple);text-align:center">C</td>
-                <td style="padding:5px 10px;border:1px solid var(--bd);font-weight:500;color:var(--t1)">genre</td>
-                <td style="padding:5px 10px;border:1px solid var(--bd);color:var(--t2)">드라마 / 리얼리티 / 서바이벌 / 스포츠 / SF / 장르 / 예능</td>
-                <td style="padding:5px 10px;border:1px solid var(--bd);color:var(--t3);font-style:italic">드라마</td>
-                <td style="padding:5px 10px;border:1px solid var(--bd);text-align:center">✅</td>
-              </tr>
-              <tr>
-                <td style="padding:5px 10px;border:1px solid var(--bd);font-weight:700;color:var(--purple);text-align:center">D</td>
-                <td style="padding:5px 10px;border:1px solid var(--bd);font-weight:500;color:var(--t1)">시작월</td>
-                <td style="padding:5px 10px;border:1px solid var(--bd);color:var(--t2)">방영 시작 월 (숫자만)</td>
-                <td style="padding:5px 10px;border:1px solid var(--bd);color:var(--t3);font-style:italic">4</td>
-                <td style="padding:5px 10px;border:1px solid var(--bd);text-align:center">✅</td>
-              </tr>
-              <tr>
-                <td style="padding:5px 10px;border:1px solid var(--bd);font-weight:700;color:var(--purple);text-align:center">E</td>
-                <td style="padding:5px 10px;border:1px solid var(--bd);font-weight:500;color:var(--t1)">종료월</td>
-                <td style="padding:5px 10px;border:1px solid var(--bd);color:var(--t2)">방영 종료 월 (숫자만)</td>
-                <td style="padding:5px 10px;border:1px solid var(--bd);color:var(--t3);font-style:italic">5</td>
-                <td style="padding:5px 10px;border:1px solid var(--bd);text-align:center">✅</td>
-              </tr>
-              <tr>
-                <td style="padding:5px 10px;border:1px solid var(--bd);font-weight:700;color:var(--purple);text-align:center">F</td>
-                <td style="padding:5px 10px;border:1px solid var(--bd);font-weight:500;color:var(--t1)">타겟</td>
-                <td style="padding:5px 10px;border:1px solid var(--bd);color:var(--t2)">주 타겟 시청자</td>
-                <td style="padding:5px 10px;border:1px solid var(--bd);color:var(--t3);font-style:italic">20-30대 여성</td>
-                <td style="padding:5px 10px;border:1px solid var(--bd);text-align:center">✅</td>
-              </tr>
-              <tr>
-                <td style="padding:5px 10px;border:1px solid var(--bd);font-weight:700;color:var(--purple);text-align:center">G</td>
-                <td style="padding:5px 10px;border:1px solid var(--bd);font-weight:500;color:var(--t1)">시놉시스</td>
-                <td style="padding:5px 10px;border:1px solid var(--bd);color:var(--t2)">프로그램 소개 2~3문장</td>
-                <td style="padding:5px 10px;border:1px solid var(--bd);color:var(--t3);font-style:italic">전 연인들이...</td>
-                <td style="padding:5px 10px;border:1px solid var(--bd);text-align:center">✅</td>
-              </tr>
-              <tr>
-                <td style="padding:5px 10px;border:1px solid var(--bd);font-weight:700;color:var(--purple);text-align:center">H</td>
-                <td style="padding:5px 10px;border:1px solid var(--bd);font-weight:500;color:var(--t1)">출연진</td>
-                <td style="padding:5px 10px;border:1px solid var(--bd);color:var(--t2)">주요 출연진 (쉼표 구분)</td>
-                <td style="padding:5px 10px;border:1px solid var(--bd);color:var(--t3);font-style:italic">류준열, 문가영</td>
-                <td style="padding:5px 10px;border:1px solid var(--bd);text-align:center">—</td>
-              </tr>
-              <tr>
-                <td style="padding:5px 10px;border:1px solid var(--bd);font-weight:700;color:var(--purple);text-align:center">I</td>
-                <td style="padding:5px 10px;border:1px solid var(--bd);font-weight:500;color:var(--t1)">편수</td>
-                <td style="padding:5px 10px;border:1px solid var(--bd);color:var(--t2)">총 편수 숫자 (모르면 빈칸)</td>
-                <td style="padding:5px 10px;border:1px solid var(--bd);color:var(--t3);font-style:italic">16</td>
-                <td style="padding:5px 10px;border:1px solid var(--bd);text-align:center">—</td>
-              </tr>
-              <tr>
-                <td style="padding:5px 10px;border:1px solid var(--bd);font-weight:700;color:var(--purple);text-align:center">J</td>
-                <td style="padding:5px 10px;border:1px solid var(--bd);font-weight:500;color:var(--t1)">광고상품</td>
-                <td style="padding:5px 10px;border:1px solid var(--bd);color:var(--t2)">노출 가능 광고 상품 (쉼표 구분)</td>
-                <td style="padding:5px 10px;border:1px solid var(--bd);color:var(--t3);font-style:italic">Pre-roll, 중간광고</td>
-                <td style="padding:5px 10px;border:1px solid var(--bd);text-align:center">✅</td>
-              </tr>
-              <tr>
-                <td style="padding:5px 10px;border:1px solid var(--bd);font-weight:700;color:var(--purple);text-align:center">K</td>
-                <td style="padding:5px 10px;border:1px solid var(--bd);font-weight:500;color:var(--t1)">피크월</td>
-                <td style="padding:5px 10px;border:1px solid var(--bd);color:var(--t2)">예상 최고 시청률 월 (숫자)</td>
-                <td style="padding:5px 10px;border:1px solid var(--bd);color:var(--t3);font-style:italic">4</td>
-                <td style="padding:5px 10px;border:1px solid var(--bd);text-align:center">—</td>
-              </tr>
-              <tr>
-                <td style="padding:5px 10px;border:1px solid var(--bd);font-weight:700;color:var(--purple);text-align:center">L</td>
-                <td style="padding:5px 10px;border:1px solid var(--bd);font-weight:500;color:var(--t1)">포스터URL</td>
-                <td style="padding:5px 10px;border:1px solid var(--bd);color:var(--t2)">공개 접근 가능한 이미지 URL</td>
-                <td style="padding:5px 10px;border:1px solid var(--bd);color:var(--t3);font-style:italic">https://...jpg</td>
-                <td style="padding:5px 10px;border:1px solid var(--bd);text-align:center">—</td>
-              </tr>
-              <tr>
-                <td style="padding:5px 10px;border:1px solid var(--bd);font-weight:700;color:var(--purple);text-align:center">M</td>
-                <td style="padding:5px 10px;border:1px solid var(--bd);font-weight:500;color:var(--t1)">특판링크URL</td>
-                <td style="padding:5px 10px;border:1px solid var(--bd);color:var(--t2)">특판 공지 페이지 URL (있을 경우만)</td>
-                <td style="padding:5px 10px;border:1px solid var(--bd);color:var(--t3);font-style:italic">https://tvingad...</td>
-                <td style="padding:5px 10px;border:1px solid var(--bd);text-align:center">—</td>
-              </tr>
-          </tbody>
-        </table>
-      </div>
-
-      <div style="margin-top:10px;padding:8px 12px;background:var(--amber-bg);border-radius:var(--r);border-left:3px solid var(--amber)">
-        <div style="font-size:10px;color:var(--amber);font-weight:600;margin-bottom:2px">⚠️ 주의사항</div>
-        <div style="font-size:10px;color:var(--t2);line-height:1.6">
-          · 1행은 반드시 헤더(열 이름)로 비워두거나 헤더 텍스트 입력 — 데이터는 2행부터<br>
-          · platform 값은 반드시 소문자 <strong>tving</strong> 또는 <strong>wavve</strong> (대소문자 구분)<br>
-          · 월은 숫자만 입력 (1~12). "4월" "April" 등 텍스트 입력 시 오류 발생<br>
-          · Sheets 수정 후에는 반드시 "데이터 동기화" 버튼을 눌러야 대시보드에 반영됨
+      <!-- AI 신작 추가 -->
+      <div style="border-top:1px solid var(--bd);padding-top:14px;margin-top:4px">
+        <div style="font-size:12px;font-weight:600;margin-bottom:10px">콘텐츠 추가</div>
+        <div class="field-row">
+          <input class="fin" id="ai-title" placeholder="프로그램명 (예: 환승연애 시즌5)">
+          <select class="fin" id="ai-plat" style="max-width:120px">
+            <option value="tving">TVING</option>
+            <option value="wavve">Wavve</option>
+          </select>
+          <button class="btn pri" id="ai-btn" onclick="runAI()">AI 자동완성</button>
+          <button class="btn" onclick="addManual()">직접 입력</button>
         </div>
-      </div>
-    </div>
-
-    <!-- ══════════════════════════════════════════
-         STEP 2. TAS / Wavve API 연동
-    ══════════════════════════════════════════ -->
-    <div class="admin-section">
-      <div class="asec-hdr">
-        <span style="font-size:11px;font-weight:700;color:var(--tv);background:var(--tv-bg);padding:2px 8px;border-radius:10px;margin-right:4px">STEP 2</span>
-        <span class="asec-title">TAS / Wavve API 연동</span>
-        <span class="abadge ab-tas">내부 API</span>
-        <span style="display:flex;align-items:center;gap:5px;font-size:11px;color:var(--t3);margin-left:auto">
-          <span class="sdot doff" id="tas-dot"></span><span id="tas-lbl">미연동 — API 발급 필요</span>
-        </span>
-      </div>
-
-      <div style="background:var(--bg2);border-radius:var(--r);padding:12px 14px;margin-bottom:12px;border-left:3px solid var(--tv)">
-        <div style="font-size:11px;font-weight:600;color:var(--t1);margin-bottom:6px">TAS 개발팀에 요청해야 하는 것</div>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
-          <div style="font-size:10px;color:var(--t2);background:var(--bg);border-radius:var(--r);padding:8px 10px">
-            <div style="font-weight:600;color:var(--t1);margin-bottom:3px">🔑 API 엔드포인트 1</div>
-            <div style="font-family:monospace;font-size:9px;color:var(--purple);margin-bottom:3px">GET /api/v1/ranking/top20</div>
-            <div>오늘의 TOP 20 랭킹 (플랫폼별, 읽기 전용)</div>
-          </div>
-          <div style="font-size:10px;color:var(--t2);background:var(--bg);border-radius:var(--r);padding:8px 10px">
-            <div style="font-weight:600;color:var(--t1);margin-bottom:3px">🔑 API 엔드포인트 2</div>
-            <div style="font-family:monospace;font-size:9px;color:var(--purple);margin-bottom:3px">GET /api/v1/contents/lineup</div>
-            <div>연간 콘텐츠 메타데이터 (읽기 전용)</div>
-          </div>
-        </div>
-        <div style="font-size:10px;color:var(--t3);margin-top:8px">※ API 연동 완료 시: TOP 20이 매일 오전 6시 자동 갱신되어 수동 편집 불필요. 별도 요청 문서 제출됨 (TAS_API_Request_2026.docx)</div>
-      </div>
-
-      <div class="field-row">
-        <input class="fin" id="tas-base" placeholder="TAS API Base URL (예: https://api-internal.tving.com)">
-        <input class="fin" id="tas-key"  placeholder="TAS API Key (발급 후 입력)" style="max-width:220px">
-        <button class="btn dan" onclick="connectTAS()">연결 테스트</button>
-      </div>
-      <div style="font-size:10px;color:var(--t3);margin-top:6px">API 발급 전까지는 아래 STEP 3의 수동 편집기로 운영하세요.</div>
-    </div>
-
-    <!-- ══════════════════════════════════════════
-         STEP 3. TOP 20 랭킹 편집
-    ══════════════════════════════════════════ -->
-    <div class="admin-section">
-      <div class="asec-hdr">
-        <span style="font-size:11px;font-weight:700;color:var(--wv-dark);background:var(--wv-bg);padding:2px 8px;border-radius:10px;margin-right:4px">STEP 3</span>
-        <span class="asec-title">TOP 20 랭킹 수동 편집</span>
-        <span class="abadge ab-rank">매주 월요일 업데이트</span>
-      </div>
-
-      <div style="background:var(--bg2);border-radius:var(--r);padding:12px 14px;margin-bottom:12px;border-left:3px solid var(--wv)">
-        <div style="font-size:11px;font-weight:600;color:var(--t1);margin-bottom:6px">주간 업데이트 방법 (약 5분 소요)</div>
-        <div style="display:flex;flex-direction:column;gap:5px">
-          <div style="font-size:10px;color:var(--t2);display:flex;gap:8px;align-items:flex-start">
-            <span style="font-weight:700;color:var(--wv);min-width:16px">①</span>
-            <span>티빙 앱 또는 웨이브 앱 접속 → 홈 화면에서 <strong>오늘의 TOP 20</strong> 섹션 확인</span>
-          </div>
-          <div style="font-size:10px;color:var(--t2);display:flex;gap:8px;align-items:flex-start">
-            <span style="font-weight:700;color:var(--wv);min-width:16px">②</span>
-            <span>아래 편집기에서 <strong>드래그로 순서 조정</strong>. 새로 진입한 콘텐츠는 하단 입력창에 제목 입력 후 Enter</span>
-          </div>
-          <div style="font-size:10px;color:var(--t2);display:flex;gap:8px;align-items:flex-start">
-            <span style="font-weight:700;color:var(--wv);min-width:16px">③</span>
-            <span>제목 수정이 필요하면 항목을 <strong>더블클릭</strong> → 수정 → Enter 또는 클릭아웃</span>
-          </div>
-          <div style="font-size:10px;color:var(--t2);display:flex;gap:8px;align-items:flex-start">
-            <span style="font-weight:700;color:var(--wv);min-width:16px">④</span>
-            <span>업데이트 날짜 확인 후 <strong>"저장 & 뷰어 반영"</strong> 클릭 → 광고주 화면에 즉시 반영됨</span>
-          </div>
-        </div>
-        <div style="font-size:10px;color:var(--t3);margin-top:8px;padding-top:8px;border-top:1px solid var(--bd)">
-          💡 저장 후 ▲▼ 순위 변동은 다음 주 저장 시 자동 계산됩니다. 새로 진입한 콘텐츠는 <strong>NEW</strong> 뱃지로 표시.
-        </div>
-      </div>
-
-      <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;flex-wrap:wrap">
-        <div style="font-size:11px;color:var(--t3)">업데이트 날짜</div>
-        <input type="date" class="fin" id="rank-date" style="max-width:160px;flex:none">
-        <button class="btn suc" onclick="saveRankings()">저장 & 뷰어 반영</button>
-      </div>
-      <div class="reditor-cols">
-        <div class="re-col">
-          <div class="re-hdr"><span class="re-title" style="color:var(--tv)">TVING TOP 20</span><span style="font-size:10px;color:var(--t3)" id="re-tving-cnt"></span></div>
-          <ul class="re-list" id="re-tving"></ul>
-          <div class="re-add"><input class="re-add-inp" id="add-tving" placeholder="새로 진입한 프로그램명 입력 후 Enter" onkeydown="addRankItem(event,'tving')"></div>
-        </div>
-        <div class="re-col">
-          <div class="re-hdr"><span class="re-title" style="color:var(--wv)">Wavve TOP 20</span><span style="font-size:10px;color:var(--t3)" id="re-wavve-cnt"></span></div>
-          <ul class="re-list" id="re-wavve"></ul>
-          <div class="re-add"><input class="re-add-inp" id="add-wavve" placeholder="새로 진입한 프로그램명 입력 후 Enter" onkeydown="addRankItem(event,'wavve')"></div>
-        </div>
-      </div>
-    </div>
-
-    <!-- ══════════════════════════════════════════
-         STEP 4. 신작 콘텐츠 추가
-    ══════════════════════════════════════════ -->
-    <div class="admin-section">
-      <div class="asec-hdr">
-        <span style="font-size:11px;font-weight:700;color:var(--purple);background:var(--purple-bg);padding:2px 8px;border-radius:10px;margin-right:4px">STEP 4</span>
-        <span class="asec-title">신작 콘텐츠 추가</span>
-        <span class="abadge ab-ai">Claude AI 자동완성</span>
-      </div>
-
-      <div style="background:var(--bg2);border-radius:var(--r);padding:12px 14px;margin-bottom:12px;border-left:3px solid var(--purple)">
-        <div style="font-size:11px;font-weight:600;color:var(--t1);margin-bottom:6px">두 가지 방법 중 선택</div>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
-          <div style="font-size:10px;color:var(--t2)">
-            <div style="font-weight:600;color:var(--t1);margin-bottom:4px">🤖 방법 A. AI 자동완성 (권장)</div>
-            <div style="line-height:1.6">프로그램명만 입력하면 장르·시놉시스·타겟·광고상품을 AI가 자동으로 채워줌. 확인 후 수정하고 저장.</div>
-          </div>
-          <div style="font-size:10px;color:var(--t2)">
-            <div style="font-weight:600;color:var(--t1);margin-bottom:4px">✏️ 방법 B. 직접 입력</div>
-            <div style="line-height:1.6">"직접 추가" 버튼 클릭 → 빈 폼이 열림 → 각 항목 직접 입력. Google Sheets 연동 중이라면 시트에 행 추가 후 "데이터 동기화"가 더 편함.</div>
-          </div>
-        </div>
-      </div>
-
-      <div class="field-row">
-        <input class="fin" id="ai-title" placeholder="프로그램명 입력 (예: 환승연애 시즌5, 피의 게임4)">
-        <select class="fin" id="ai-plat" style="max-width:120px">
-          <option value="tving">TVING</option>
-          <option value="wavve">Wavve</option>
-        </select>
-        <button class="btn pri" id="ai-btn" onclick="runAI()">AI 자동완성</button>
-        <button class="btn" onclick="addManual()">직접 추가</button>
-      </div>
-      <div style="font-size:10px;color:var(--t3);margin-bottom:8px">AI 자동완성은 인터넷 검색 기반으로 정보를 채웁니다. 시놉시스·타겟·출연진은 반드시 확인 후 수정하세요.</div>
-      <div class="form-panel" id="ai-panel">
-        <div class="form-grid" id="ai-form"></div>
-        <div class="save-row">
-          <button class="btn" onclick="cancelAI()">취소</button>
-          <button class="btn suc" onclick="saveEntry()">저장</button>
-        </div>
-      </div>
-    </div>
-
-    <!-- ══════════════════════════════════════════
-         STEP 5. 썸네일 관리
-    ══════════════════════════════════════════ -->
-    <div class="admin-section">
-      <div class="asec-hdr">
-        <span style="font-size:11px;font-weight:700;color:var(--amber);background:var(--amber-bg);padding:2px 8px;border-radius:10px;margin-right:4px">STEP 5</span>
-        <span class="asec-title">썸네일 이미지 관리</span>
-        <span class="abadge" style="background:var(--amber-bg);color:var(--amber)">TMDB 자동 + 수동 보완</span>
-      </div>
-
-      <div style="background:var(--bg2);border-radius:var(--r);padding:12px 14px;margin-bottom:12px;border-left:3px solid var(--amber)">
-        <div style="font-size:11px;font-weight:600;color:var(--t1);margin-bottom:6px">썸네일 자동화 원리</div>
-        <div style="font-size:10px;color:var(--t2);line-height:1.7">
-          1. <strong>TMDB 자동 매칭</strong> — CONFIG에 TMDB API Key가 설정된 경우, 프로그램명으로 자동 검색하여 포스터 이미지를 표시. 한국 OTT 콘텐츠의 약 70~80%가 자동 매칭됨.<br>
-          2. <strong>자동 매칭 실패 시</strong> — 색상 플레이스홀더(타이틀 이니셜)로 표시됨. 이 경우 아래에서 수동으로 URL을 입력하면 됨.<br>
-          3. <strong>TMDB API Key 발급</strong> — <a href="https://www.themoviedb.org/settings/api" target="_blank" style="color:var(--amber)">themoviedb.org/settings/api</a> 에서 무료 발급 → 파일 상단 CONFIG.TMDB_KEY에 입력
-        </div>
-      </div>
-
-      <div class="poster-admin-grid" style="margin-bottom:0">
-        <div class="poster-bulk-box">
-          <div class="poster-bulk-title">썸네일 URL 일괄 입력</div>
-          <div class="poster-bulk-copy" style="margin-bottom:8px">
-            <strong>형식 1:</strong> 타이틀 | 이미지URL<br>
-            <strong>형식 2:</strong> 타이틀[탭키]이미지URL (구글 시트에서 복사 붙여넣기)
-          </div>
-          <textarea class="poster-textarea" id="poster-bulk-input" placeholder="사랑의 이해 시즌2 | https://image.tmdb.org/t/p/w342/...
-환승연애 시즌4 | https://...
-2026 KBO 리그 | https://..."></textarea>
-          <div style="font-size:10px;color:var(--t3);margin:6px 0 10px">· 공개 접근 가능한 이미지 URL만 동작 (로그인 필요 URL 불가)<br>· 세로형 2:3 비율 권장 (예: 300×450px, 500×750px)</div>
-          <div class="save-row">
-            <button class="btn" onclick="document.getElementById('poster-bulk-input').value=''">초기화</button>
-            <button class="btn suc" onclick="applyPosterBulk()">일괄 적용</button>
-          </div>
-        </div>
-        <div class="poster-bulk-box">
-          <div class="poster-bulk-title">이미지 URL 찾는 방법</div>
-          <div style="font-size:10px;color:var(--t2);line-height:1.8">
-            <strong>방법 1. TMDB에서 직접 복사</strong><br>
-            themoviedb.org → 프로그램 검색 → 포스터 이미지 → 우클릭 → "이미지 주소 복사"<br><br>
-            <strong>방법 2. 구글 이미지 검색</strong><br>
-            "[프로그램명] 포스터" 검색 → 이미지 클릭 → 원본 이미지 URL 복사<br><br>
-            <strong>방법 3. 공식 채널 활용</strong><br>
-            TVING 또는 Wavve 공식 보도자료·SNS의 이미지를 imgur.com 등에 업로드 후 URL 사용
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- ══════════════════════════════════════════
-         STEP 6. 벤치마크 & 집행 사례 데이터
-    ══════════════════════════════════════════ -->
-    <div class="admin-section">
-      <div class="asec-hdr">
-        <span style="font-size:11px;font-weight:700;color:var(--t1);background:var(--bg3);padding:2px 8px;border-radius:10px;margin-right:4px">STEP 6</span>
-        <span class="asec-title">광고 집행 벤치마크 & 사례 데이터</span>
-        <span class="abadge" style="background:var(--tv-bg);color:var(--tv)">인증 후 열람</span>
-      </div>
-
-      <!-- 데이터 구조 설명 -->
-      <div style="background:var(--bg2);border-radius:var(--r);padding:12px 14px;margin-bottom:14px;border-left:3px solid var(--t3)">
-        <div style="font-size:11px;font-weight:600;color:var(--t1);margin-bottom:8px">모달 "광고 집행" 탭에 표시되는 데이터 종류</div>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
-          <div style="background:var(--bg);border-radius:var(--r);padding:10px 12px">
-            <div style="font-size:11px;font-weight:600;color:var(--t1);margin-bottom:4px">📊 KPI 벤치마크 (장르별 평균)</div>
-            <div style="font-size:10px;color:var(--t2);line-height:1.7">
-              · <strong>VCR (Video Completion Rate)</strong> — 광고 완주율<br>
-              · <strong>CTR (Click-Through Rate)</strong> — 클릭률<br>
-              · <strong>브랜드 리프트</strong> — 인지도/호감도 상승폭<br>
-              → 출처: 태블로 캠페인 성과 대시보드 (장르별 집계값)
+        <div class="form-panel" id="ai-panel">
+          <div class="form-grid" id="ai-form"></div>
+          <div style="margin-top:10px">
+            <div style="font-size:12px;font-weight:600;margin-bottom:8px">썸네일 이미지</div>
+            <div id="thumb-admin-wrap"></div>
+            <div style="font-size:11px;color:var(--t3);margin-top:6px">URL 입력 또는 이미지를 클립보드에 복사 후 아래 영역에 Ctrl+V</div>
+            <div id="paste-zone"
+              style="margin-top:8px;border:2px dashed var(--bd2);border-radius:var(--r);padding:20px;text-align:center;font-size:12px;color:var(--t3);cursor:pointer;transition:border-color .15s"
+              onmouseenter="this.style.borderColor='var(--purple)'"
+              onmouseleave="this.style.borderColor='var(--bd2)'"
+              onclick="this.focus()" tabindex="0">
+              📋 이미지를 클립보드에서 붙여넣기 (Ctrl+V)
+              <div id="paste-preview" style="margin-top:8px"></div>
             </div>
           </div>
-          <div style="background:var(--bg);border-radius:var(--r);padding:10px 12px">
-            <div style="font-size:11px;font-weight:600;color:var(--t1);margin-bottom:4px">📋 집행 사례 (브랜드별 케이스)</div>
-            <div style="font-size:10px;color:var(--t2);line-height:1.7">
-              · 브랜드명 (익명처리 가능)<br>
-              · 주요 성과 요약 1줄<br>
-              · 집행 방식 요약 1줄<br>
-              → 출처: 광고영업팀 / 인사이트팀 케이스 스터디
-            </div>
+          <div class="save-row" style="margin-top:12px">
+            <button class="btn" onclick="cancelAI()">취소</button>
+            <button class="btn suc" onclick="saveEntry()">저장</button>
           </div>
         </div>
       </div>
 
-      <!-- 자동 연동 방향 -->
-      <div style="margin-bottom:12px">
-        <div style="font-size:11px;font-weight:600;color:var(--t1);margin-bottom:8px">🔄 자동 연동 방향 (장기)</div>
-        <div style="display:flex;flex-direction:column;gap:6px">
-          <div style="font-size:10px;color:var(--t2);background:var(--bg2);border-radius:var(--r);padding:8px 12px;display:flex;gap:8px">
-            <span style="color:var(--green);font-weight:700;flex-shrink:0">권장</span>
-            <span><strong>태블로 Embedded Analytics</strong> — 태블로 서버에서 "장르별 KPI 뷰"를 공개 embed URL로 발행 → 코드에서 장르값으로 iframe URL을 동적 생성. 라이선스가 임베드를 지원하는지 데이터팀 확인 필요.</span>
-          </div>
-          <div style="font-size:10px;color:var(--t2);background:var(--bg2);border-radius:var(--r);padding:8px 12px;display:flex;gap:8px">
-            <span style="color:var(--wv-dark);font-weight:700;flex-shrink:0">대안</span>
-            <span><strong>Google Sheets API 자동화</strong> — 태블로에서 장르별 KPI를 CSV/Excel로 정기 추출 → Sheets에 붙여넣기 → 이 플랫폼이 Sheets에서 읽어옴. 수동이지만 월 1회 작업으로 데이터 최신화 가능.</span>
-          </div>
-          <div style="font-size:10px;color:var(--t2);background:var(--bg2);border-radius:var(--r);padding:8px 12px;display:flex;gap:8px">
-            <span style="color:var(--t3);font-weight:700;flex-shrink:0">현재</span>
-            <span><strong>수동 직접 입력</strong> — 아래 가이드 참조. 장르별 평균값을 파일 코드에 직접 기입.</span>
-          </div>
+      <!-- 이달의 추천 선택 -->
+      <div style="border-top:1px solid var(--bd);padding-top:14px;margin-top:14px">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
+          <div style="font-size:12px;font-weight:600">이달의 추천 콘텐츠 <span style="font-size:11px;color:var(--t3);font-weight:400">(최대 3개 선택)</span></div>
+          <button class="btn" onclick="clearPicks()" style="font-size:11px">선택 초기화</button>
         </div>
+        <div style="font-size:11px;color:var(--t3);margin-bottom:10px">선택된 콘텐츠가 뷰어 홈의 "이달의 추천 콘텐츠 포인트"에 고정 노출됩니다.</div>
+        <div id="picks-list" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:8px"></div>
       </div>
 
-      <!-- 수동 관리 가이드 -->
-      <div style="border:1px solid var(--bd);border-radius:var(--r);overflow:hidden;margin-bottom:12px">
-        <div style="background:var(--bg2);padding:8px 12px;font-size:11px;font-weight:600;color:var(--t1);border-bottom:1px solid var(--bd)">
-          📝 당분간 수동 관리 방법 — Google Sheets 벤치마크 탭 구조
+      <!-- 전체 목록 -->
+      <div style="border-top:1px solid var(--bd);padding-top:14px;margin-top:14px">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
+          <div style="font-size:12px;font-weight:600">전체 콘텐츠 <span style="font-weight:400;color:var(--t3)" id="total-cnt"></span></div>
         </div>
-        <div style="padding:12px 14px">
-          <div style="font-size:10px;color:var(--t2);margin-bottom:10px;line-height:1.6">
-            라인업 Sheets에 <strong>"벤치마크"</strong> 시트 탭을 추가하고 아래 컬럼 구조로 입력하세요.<br>
-            이 플랫폼은 콘텐츠의 <code style="background:var(--bg2);padding:1px 4px;border-radius:3px">genre</code> 값으로 해당 행을 찾아 KPI를 표시합니다.
-          </div>
-          <div style="overflow-x:auto">
-            <table style="border-collapse:collapse;font-size:10px;min-width:580px;width:100%">
-              <thead>
-                <tr style="background:var(--purple-bg)">
-                  <th style="padding:6px 10px;border:1px solid var(--bd);color:var(--purple);font-weight:700;text-align:center">열</th>
-                  <th style="padding:6px 10px;border:1px solid var(--bd);color:var(--t1);font-weight:600">항목</th>
-                  <th style="padding:6px 10px;border:1px solid var(--bd);color:var(--t1);font-weight:600">입력 형식</th>
-                  <th style="padding:6px 10px;border:1px solid var(--bd);color:var(--t1);font-weight:600">예시</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr><td style="padding:5px 10px;border:1px solid var(--bd);font-weight:700;color:var(--purple);text-align:center">A</td><td style="padding:5px 10px;border:1px solid var(--bd);font-weight:500">genre</td><td style="padding:5px 10px;border:1px solid var(--bd);color:var(--t2)">장르명 (라인업 C열과 동일하게)</td><td style="padding:5px 10px;border:1px solid var(--bd);color:var(--t3);font-style:italic">드라마</td></tr>
-                <tr><td style="padding:5px 10px;border:1px solid var(--bd);font-weight:700;color:var(--purple);text-align:center">B</td><td style="padding:5px 10px;border:1px solid var(--bd);font-weight:500">vcr</td><td style="padding:5px 10px;border:1px solid var(--bd);color:var(--t2)">VCR 상승폭 (숫자만, % 기호 제외)</td><td style="padding:5px 10px;border:1px solid var(--bd);color:var(--t3);font-style:italic">42</td></tr>
-                <tr><td style="padding:5px 10px;border:1px solid var(--bd);font-weight:700;color:var(--purple);text-align:center">C</td><td style="padding:5px 10px;border:1px solid var(--bd);font-weight:500">ctr</td><td style="padding:5px 10px;border:1px solid var(--bd);color:var(--t2)">평균 CTR (숫자만, 소수점 가능)</td><td style="padding:5px 10px;border:1px solid var(--bd);color:var(--t3);font-style:italic">1.8</td></tr>
-                <tr><td style="padding:5px 10px;border:1px solid var(--bd);font-weight:700;color:var(--purple);text-align:center">D</td><td style="padding:5px 10px;border:1px solid var(--bd);font-weight:500">lift</td><td style="padding:5px 10px;border:1px solid var(--bd);color:var(--t2)">브랜드 리프트 배수 (숫자만)</td><td style="padding:5px 10px;border:1px solid var(--bd);color:var(--t3);font-style:italic">3.5</td></tr>
-                <tr><td style="padding:5px 10px;border:1px solid var(--bd);font-weight:700;color:var(--purple);text-align:center">E</td><td style="padding:5px 10px;border:1px solid var(--bd);font-weight:500">case1_brand</td><td style="padding:5px 10px;border:1px solid var(--bd);color:var(--t2)">사례 1 브랜드명 (익명 처리 가능)</td><td style="padding:5px 10px;border:1px solid var(--bd);color:var(--t3);font-style:italic">뷰티 브랜드 A</td></tr>
-                <tr><td style="padding:5px 10px;border:1px solid var(--bd);font-weight:700;color:var(--purple);text-align:center">F</td><td style="padding:5px 10px;border:1px solid var(--bd);font-weight:500">case1_result</td><td style="padding:5px 10px;border:1px solid var(--bd);color:var(--t2)">성과 요약 1줄</td><td style="padding:5px 10px;border:1px solid var(--bd);color:var(--t3);font-style:italic">브랜드 인지도 23%↑, CTR 1.9%</td></tr>
-                <tr><td style="padding:5px 10px;border:1px solid var(--bd);font-weight:700;color:var(--purple);text-align:center">G</td><td style="padding:5px 10px;border:1px solid var(--bd);font-weight:500">case1_detail</td><td style="padding:5px 10px;border:1px solid var(--bd);color:var(--t2)">집행 방식 요약 1줄</td><td style="padding:5px 10px;border:1px solid var(--bd);color:var(--t3);font-style:italic">Pre-roll 4주 + 중간광고, 25-34세 여성 타겟팅</td></tr>
-                <tr><td style="padding:5px 10px;border:1px solid var(--bd);font-weight:700;color:var(--purple);text-align:center">H-J</td><td style="padding:5px 10px;border:1px solid var(--bd);font-weight:500">case2_*</td><td style="padding:5px 10px;border:1px solid var(--bd);color:var(--t2)">사례 2 (brand / result / detail)</td><td style="padding:5px 10px;border:1px solid var(--bd);color:var(--t3);font-style:italic">동일 구조 반복</td></tr>
-              </tbody>
-            </table>
-          </div>
-          <div style="margin-top:10px;padding:8px 12px;background:var(--amber-bg);border-radius:var(--r);border-left:3px solid var(--amber)">
-            <div style="font-size:10px;color:var(--amber);font-weight:600;margin-bottom:3px">📌 태블로에서 데이터 추출하는 방법</div>
-            <div style="font-size:10px;color:var(--t2);line-height:1.7">
-              1. 태블로 캠페인 성과 대시보드 접속<br>
-              2. 장르별 필터 적용 → 기간: 최근 12개월 or 전체 기간<br>
-              3. VCR · CTR · 브랜드 리프트 집계값 메모 (장르당 평균값)<br>
-              4. 위 Sheets 벤치마크 탭에 장르별로 1행씩 입력<br>
-              5. 라인업 Sheets와 같은 스프레드시트에 탭으로 추가하면 API 연동 시 한 번에 읽어올 수 있음<br>
-              → <strong>권장 업데이트 주기: 분기 1회</strong> (캠페인 성과가 충분히 쌓인 시점)
-            </div>
-          </div>
+        <div class="tbl-wrap">
+          <table class="dtbl">
+            <thead><tr><th>플랫폼</th><th>타이틀</th><th>장르</th><th>방영</th><th>타겟</th><th>썸네일</th><th>특판</th><th></th></tr></thead>
+            <tbody id="data-tbody"></tbody>
+          </table>
         </div>
-      </div>
-
-      <!-- 현재 하드코딩된 기본값 안내 -->
-      <div style="font-size:10px;color:var(--t3);padding:8px 12px;background:var(--bg2);border-radius:var(--r)">
-        현재 대시보드에 표시되는 KPI(VCR ↑38%, CTR 1.6%, 브랜드 리프트 3.2×)는 샘플 기본값입니다.
-        Sheets 벤치마크 탭 연동 전까지는 파일 내 <code style="color:var(--purple)">CASES</code> 객체와 <code style="color:var(--purple)">d.benchmark</code>를 직접 수정하거나,
-        실제 데이터를 Sheets에 입력 후 "데이터 동기화"를 누르면 자동 반영됩니다.
       </div>
     </div>
 
-    <!-- ══════════════════════════════════════════
-         STEP 7. 화제 기사 · 보도자료 관리
-    ══════════════════════════════════════════ -->
+    <!-- ── C. 타겟 오디언스 연동 ── -->
     <div class="admin-section">
       <div class="asec-hdr">
-        <span style="font-size:11px;font-weight:700;color:var(--purple);background:var(--purple-bg);padding:2px 8px;border-radius:10px;margin-right:4px">STEP 7</span>
-        <span class="asec-title">화제 기사 · 보도자료 등록</span>
-        <span class="abadge" style="background:var(--purple-bg);color:var(--purple)">뷰어 홈 노출</span>
+        <span class="asec-title">타겟 오디언스</span>
+        <span class="abadge" style="background:var(--purple-bg);color:var(--purple)">태블로 연동</span>
       </div>
-
-      <!-- 가이드 -->
-      <div style="background:var(--bg2);border-radius:var(--r);padding:12px 14px;margin-bottom:14px;border-left:3px solid var(--purple)">
-        <div style="font-size:11px;font-weight:600;color:var(--t1);margin-bottom:8px">등록 방법 & 운영 가이드</div>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px">
-          <div style="font-size:10px;color:var(--t2);line-height:1.7">
-            <div style="font-weight:600;color:var(--t1);margin-bottom:3px">📌 어떤 기사를 등록하면 좋나요?</div>
-            · 공식 보도자료 (제작발표회, 캐스팅 확정 등)<br>
-            · 포털 실시간 트렌드 진입 관련 기사<br>
-            · 주요 언론사 단독 인터뷰 · 프리뷰 기사<br>
-            · 시청률 · 화제성 지표 기사 (닐슨, 굿데이터 등)
-          </div>
-          <div style="font-size:10px;color:var(--t2);line-height:1.7">
-            <div style="font-weight:600;color:var(--t1);margin-bottom:3px">🔗 기사 URL 찾는 법</div>
-            · 네이버 뉴스에서 콘텐츠명 검색 → 기사 클릭 → 주소창 URL 복사<br>
-            · TVING/Wavve 공식 보도자료: 각 플랫폼 뉴스룸 페이지<br>
-            · 굿데이터 화제성: contents.gooddata.co.kr<br>
-            · OTT뉴스·스타투데이 등 OTT 전문 매체 활용
-          </div>
-        </div>
-        <div style="font-size:10px;color:var(--t3);padding:8px 10px;background:var(--bg);border-radius:var(--r)">
-          💡 <strong>운영 팁</strong> — 주 1~2회 업데이트 권장. 최신순으로 자동 정렬됩니다. 최대 12개까지 노출되며 초과 시 오래된 것부터 자동 제거됩니다.
-        </div>
+      <div style="font-size:12px;color:var(--t2);line-height:1.7;margin-bottom:12px">
+        프로그램 코드 기준으로 성별/연령 분포 데이터를 태블로에서 가져옵니다.<br>
+        <span style="color:var(--t3)">연동 방식: 태블로 Embedded Analytics → 장르/프로그램코드로 필터링된 뷰 embed</span>
       </div>
-
-      <!-- 등록 폼 -->
-      <div style="background:var(--bg2);border-radius:var(--r);padding:12px 14px;margin-bottom:12px">
-        <div style="font-size:11px;font-weight:600;color:var(--t1);margin-bottom:10px">새 기사 등록</div>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px">
-          <div style="display:flex;flex-direction:column;gap:4px">
-            <label style="font-size:10px;color:var(--t3)">관련 콘텐츠 <span style="color:var(--tv)">*</span></label>
-            <select class="fi" id="news-content" style="font-size:12px">
-              <option value="">콘텐츠 선택</option>
-            </select>
-          </div>
-          <div style="display:flex;flex-direction:column;gap:4px">
-            <label style="font-size:10px;color:var(--t3)">화제 분위기 <span style="color:var(--tv)">*</span></label>
-            <select class="fi" id="news-mood" style="font-size:12px">
-              <option value="hype">🔥 화제 / 트렌딩</option>
-              <option value="positive">✅ 호평 / 긍정 반응</option>
-              <option value="anticipation">⭐ 기대작 / 공개 예정</option>
-              <option value="news">📢 공식 발표 / 보도자료</option>
-            </select>
-          </div>
-          <div style="display:flex;flex-direction:column;gap:4px;grid-column:1/-1">
-            <label style="font-size:10px;color:var(--t3)">기사 제목 <span style="color:var(--tv)">*</span></label>
-            <input class="fi" id="news-title" placeholder="예: 환승연애 시즌4, 방영 전부터 화제성 1위… 광고 문의 폭주" style="font-size:12px">
-          </div>
-          <div style="display:flex;flex-direction:column;gap:4px;grid-column:1/-1">
-            <label style="font-size:10px;color:var(--t3)">한줄 요약 <span style="color:var(--tv)">*</span></label>
-            <input class="fi" id="news-summary" placeholder="예: 방영 전부터 SNS 화제량 전주 대비 340% 급증, 광고 집행 골든타임 도래" style="font-size:12px">
-          </div>
-          <div style="display:flex;flex-direction:column;gap:4px">
-            <label style="font-size:10px;color:var(--t3)">언론사 / 출처</label>
-            <input class="fi" id="news-media" placeholder="예: 스타투데이, TVING 뉴스룸" style="font-size:12px">
-          </div>
-          <div style="display:flex;flex-direction:column;gap:4px">
-            <label style="font-size:10px;color:var(--t3)">날짜</label>
-            <input class="fi" type="date" id="news-date" style="font-size:12px">
-          </div>
-          <div style="display:flex;flex-direction:column;gap:4px;grid-column:1/-1">
-            <label style="font-size:10px;color:var(--t3)">기사 URL <span style="color:var(--tv)">*</span></label>
-            <input class="fi" id="news-url" placeholder="https://n.news.naver.com/..." style="font-size:12px"
-              oninput="previewNewsUrl(this.value)">
-            <div id="news-url-preview" style="font-size:10px;color:var(--t3);margin-top:2px"></div>
-          </div>
-        </div>
-        <div style="display:flex;justify-content:flex-end;gap:8px">
-          <button class="btn" onclick="clearNewsForm()">초기화</button>
-          <button class="btn suc" onclick="addNewsItem()">✅ 등록</button>
-        </div>
+      <div class="field-row">
+        <input class="fin" id="tableau-base" placeholder="태블로 서버 URL" value="">
+        <input class="fin" id="tableau-token" placeholder="액세스 토큰" style="max-width:260px" value="">
+        <button class="btn" onclick="connectTableau()">연결 테스트</button>
       </div>
-
-      <!-- 등록된 기사 목록 -->
-      <div style="font-size:11px;font-weight:600;color:var(--t2);margin-bottom:8px">등록된 기사 <span id="news-count" style="font-weight:400;color:var(--t3)"></span></div>
-      <div id="news-admin-list"></div>
+      <div style="font-size:11px;color:var(--t3);margin-top:6px">
+        미연동 상태에서는 DATA 객체 내 audience 필드(f/m/ages)의 샘플 데이터가 표시됩니다.
+      </div>
     </div>
 
-    <!-- ══════════════════════════════════════════
-         STEP 8. 콘텐츠 목록 관리
-    ══════════════════════════════════════════ -->
-    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;margin-top:4px">
-      <div>
-        <span style="font-size:11px;font-weight:700;color:var(--t3);background:var(--bg2);padding:2px 8px;border-radius:10px;margin-right:6px">STEP 8</span>
-        <span style="font-size:13px;font-weight:500">전체 콘텐츠 목록</span>
-        <span style="font-weight:400;color:var(--t3);font-size:13px"> <span id="total-cnt"></span></span>
-      </div>
-      <div style="font-size:10px;color:var(--t3)">특판 URL이나 썸네일을 개별 수정할 때 활용하세요</div>
-    </div>
-    <div class="tbl-wrap">
-      <table class="dtbl">
-        <thead><tr><th>플랫폼</th><th>타이틀</th><th>장르</th><th>방영</th><th>타겟</th><th>광고상품</th><th>썸네일</th><th>특판링크</th><th></th></tr></thead>
-        <tbody id="data-tbody"></tbody>
-      </table>
-    </div>
   </div>
 </div>
-
 </div><!-- /app -->
 <div class="toast" id="toast"></div>
 
@@ -1447,10 +922,13 @@ const CASES = {
 };
 function getCases(genre){ return CASES[genre] || CASES['드라마'] }
 
-let selPlat='all', selGenres=new Set(), selCategory='all', sortMode='recommended', selectedDemo='MF2039', editingId=null;
+let selPlat='all', selCategory='all', sortMode='recommended', editingId=null;
 let rankUpdatedDate='', dragPlat=null, dragIdx=null, draggingEl=null;
-let calView = 'list';      // 캘린더 뷰 모드: 'list' | 'timeline'
-let curMainTab = 'home';   // 메인 탭: 'home' | 'ranking' | 'explorer'
+let calView = 'list';
+let curMainTab = 'home';
+let selectedDemoTab = '10대남';
+let PICKS = []; // 이달의 추천 선택된 id 배열 (최대 3개)
+let pasteImageData = null; // 붙여넣기 이미지
 
 // ── 날짜 ──────────────────────────────────────────────────────
 const now = new Date();
@@ -1483,17 +961,14 @@ function setPlat(p){
   document.querySelectorAll('#plat-tabs .btn').forEach((b,i)=>b.classList.toggle('on',['all','tving','wavve'][i]===p));
   renderAll();
 }
-function setCategory(v){ selCategory=v; renderFilters(); renderDemoPanel(); renderPosters(); renderRecommendations(); renderMonthlyCalendar(); }
+function setCategory(v){ selCategory=v; renderFilters(); renderPosters(); renderRecommendations(); }
 function setSort(v){ sortMode=v; renderPosters(); }
-function toggleGenre(g){ selGenres.has(g)?selGenres.delete(g):selGenres.add(g); renderFilters(); renderDemoPanel(); renderPosters(); renderRecommendations(); renderMonthlyCalendar(); }
-function setDemoPreset(key){ selectedDemo=key; renderDemoPanel(); renderPosters(); }
 function goAdmin(){ document.getElementById('viewer-page').classList.remove('active'); document.getElementById('admin-page').classList.add('active'); renderAdmin(); }
 function goViewer(){ document.getElementById('admin-page').classList.remove('active'); document.getElementById('viewer-page').classList.add('active'); }
 
 function getFiltered(){
   return DATA.filter(d=>{
     if(selPlat!=='all'&&d.platform!==selPlat)return false;
-    if(selGenres.size>0&&!selGenres.has(d.genre))return false;
     if(selCategory==='special'&&!d.specialUrl)return false;
     if(selCategory==='top20'&&!isRankedTitle(d.title))return false;
     return true;
@@ -1638,78 +1113,84 @@ function getRecommendations(){
 // ── Render all ────────────────────────────────────────────────
 function renderAll(){
   renderFilters();
-  // 현재 활성 탭만 렌더
-  if(curMainTab === 'home')    { renderRecommendations(); renderMonthlyCalendar(); renderBuzzInitial(); }
-  if(curMainTab === 'ranking') { renderRankToday(); renderRankHistory(); }
-  if(curMainTab === 'explorer'){ renderDemoPanel(); renderPosters(); }
-  // 추천은 항상 최신 상태 유지 (홈 탭 데이터)
+  if(curMainTab === 'home')    { renderRecommendations(); renderMonthlyCalendar(); }
+  if(curMainTab === 'ranking') { renderRankToday(); renderDemoSection(); }
+  if(curMainTab === 'explorer'){ renderPosters(); }
   if(curMainTab !== 'home') renderRecommendations();
 }
 
 function renderFilters(){
-  const genres=[...new Set(DATA.map(d=>d.genre))];
-  const chips = genres.map(g=>{
-    const on=selGenres.has(g);
-    return `<button class="filter-chip ${on?'on':''}" onclick="toggleGenre('${g}')">${g}</button>`;
-  }).join('');
-  document.getElementById('filters').innerHTML = `
-    <span class="filter-label">구분</span>
+  const el = document.getElementById('filters');
+  if(!el) return;
+  el.innerHTML=`
     <button class="filter-chip ${selCategory==='all'?'on':''}" onclick="setCategory('all')">전체</button>
-    <button class="filter-chip ${selCategory==='special'?'on':''}" onclick="setCategory('special')">특판</button>
-    <button class="filter-chip ${selCategory==='top20'?'on':''}" onclick="setCategory('top20')">TOP20</button>
-    <button class="filter-chip ${selCategory==='demo'?'on':''}" onclick="setCategory('demo')">시청데모</button>
-    <span class="fsep"></span>
-    <span class="filter-label">장르</span>${chips}`;
+    <button class="filter-chip ${selCategory==='special'?'on':''}" onclick="setCategory('special')">⭐ 특판</button>
+    <button class="filter-chip ${selCategory==='top20'?'on':''}" onclick="setCategory('top20')">🏆 TOP 20</button>`;
 }
+// 시청데모 PKG 탭별 콘텐츠 (TOP20 탭 하단에 표시)
+const DEMO_SEGMENTS = {
+  '10대남': ['이상한 변호사 우영우', '피의 게임3', '2026 KBO 리그'],
+  '10대여': ['환승연애 시즌4', '사랑의 이해 시즌2', '마이 데몬 시즌2'],
+  '20대남': ['지옥 시즌2', '삼체 한국판', '2026 KBO 리그'],
+  '20대여': ['환승연애 시즌4', '사랑의 이해 시즌2', '술꾼도시여자들3'],
+  '30대남': ['지옥 시즌2', '2026 KBO 리그', '삼체 한국판'],
+  '30대여': ['술꾼도시여자들3', '나는 솔로', '이토록 친밀한 배신자'],
+  '40대남': ['2026 KBO 리그', '나는 솔로', '지옥 시즌2'],
+  '40대여': ['나는 솔로', '불꽃미녀 시즌2', '술꾼도시여자들3'],
+  '50대이상': ['나는 솔로', '불꽃미녀 시즌2', '2026 KBO 리그'],
+};
 
-function renderDemoPanel(){
-  const panel = document.getElementById('demo-panel');
-  if(!panel) return;
-  if(selCategory !== 'demo'){
-    panel.style.display='none';
-    panel.innerHTML='';
-    return;
-  }
-  const preset = DEMO_PRESETS[selectedDemo];
-  panel.style.display='block';
-  panel.innerHTML = `
-    <div class="demo-panel-top">
-      <div>
-        <div class="sec-title">시청데모 PKG 프리셋 익스플로러</div>
-        <div class="demo-copy">특정 데모별 선호 콘텐츠를 타겟팅하는 시청데모 PKG를 이 화면 안에서 바로 볼 수 있게 구성했습니다. 각 데모 Preset은 월 1회 업데이트되며, 웨이브 프로그램 리스트는 플랫폼사 요청으로 공개가 제한됩니다.</div>
+function renderDemoSection(){
+  const tabsEl = document.getElementById('demo-tabs');
+  const gridEl = document.getElementById('demo-content-grid');
+  if(!tabsEl || !gridEl) return;
+
+  tabsEl.innerHTML = Object.keys(DEMO_SEGMENTS).map(seg =>
+    `<button class="filter-chip ${selectedDemoTab===seg?'on':''}" onclick="setDemoTab('${seg}')">${seg}</button>`
+  ).join('');
+
+  const titles = DEMO_SEGMENTS[selectedDemoTab] || [];
+  gridEl.innerHTML = titles.map((title, idx) => {
+    const d = DATA.find(x => x.title === title);
+    if(d) return posterCardHtml(d);
+    const [bg, fg] = phCol(title);
+    return `<div class="pcard" style="cursor:default">
+      <div class="poster-wrap" style="background:${bg}">
+        <div class="poster-ph"><span class="ph-init" style="color:${fg}">${ini(title)}</span></div>
       </div>
-      <a class="btn pri" href="https://tvingad.oopy.io/271b01af-4e49-81a6-bc29-edc0f569d496" target="_blank">상품 상세 보기</a>
-    </div>
-    <div class="demo-segments">
-      ${Object.entries(DEMO_PRESETS).map(([key, item])=>`<button class="demo-seg ${selectedDemo===key?'on':''}" onclick="setDemoPreset('${key}')">${item.label}</button>`).join('')}
-    </div>
-    <div class="demo-meta">
-      <div class="demo-info-card">
-        <div class="demo-info-label">현재 Preset</div>
-        <div class="demo-info-value">${preset.label}</div>
-        <div class="demo-info-sub">${preset.audience} 타깃이 많이 본 TVING 콘텐츠 묶음입니다.<br>시청데모 PKG는 TVING·Wavve 통합 상품이며, 논스킵 15초 기준 CPM 18,000원 / 최소 집행 금액 1,000만원(VAT 별도)으로 안내되고 있습니다.</div>
-      </div>
-      <div>
-        <div class="demo-preset-list">
-          ${preset.titles.slice(0,12).map((title, idx)=>`<button class="demo-pill" onclick="openByTitle('${title.replace(/'/g, "\'")}')"><span class="demo-pill-badge">${idx+1}</span><span class="demo-pill-title">${title}</span></button>`).join('')}
-        </div>
-        <div class="demo-note">출처 기준: 시청데모 PKG 소개 페이지와 공개된 TVING Preset 시트 구조. 웨이브 프로그램 리스트는 공개 제한 문구가 있어 별도 상세 표시는 넣지 않았습니다.</div>
+      <div class="pcard-body">
+        <div class="pc-title">${title}</div>
+        <div class="pc-date" style="font-size:11px;color:var(--t3)">Preset 전용</div>
       </div>
     </div>`;
+  }).join('');
+  if(d) titles.forEach((title, i) => {
+    const linked = DATA.find(x=>x.title===title);
+    if(linked) injectPoster(`pw-${linked.id}`, linked.title, linked.posterUrl);
+  });
+}
+
+function setDemoTab(seg){
+  selectedDemoTab = seg;
+  renderDemoSection();
 }
 
 function getRecommendations(){
-  const pool = getFiltered().slice().sort((a,b)=> getCardScore(b)-getCardScore(a) || monthsUntil(a.startMonth)-monthsUntil(b.startMonth));
+  // 관리자가 선택한 PICKS가 있으면 우선 표시
+  if(PICKS.length > 0){
+    const picked = PICKS.map(id => DATA.find(d=>d.id===id)).filter(Boolean);
+    if(picked.length > 0) return picked.slice(0,3);
+  }
+  const pool = DATA.slice().sort((a,b)=> getCardScore(b)-getCardScore(a) || monthsUntil(a.startMonth)-monthsUntil(b.startMonth));
   return pool.slice(0,3);
 }
 function getCardScore(d){
   return (d.specialUrl?4:0) + (isRankedTitle(d.title)?3:0) + (monthsUntil(d.startMonth)===0?3:0) + (monthsUntil(d.startMonth)===1?2:0) + (d.genre==='드라마'?1:0);
 }
 function getSortedContent(){
-  const list=getExplorerContent().slice();
+  const list=getFiltered().slice();
   if(sortMode==='release') return list.sort((a,b)=>a.startMonth-b.startMonth || getCardScore(b)-getCardScore(a));
   if(sortMode==='platform') return list.sort((a,b)=>(a.platform>b.platform?1:-1) || a.startMonth-b.startMonth);
-  if(sortMode==='genre') return list.sort((a,b)=>(a.genre>b.genre?1:-1) || a.startMonth-b.startMonth);
   if(sortMode==='special') return list.sort((a,b)=>(b.specialUrl?1:0)-(a.specialUrl?1:0) || getCardScore(b)-getCardScore(a));
   return list.sort((a,b)=>getCardScore(b)-getCardScore(a) || a.startMonth-b.startMonth);
 }
@@ -1761,14 +1242,14 @@ function renderRecommendations(){
 
 function renderPosters(){
   const f=getSortedContent();
-  document.getElementById('lineup-cnt').textContent= selCategory==='demo' ? `${selectedDemo} Preset · ${f.length}개 콘텐츠` : `${f.length}개 콘텐츠`;
+  document.getElementById('lineup-cnt').textContent=`${f.length}개 콘텐츠`;
   document.getElementById('poster-grid').innerHTML=f.length===0
     ?`<div class="empty">해당 조건의 콘텐츠가 없습니다</div>`
     :f.map(d=>{
       const pid=`pw-${d.id}`;
       const [bg,fg]=phCol(d.title);
       const adList=(d.adSlot||'').split(',').map(s=>s.trim()).filter(Boolean).slice(0,3);
-      const badges = [d.specialUrl?'<span class="quick-badge qb-special">특판</span>':'', rankBadgeHtml(d.title), selCategory==='demo' || d.isDemoOnly?'<span class="quick-badge qb-rank">시청데모</span>':'', monthsUntil(d.startMonth)<=1&&!d.isDemoOnly?'<span class="quick-badge qb-soon">출시 임박</span>':''].filter(Boolean).join('');
+      const badges = [d.specialUrl?'<span class="quick-badge qb-special">특판</span>':'', rankBadgeHtml(d.title), monthsUntil(d.startMonth)<=1?'<span class="quick-badge qb-soon">출시 임박</span>':''].filter(Boolean).join('');
       const specBadge=d.specialUrl?`<div class="special-badge"><svg viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>특판</div>`:'';
       return `<div class="pcard" onclick="openModal(${d.id})">
         <div class="poster-wrap" id="${pid}" style="background:${bg}">
@@ -1786,7 +1267,7 @@ function renderPosters(){
           <div class="pc-date">${d.startMonth}월${d.endMonth!==d.startMonth?'–'+d.endMonth+'월':''}${d.ep?' · '+d.ep+'부작':''}</div>
           <div class="ad-tags">${adList.map(a=>`<span class="ad-tag">${a}</span>`).join('')}</div>
           <div class="pc-foot" style="margin-top:8px">
-            <span class="tgt">${getBrandFit(d)}</span>
+            <span class="tgt">${d.target||''}</span>
             ${d.peakMonth>=5&&d.peakMonth<=8?'<span class="peak">성수기</span>':''}
           </div>
         </div>
@@ -1887,46 +1368,39 @@ function renderRankToday(){
   const grid = document.getElementById('rank-today-grid');
   const meta = document.getElementById('rank-today-meta');
   if(!grid) return;
-  if(!rankUpdatedDate && !RANKS.tving.length){
-    grid.innerHTML = `<div style="padding:32px;text-align:center;color:var(--t3);font-size:12px;grid-column:1/-1">관리자 페이지에서 TOP 20을 저장하면 여기에 표시됩니다.</div>`;
+  const list = RANKS.tving || [];
+  if(!list.length){
+    grid.innerHTML = `<div style="padding:32px;text-align:center;color:var(--t3);font-size:13px">관리자 페이지에서 "지금 가져오기"를 눌러 TOP 20을 불러오세요.</div>`;
     return;
   }
   if(meta) meta.textContent = rankUpdatedDate ? rankUpdatedDate + ' 기준' : '';
 
-  function col(plat){
-    const list = RANKS[plat] || [];
-    const color = plat === 'tving' ? 'var(--tv)' : 'var(--wv)';
-    const label = plat === 'tving' ? 'TVING' : 'Wavve';
-    const rows = list.map((item, i) => {
-      const rank = i + 1;
-      const chg  = item.isNew ? null : (item.prevRank ? item.prevRank - rank : 0);
-      const chgHtml = item.isNew
-        ? `<span class="rh-chg" style="color:var(--green)">NEW</span>`
-        : chg === 0 ? `<span class="rh-chg" style="color:var(--t3)">—</span>`
-        : chg >  0  ? `<span class="rh-chg cup">▲${chg}</span>`
-                    : `<span class="rh-chg cdn">▼${Math.abs(chg)}</span>`;
-      const nc  = rank===1 ? 'rh-num rh-num-1' : rank<=3 ? 'rh-num rh-num-3' : 'rh-num';
-      const [pbg,pfg] = phCol(item.title);
-      const pid = `rht-${plat}-${i}`;
-      const linked = DATA.find(d => d.title === item.title);
-      setTimeout(() => injectPoster(pid, item.title, linked?.posterUrl), 0);
-      return `<div class="rh-item" ${linked ? `onclick="openModal(${linked.id})"` : ''} style="${linked ? 'cursor:pointer' : ''}">
-        <div class="rh-poster" id="${pid}" style="background:${pbg}"><div class="rh-ph" style="color:${pfg}">${ini(item.title)}</div></div>
-        <span class="${nc}">${rank}</span>
-        <div class="rh-info">
-          <div class="rh-ttl">${item.title}${linked ? '' : '<span style="font-size:9px;color:var(--t3);margin-left:4px">미등록</span>'}</div>
-          <div class="rh-genre">${item.genre}</div>
-        </div>
-        ${chgHtml}
-      </div>`;
-    }).join('');
-    return `<div class="rh-col">
-      <div class="rh-head"><span class="rh-title" style="color:${color}">${label} TOP ${list.length}</span></div>
-      ${rows || '<div style="padding:20px;text-align:center;color:var(--t3);font-size:11px">데이터 없음</div>'}
+  const rows = list.map((item, i) => {
+    const rank = i + 1;
+    const chg  = item.isNew ? null : (item.prevRank ? item.prevRank - rank : 0);
+    const chgHtml = item.isNew
+      ? `<span class="rh-chg" style="color:var(--green)">NEW</span>`
+      : chg === 0 ? `<span class="rh-chg" style="color:var(--t3)">—</span>`
+      : chg >  0  ? `<span class="rh-chg cup">▲${chg}</span>`
+                  : `<span class="rh-chg cdn">▼${Math.abs(chg)}</span>`;
+    const nc  = rank===1 ? 'rh-num rh-num-1' : rank<=3 ? 'rh-num rh-num-3' : 'rh-num';
+    const [pbg,pfg] = phCol(item.title);
+    const pid = `rht-tving-${i}`;
+    const linked = DATA.find(d => d.title === item.title);
+    setTimeout(() => injectPoster(pid, item.title, linked?.posterUrl), 0);
+    return `<div class="rh-item" ${linked ? `onclick="openModal(${linked.id})"` : ''} style="${linked ? 'cursor:pointer' : ''}">
+      <div class="rh-poster" id="${pid}" style="background:${pbg}"><div class="rh-ph" style="color:${pfg}">${ini(item.title)}</div></div>
+      <span class="${nc}">${rank}</span>
+      <div class="rh-info">
+        <div class="rh-ttl">${item.title}${linked ? '' : '<span style="font-size:10px;color:var(--t3);margin-left:4px">미등록</span>'}</div>
+        <div class="rh-genre">${item.genre}</div>
+      </div>
+      ${chgHtml}
     </div>`;
-  }
-  grid.style.gridTemplateColumns = '1fr 1fr';
-  grid.innerHTML = col('tving') + col('wavve');
+  }).join('');
+
+  grid.style.gridTemplateColumns = '1fr';
+  grid.innerHTML = `<div class="rh-col">${rows}</div>`;
 }
 function setCalView(v){
   calView = v;
@@ -2113,7 +1587,7 @@ function buildModalInner(d){
                 <div id="${mid2}" style="width:90px;height:130px;background:${mbg};display:flex;flex-direction:column;align-items:center;justify-content:center;position:relative">
                   <div style="font-size:16px;font-weight:600;color:${mfg};opacity:.7">${ini(m.title)}</div>
                   ${mrank ? `<div style="position:absolute;top:5px;left:5px;background:rgba(0,0,0,0.6);border-radius:4px;padding:2px 5px;font-size:8px;font-weight:700;color:#fff">#${mrank.rank}</div>` : ''}
-                  ${m.specialUrl ? `<div style="position:absolute;top:5px;right:5px;background:#FAC775;border-radius:4px;padding:2px 5px;font-size:7px;font-weight:800;color:#1A1A2E">특판</div>` : ''}
+                  ${m.specialUrl ? `<div style="position:absolute;top:5px;right:5px;background:#FBBF24;border-radius:4px;padding:2px 5px;font-size:7px;font-weight:800;color:#1A1200">특판</div>` : ''}
                 </div>
                 <div style="padding:6px 7px;background:var(--bg)">
                   <div style="font-size:10px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:var(--t1)">${m.title}</div>
@@ -2283,18 +1757,75 @@ async function syncSheets(){
 }
 
 // ── TAS API ───────────────────────────────────────────────────
-async function connectTAS(){
-  const base=document.getElementById('tas-base').value.trim()||CONFIG.TAS_API_BASE;
-  const key=document.getElementById('tas-key').value.trim()||CONFIG.TAS_API_KEY;
-  if(!base){toast('TAS API URL을 입력해주세요');return}
-  try{
-    const r=await fetch(`${base}/api/v1/ranking/top20?platform=tving&limit=1`,{headers:{'Authorization':`Bearer ${key}`}});
-    if(!r.ok)throw new Error(`HTTP ${r.status}`);
-    CONFIG.TAS_API_ENABLED=true;CONFIG.TAS_API_BASE=base;CONFIG.TAS_API_KEY=key;
-    document.getElementById('tas-dot').className='sdot don';
-    document.getElementById('tas-lbl').textContent='연결됨 — 자동 갱신 활성화';
-    toast('TAS API 연결 성공!');
-  }catch(e){document.getElementById('tas-lbl').textContent='연결 실패';toast('TAS 연결 실패: '+e.message)}
+// ── Redash API (TVING TOP 20) ──────────────────────────────
+async function fetchRedashTop20(){
+  const dot = document.getElementById('top20-dot');
+  const lbl = document.getElementById('top20-lbl');
+  const preview = document.getElementById('top20-preview');
+  const lastFetch = document.getElementById('top20-last-fetch');
+
+  if(dot) dot.className='sdot';
+  if(lbl) lbl.textContent='불러오는 중...';
+  if(preview) preview.innerHTML='<span class="spinner"></span> 데이터 요청 중...';
+
+  const url = `${CONFIG.REDASH_BASE}/api/queries/${CONFIG.REDASH_TOP20_QUERY}/results.json?api_key=${CONFIG.REDASH_API_KEY}`;
+
+  try {
+    const res = await fetch(url);
+    if(!res.ok) throw new Error(`HTTP ${res.status}`);
+    const json = await res.json();
+
+    // Redash 응답 파싱: query_result.data.rows
+    const rows = json?.query_result?.data?.rows || [];
+    if(!rows.length) throw new Error('데이터가 비어있습니다');
+
+    // 행 구조 파악 후 TOP 20 추출
+    // 컬럼명은 실제 쿼리에 따라 다를 수 있음 - rank, title, genre 순으로 시도
+    const titleKey = Object.keys(rows[0]).find(k => /title|program|content|프로그램|콘텐츠/i.test(k)) || Object.keys(rows[0])[1];
+    const genreKey = Object.keys(rows[0]).find(k => /genre|장르/i.test(k)) || '';
+    const rankKey  = Object.keys(rows[0]).find(k => /rank|순위/i.test(k)) || Object.keys(rows[0])[0];
+
+    const sorted = [...rows].sort((a,b) => (parseInt(a[rankKey])||0) - (parseInt(b[rankKey])||0)).slice(0,20);
+
+    // 기존 RANKS와 비교해서 변동 계산
+    const prevRanks = {};
+    (RANKS.tving||[]).forEach((item,i) => { prevRanks[item.title] = i+1; });
+
+    RANKS.tving = sorted.map((row,i) => ({
+      title:    String(row[titleKey]||'').trim(),
+      genre:    genreKey ? String(row[genreKey]||'').trim() : guessGenre(String(row[titleKey]||'')),
+      isNew:    !prevRanks[String(row[titleKey]||'').trim()],
+      prevRank: prevRanks[String(row[titleKey]||'').trim()] || null,
+    }));
+
+    const now2 = new Date();
+    rankUpdatedDate = `${now2.getFullYear()}. ${now2.getMonth()+1}. ${now2.getDate()} ${String(now2.getHours()).padStart(2,'0')}:${String(now2.getMinutes()).padStart(2,'0')}`;
+    localStorage.setItem('rankings', JSON.stringify({
+      tving: RANKS.tving.map((x,i)=>({rank:i+1,title:x.title,genre:x.genre})),
+      updatedDate: rankUpdatedDate,
+    }));
+
+    if(dot) { dot.className='sdot don'; }
+    if(lbl) lbl.textContent=`연동됨 · ${RANKS.tving.length}개`;
+    if(lastFetch) lastFetch.textContent = rankUpdatedDate + ' 업데이트';
+    if(preview) preview.innerHTML = `<div style="font-size:11px;color:var(--green);padding:6px 0">✓ TVING TOP ${RANKS.tving.length} 데이터를 성공적으로 가져왔습니다.<br>
+      <span style="color:var(--t3)">1위: ${RANKS.tving[0]?.title} · 컬럼 감지: rank=${rankKey}, title=${titleKey}</span></div>`;
+
+    renderRankToday();
+    toast(`TVING TOP ${RANKS.tving.length} 업데이트 완료`);
+  } catch(e) {
+    if(dot) dot.className='sdot doff';
+    if(lbl) lbl.textContent='연동 실패';
+    if(preview) preview.innerHTML = `<div style="font-size:11px;color:var(--tv);padding:6px 0">
+      ✗ 오류: ${e.message}<br>
+      <span style="color:var(--t3)">CORS 정책 또는 API Key 문제일 수 있습니다. 브라우저 콘솔(F12)에서 오류를 확인하세요.</span>
+    </div>`;
+    toast('Redash 연동 실패: ' + e.message);
+  }
+}
+
+async function connectTableau(){
+  toast('태블로 연동은 데이터팀과 협의 후 설정하세요');
 }
 
 // ── 랭킹 편집기 ───────────────────────────────────────────────
@@ -2380,137 +1911,22 @@ function saveRankings(){
 
   // 히스토리 적립 (날짜별)
   let hist = {};
-  try { hist = JSON.parse(localStorage.getItem('rankHistory') || '{}'); } catch {}
   hist[dateKey] = snapshot;
   // 최대 90일 보존
   const keys = Object.keys(hist).sort().reverse();
   if(keys.length > 90) keys.slice(90).forEach(k => delete hist[k]);
-  localStorage.setItem('rankHistory', JSON.stringify(hist));
 
   renderRankEditor('tving');
   renderRankEditor('wavve');
   renderAll();
-  initRankHistoryDropdown();
   toast(`랭킹 저장 완료 — ${rankUpdatedDate} 기준 기록됨. 히스토리 ${Object.keys(hist).length}일치 보존 중`);
 }
 
 // ── 히스토리 드롭다운 초기화 ─────────────────────────────────
-function initRankHistoryDropdown(){
-  const sel = document.getElementById('rank-hist-date');
-  if(!sel) return;
-  let hist = {};
-  try { hist = JSON.parse(localStorage.getItem('rankHistory') || '{}'); } catch {}
-  const keys = Object.keys(hist).sort().reverse(); // 최신순
-  sel.innerHTML = '<option value="">날짜 선택</option>' +
-    keys.map(k => {
-      const label = hist[k].updatedDate || k;
-      return `<option value="${k}">${label}</option>`;
-    }).join('');
-  if(keys.length > 0){
-    sel.value = keys[0]; // 기본: 가장 최근
-    renderRankHistory();
-  }
-  document.getElementById('rank-hist-meta').textContent =
-    keys.length > 0 ? `${keys.length}일치 기록 보존 중` : '저장된 기록 없음';
-}
 
 // ── 선택한 날짜의 랭킹 렌더 ──────────────────────────────────
-function renderRankHistory(){
-  const sel = document.getElementById('rank-hist-date');
-  const grid = document.getElementById('rank-history-grid');
-  if(!sel || !grid) return;
-  const dateKey = sel.value;
-  if(!dateKey){
-    grid.innerHTML = `<div style="padding:32px;text-align:center;color:var(--t3);font-size:12px;grid-column:1/-1">날짜를 선택하세요</div>`;
-    return;
-  }
-
-  let hist = {};
-  try { hist = JSON.parse(localStorage.getItem('rankHistory') || '{}'); } catch {}
-  const snap = hist[dateKey];
-  if(!snap){ grid.innerHTML = `<div style="padding:32px;text-align:center;color:var(--t3);font-size:12px;grid-column:1/-1">데이터가 없습니다</div>`; return; }
-
-  // 이전 날짜 스냅샷 (변동 계산용)
-  const allKeys = Object.keys(hist).sort();
-  const prevIdx = allKeys.indexOf(dateKey) - 1;
-  const prevSnap = prevIdx >= 0 ? hist[allKeys[prevIdx]] : null;
-
-  function rankCol(plat, list, prevList){
-    const color = plat === 'tving' ? 'var(--tv)' : 'var(--wv)';
-    const label = plat === 'tving' ? 'TVING' : 'Wavve';
-    const rows = list.map((item, i) => {
-      const rank = i + 1;
-      const prevRank = prevList ? (prevList.findIndex(x => x.title === item.title) + 1 || null) : null;
-      const chg = prevRank ? prevRank - rank : null;
-      const chgHtml = prevRank === null
-        ? `<span class="rh-chg" style="color:var(--green)">NEW</span>`
-        : chg === 0  ? `<span class="rh-chg" style="color:var(--t3)">—</span>`
-        : chg > 0    ? `<span class="rh-chg cup">▲${chg}</span>`
-                     : `<span class="rh-chg cdn">▼${Math.abs(chg)}</span>`;
-      const nc = rank === 1 ? 'rh-num rh-num-1' : rank <= 3 ? 'rh-num rh-num-3' : 'rh-num';
-      const [pbg, pfg] = phCol(item.title);
-      const pid = `rhp-${dateKey}-${plat}-${i}`;
-      const linked = DATA.find(d => d.title === item.title);
-      setTimeout(() => injectPoster(pid, item.title, linked?.posterUrl), 0);
-      return `<div class="rh-item" ${linked ? `onclick="openModal(${linked.id})"` : ''}>
-        <div class="rh-poster" id="${pid}" style="background:${pbg}">
-          <div class="rh-ph" style="color:${pfg}">${ini(item.title)}</div>
-        </div>
-        <span class="${nc}">${rank}</span>
-        <div class="rh-info">
-          <div class="rh-ttl">${item.title}${linked ? '' : '<span style="font-size:9px;color:var(--t3);margin-left:4px">미등록</span>'}</div>
-          <div class="rh-genre">${item.genre}</div>
-        </div>
-        ${chgHtml}
-      </div>`;
-    }).join('');
-    return `<div class="rh-col">
-      <div class="rh-head">
-        <span class="rh-title" style="color:${color}">${label} TOP ${list.length}</span>
-        ${prevList ? `<span style="font-size:10px;color:var(--t3)">vs ${hist[allKeys[prevIdx]]?.updatedDate || ''}</span>` : '<span style="font-size:10px;color:var(--t3)">첫 기록</span>'}
-      </div>
-      ${rows}
-    </div>`;
-  }
-
-  grid.style.gridTemplateColumns = '1fr 1fr';
-  grid.innerHTML =
-    rankCol('tving', snap.tving || [], prevSnap?.tving || null) +
-    rankCol('wavve', snap.wavve || [], prevSnap?.wavve || null);
-}
 
 // ── TAS API 자동 갱신 (연동 시 사용) ───────────────────────────
-async function fetchTASRanking(){
-  if(!CONFIG.TAS_API_ENABLED || !CONFIG.TAS_API_BASE) return;
-  try {
-    const headers = { 'Authorization': `Bearer ${CONFIG.TAS_API_KEY}` };
-    const [tvRes, wvRes] = await Promise.all([
-      fetch(`${CONFIG.TAS_API_BASE}/api/v1/ranking/top20?platform=tving&limit=20`, { headers }),
-      fetch(`${CONFIG.TAS_API_BASE}/api/v1/ranking/top20?platform=wavve&limit=20`, { headers }),
-    ]);
-    if(!tvRes.ok || !wvRes.ok) throw new Error('API 응답 오류');
-    const [tvData, wvData] = await Promise.all([tvRes.json(), wvRes.json()]);
-
-    // TAS API 응답 형식: { items: [{rank, title, genre, ...}] }
-    RANKS.tving = (tvData.items || []).slice(0,20).map((x,i) => ({
-      title: x.title, genre: x.genre || '드라마',
-      isNew: !RANKS.tving.find(r => r.title === x.title),
-      prevRank: RANKS.tving.findIndex(r => r.title === x.title) + 1 || null,
-    }));
-    RANKS.wavve = (wvData.items || []).slice(0,20).map((x,i) => ({
-      title: x.title, genre: x.genre || '드라마',
-      isNew: !RANKS.wavve.find(r => r.title === x.title),
-      prevRank: RANKS.wavve.findIndex(r => r.title === x.title) + 1 || null,
-    }));
-
-    // 자동 저장 (히스토리 적립)
-    document.getElementById('rank-date').value = new Date().toISOString().split('T')[0];
-    saveRankings();
-    toast('TAS API에서 오늘의 TOP 20 자동 갱신 완료');
-  } catch(e) {
-    console.warn('TAS 자동 갱신 실패:', e.message);
-  }
-}
 
 // ── AI 자동완성 ───────────────────────────────────────────────
 async function callClaude(prompt){
@@ -2616,26 +2032,97 @@ function applyPosterBulk(){
 
 // ── Admin render ──────────────────────────────────────────────
 function renderAdmin(){
-  document.getElementById('total-cnt').textContent=`(${DATA.length}편)`;
-  initNewsContentSelect();
-  renderNewsAdminList();
-  document.getElementById('data-tbody').innerHTML=DATA.map(d=>`
-    <tr>
-      <td><span class="pbadge ${d.platform}-b">${d.platform==='tving'?'TVING':'Wavve'}</span></td>
-      <td style="font-weight:500">${d.title}</td>
-      <td style="color:var(--t2)">${d.genre}</td>
-      <td style="color:var(--t2)">${d.startMonth}–${d.endMonth}월</td>
-      <td style="color:var(--t2)">${d.target}</td>
-      <td style="color:var(--t3);font-size:11px">${d.adSlot}</td>
-      <td><div class="poster-inline"><div class="poster-thumb-mini" id="thumb-mini-${d.id}"><span>${ini(d.title)}</span></div><input id="poster-url-${d.id}" value="${esc(d.posterUrl)}" placeholder="https://i.ifh.cc/...jpg"><button class="poster-save-btn" onclick="updatePosterUrl(${d.id})">저장</button></div></td>
-      <td style="font-size:11px">${d.specialUrl?`<a href="${d.specialUrl}" target="_blank" style="color:var(--purple)">링크 있음</a>`:'<span style="color:var(--t3)">—</span>'}</td>
-      <td><button class="del-btn" onclick="deleteEntry(${d.id})">삭제</button></td>
-    </tr>`).join('');
-  DATA.forEach(d=>injectPoster(`thumb-mini-${d.id}`, d.title, d.posterUrl));
-  renderRankEditor('tving');
-  renderRankEditor('wavve');
+  const cnt = document.getElementById('total-cnt');
+  if(cnt) cnt.textContent=`(${DATA.length}편)`;
+
+  // 이달의 추천 선택 UI
+  const picksList = document.getElementById('picks-list');
+  if(picksList){
+    picksList.innerHTML = DATA.map(d => {
+      const picked = PICKS.includes(d.id);
+      const [bg,fg] = phCol(d.title);
+      return `<div onclick="togglePick(${d.id})" style="display:flex;align-items:center;gap:8px;padding:8px 10px;border-radius:var(--r);border:2px solid ${picked?'var(--purple)':'var(--bd)'};background:${picked?'var(--purple-bg)':'var(--bg)'};cursor:pointer;transition:all .15s">
+        <div style="width:28px;height:40px;border-radius:4px;overflow:hidden;flex-shrink:0;background:${bg}">
+          ${d.posterUrl ? `<img src="${d.posterUrl}" style="width:100%;height:100%;object-fit:cover">` : `<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:8px;font-weight:700;color:${fg}">${ini(d.title)}</div>`}
+        </div>
+        <div style="min-width:0">
+          <div style="font-size:11px;font-weight:${picked?700:500};color:${picked?'var(--purple)':'var(--t1)'};white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${d.title}</div>
+          <div style="font-size:10px;color:var(--t3)">${d.platform==='tving'?'TVING':'Wavve'} · ${d.genre}</div>
+        </div>
+        ${picked?'<span style="margin-left:auto;font-size:10px;color:var(--purple);font-weight:700">✓</span>':''}
+      </div>`;
+    }).join('');
+  }
+
+  // 전체 목록
+  const tbody = document.getElementById('data-tbody');
+  if(tbody){
+    tbody.innerHTML=DATA.map(d=>`
+      <tr>
+        <td><span class="pbadge ${d.platform}-b">${d.platform==='tving'?'TVING':'Wavve'}</span></td>
+        <td style="font-weight:500">${d.title}</td>
+        <td style="color:var(--t2)">${d.genre}</td>
+        <td style="color:var(--t2)">${d.startMonth}–${d.endMonth}월</td>
+        <td style="color:var(--t2)">${d.target||''}</td>
+        <td>
+          <div class="poster-inline">
+            <div class="poster-thumb-mini" id="thumb-mini-${d.id}"><span>${ini(d.title)}</span></div>
+            <input id="poster-url-${d.id}" value="${esc(d.posterUrl||'')}" placeholder="https://..." style="flex:1;padding:5px 8px;font-size:11px;border:1px solid var(--bd2);border-radius:6px;background:var(--bg);color:var(--t1)">
+            <button class="poster-save-btn" onclick="updatePosterUrl(${d.id})">저장</button>
+          </div>
+        </td>
+        <td style="font-size:11px">${d.specialUrl?`<a href="${d.specialUrl}" target="_blank" style="color:var(--purple)">링크↗</a>`:'<span style="color:var(--t3)">—</span>'}</td>
+        <td><button class="del-btn" onclick="deleteEntry(${d.id})">삭제</button></td>
+      </tr>`).join('');
+    DATA.forEach(d=>injectPoster(`thumb-mini-${d.id}`, d.title, d.posterUrl));
+  }
 }
-function deleteEntry(id){DATA=DATA.filter(d=>d.id!==id);persistData();renderAdmin();renderAll();toast('삭제됐습니다')}
+
+function togglePick(id){
+  if(PICKS.includes(id)){
+    PICKS = PICKS.filter(x=>x!==id);
+  } else {
+    if(PICKS.length >= 3){ toast('최대 3개까지 선택할 수 있습니다'); return; }
+    PICKS.push(id);
+  }
+  localStorage.setItem('picks', JSON.stringify(PICKS));
+  renderAdmin();
+  renderRecommendations();
+  toast(PICKS.includes(id) ? '추천 콘텐츠에 추가됐습니다' : '추천 콘텐츠에서 제외됐습니다');
+}
+
+function clearPicks(){
+  PICKS = [];
+  localStorage.removeItem('picks');
+  renderAdmin();
+  renderRecommendations();
+  toast('추천 선택이 초기화됐습니다');
+}
+
+// ── 클립보드 이미지 붙여넣기 ─────────────────────────────────
+function initPasteZone(){
+  document.addEventListener('paste', e => {
+    const panel = document.getElementById('ai-panel');
+    if(!panel || !panel.classList.contains('open')) return;
+    const items = e.clipboardData?.items || [];
+    for(const item of items){
+      if(item.type.startsWith('image/')){
+        const blob = item.getAsFile();
+        const reader = new FileReader();
+        reader.onload = ev => {
+          pasteImageData = ev.target.result;
+          const preview = document.getElementById('paste-preview');
+          if(preview) preview.innerHTML = `<img src="${pasteImageData}" style="max-width:100%;max-height:120px;border-radius:6px;margin-top:4px">`;
+          toast('이미지가 붙여넣어졌습니다. 저장 시 함께 적용됩니다.');
+        };
+        reader.readAsDataURL(blob);
+        break;
+      }
+    }
+  });
+}
+
+function deleteEntry(id){DATA=DATA.filter(d=>d.id!==id);PICKS=PICKS.filter(x=>x!==id);persistData();renderAdmin();renderAll();toast('삭제됐습니다')}
 
 // ── Toast ─────────────────────────────────────────────────────
 function toast(msg){
@@ -2645,242 +2132,22 @@ function toast(msg){
 
 // ── 캐시 복원 ─────────────────────────────────────────────────
 // ── 화제성 기사 로드 (Claude API + 웹서치) ──────────────────
-let buzzCache = null;
-let buzzCacheTime = 0;
-const BUZZ_TTL = 30 * 60 * 1000;
 
 // ── 뉴스 아이템 저장소 ───────────────────────────────────────
-let NEWS_ITEMS = []; // [{id, contentTitle, title, summary, media, date, url, mood, emoji, addedAt}]
 
-function saveNewsItems(){
-  try { localStorage.setItem('newsItems', JSON.stringify(NEWS_ITEMS)); } catch{}
-}
-function loadNewsItemsFromStorage(){
-  try {
-    const saved = localStorage.getItem('newsItems');
-    if(saved) NEWS_ITEMS = JSON.parse(saved);
-  } catch{}
-}
 
 // ── 뷰어: 등록 기사 렌더 ────────────────────────────────────
-function renderBuzzInitial(){
-  const grid = document.getElementById('buzz-grid');
-  if(!grid) return;
-  if(!NEWS_ITEMS.length){
-    grid.innerHTML = `<div style="grid-column:1/-1;padding:32px;text-align:center;color:var(--t3);font-size:12px">
-      관리자 페이지에서 화제 기사를 등록하면 여기에 표시됩니다.<br>
-      <span style="font-size:10px;margin-top:6px;display:block">우하단 자물쇠 아이콘 → 관리자 → STEP 7</span>
-    </div>`;
-    return;
-  }
-  // 최신순, 최대 12개
-  const items = [...NEWS_ITEMS].sort((a,b)=> (b.addedAt||0)-(a.addedAt||0)).slice(0,12);
-  grid.innerHTML = items.map(a => newsCard(a)).join('');
-  // AI 추가 기사 있으면 붙이기
-  if(buzzCache) appendBuzzCards(buzzCache);
-}
 
-function newsCard(a){
-  const col  = (() => { const d = DATA.find(x=>x.title===a.contentTitle); return d ? gc(d.genre) : {bar:'#534AB7',bg:'#EEEDFE',dark:'#3C3489'}; })();
-  const moodMap = { hype:'🔥 화제', positive:'✅ 호평', anticipation:'⭐ 기대작', news:'📢 공식 발표' };
-  const moodColor= { hype:'#E8144A', positive:'#0F6E56', anticipation:'#534AB7', news:'#854F0B' };
-  const mc   = moodColor[a.mood] || col.bar;
-  const ml   = moodMap[a.mood]   || '📰 기사';
-  const emoji= a.emoji || (a.mood==='hype'?'🔥':a.mood==='positive'?'✅':a.mood==='anticipation'?'⭐':'📢');
-  return `<a class="buzz-card" href="${a.url||'#'}" target="_blank" rel="noopener" style="text-decoration:none">
-    <div class="buzz-card-thumb" style="background:linear-gradient(135deg,${col.bar}28 0%,${col.dark}44 100%)">
-      <div class="buzz-card-thumb-ph" style="font-size:38px">${emoji}</div>
-      <div style="position:absolute;top:10px;left:10px">
-        <span style="font-size:9px;font-weight:700;padding:2px 8px;border-radius:8px;background:${mc};color:#fff">${ml}</span>
-      </div>
-    </div>
-    <div class="buzz-card-body">
-      <div class="buzz-card-tags">
-        <span class="buzz-tag-title" style="background:${col.bar};color:#fff">${a.contentTitle}</span>
-        ${a.media?`<span class="buzz-tag-media">${a.media}</span>`:''}
-      </div>
-      <div class="buzz-card-headline">${a.title}</div>
-      <div class="buzz-card-summary">${a.summary||''}</div>
-      <div class="buzz-card-foot">
-        <span class="buzz-card-date">${a.date||''}</span>
-        <span class="buzz-card-link">기사 보기 →</span>
-      </div>
-    </div>
-  </a>`;
-}
 
-function appendBuzzCards(aiArticles){
-  const grid = document.getElementById('buzz-grid');
-  if(!grid || !aiArticles.length) return;
-  // 구분선 + AI 카드 추가
-  const divider = `<div style="grid-column:1/-1;display:flex;align-items:center;gap:10px;margin:4px 0">
-    <div style="flex:1;height:1px;background:var(--bd)"></div>
-    <span style="font-size:10px;color:var(--t3);white-space:nowrap">✨ AI 추천 기사</span>
-    <div style="flex:1;height:1px;background:var(--bd)"></div>
-  </div>`;
-  const colorMap = {};
-  DATA.forEach(d => { colorMap[d.title] = gc(d.genre); });
-  const moodColor = { hype:'#E8144A', positive:'#0F6E56', anticipation:'#534AB7' };
-  const aiCards = aiArticles.map(a => {
-    const col = colorMap[a.contentTitle] || {bar:'#534AB7',bg:'#EEEDFE',dark:'#3C3489'};
-    const mood = moodColor[a.mood] || col.bar;
-    const searchQ = encodeURIComponent((a.contentTitle||'') + ' ' + (a.keywords||'').split(',')[0]);
-    const newsUrl = `https://search.naver.com/search.naver?where=news&query=${searchQ}&sm=tab_jum`;
-    const kwTags = (a.keywords||'').split(',').slice(0,3).map(k =>
-      `<span style="font-size:9px;padding:1px 6px;border-radius:6px;background:${col.bar}18;color:${col.dark}">#${k.trim()}</span>`
-    ).join('');
-    return `<a class="buzz-card" href="${newsUrl}" target="_blank" rel="noopener" style="text-decoration:none">
-      <div class="buzz-card-thumb" style="background:linear-gradient(135deg,${col.bar}28 0%,${col.dark}44 100%)">
-        <div class="buzz-card-thumb-ph" style="font-size:38px">${a.emoji||'📰'}</div>
-        <div style="position:absolute;top:10px;left:10px">
-          <span style="font-size:9px;font-weight:700;padding:2px 8px;border-radius:8px;background:${mood};color:#fff">${a.mood==='hype'?'🔥 화제':a.mood==='positive'?'✅ 호평':'⭐ 기대작'}</span>
-        </div>
-      </div>
-      <div class="buzz-card-body">
-        <div class="buzz-card-tags"><span class="buzz-tag-title" style="background:${col.bar};color:#fff">${a.contentTitle}</span></div>
-        <div class="buzz-card-headline">${a.angle}</div>
-        <div class="buzz-card-summary">${a.summary}</div>
-        <div style="display:flex;gap:4px;flex-wrap:wrap;margin-top:8px">${kwTags}</div>
-        <div class="buzz-card-foot"><span class="buzz-card-date">네이버 뉴스 검색</span><span class="buzz-card-link">기사 보기 →</span></div>
-      </div>
-    </a>`;
-  }).join('');
-  grid.insertAdjacentHTML('beforeend', divider + aiCards);
-}
 
 // ── AI 기사 더 불러오기 ──────────────────────────────────────
-async function loadBuzzMore(){
-  const btn  = document.getElementById('buzz-more-btn');
-  const grid = document.getElementById('buzz-grid');
-  if(!grid) return;
-  if(buzzCache && Date.now() - buzzCacheTime < BUZZ_TTL){
-    appendBuzzCards(buzzCache); return;
-  }
-  btn.disabled = true;
-  btn.innerHTML = '<span class="spinner"></span>검색 중...';
-
-  const topItems = getRecommendations().slice(0, 5);
-  const titles   = topItems.map(d => d.title).join(', ');
-
-  const systemPrompt = '당신은 한국 OTT 콘텐츠 미디어 전문가입니다. 요청한 콘텐츠의 화제성 카드 데이터를 JSON 배열로만 반환하세요. 반드시 유효한 JSON 배열만 출력(앞뒤 설명, 마크다운 코드블록 절대 금지). 각 문자열 값 안에 큰따옴표 사용 금지. summary는 반드시 한 문장으로 완성.';
-  const userPrompt = `다음 콘텐츠들의 화제성 카드 6개를 아래 JSON 형식으로만 반환해:\n콘텐츠: ${titles}\n\n[{"contentTitle":"콘텐츠명","angle":"화제 포인트 한 줄","summary":"화제 이유 한 문장","keywords":"키워드1, 키워드2","mood":"hype","emoji":"장르이모지"}]`;
-
-  try {
-    const res = await fetch('https://api.anthropic.com/v1/messages', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        model: 'claude-sonnet-4-20250514', max_tokens: 1200,
-        system: systemPrompt,
-        messages: [{ role: 'user', content: userPrompt }],
-      }),
-    });
-    const data = await res.json();
-    if(data.error) throw new Error(data.error.message);
-    const rawText = (data.content||[]).filter(b=>b.type==='text').map(b=>b.text).join('').trim()
-      .replace(/```json\s*/gi,'').replace(/```\s*/g,'').trim();
-    const arrMatch = rawText.match(/\[[\s\S]*\]/);
-    if(!arrMatch) throw new Error('JSON 배열 없음');
-    const articles = JSON.parse(arrMatch[0]);
-    if(!Array.isArray(articles)||!articles.length) throw new Error('빈 배열');
-    buzzCache = articles;
-    buzzCacheTime = Date.now();
-    appendBuzzCards(articles);
-  } catch(e) {
-    toast('AI 기사 불러오기 실패: ' + e.message);
-  }
-  btn.disabled = false;
-  btn.innerHTML = '✨ AI 기사 더 불러오기';
-}
 
 // ── 관리자: 기사 등록/삭제 ──────────────────────────────────
-function initNewsContentSelect(){
-  const sel = document.getElementById('news-content');
-  if(!sel) return;
-  sel.innerHTML = '<option value="">콘텐츠 선택</option>' +
-    DATA.map(d=>`<option value="${d.title}">${d.title}</option>`).join('');
-}
 
-function previewNewsUrl(url){
-  const el = document.getElementById('news-url-preview');
-  if(!el) return;
-  if(!url){ el.textContent=''; return; }
-  try { const u = new URL(url); el.innerHTML = `✓ <span style="color:var(--green)">${u.hostname}</span>`; }
-  catch { el.innerHTML = `<span style="color:var(--tv)">⚠ 유효한 URL이 아닙니다</span>`; }
-}
 
-function clearNewsForm(){
-  ['news-content','news-title','news-summary','news-media','news-url'].forEach(id=>{
-    const el = document.getElementById(id); if(el) el.value='';
-  });
-  document.getElementById('news-date').value = '';
-  document.getElementById('news-url-preview').textContent = '';
-}
 
-function addNewsItem(){
-  const get = id => (document.getElementById(id)||{}).value||'';
-  const contentTitle = get('news-content');
-  const title   = get('news-title').trim();
-  const summary = get('news-summary').trim();
-  const url     = get('news-url').trim();
-  if(!contentTitle){ toast('콘텐츠를 선택해주세요'); return; }
-  if(!title)        { toast('기사 제목을 입력해주세요'); return; }
-  if(!url)          { toast('기사 URL을 입력해주세요'); return; }
-  try { new URL(url); } catch { toast('유효한 URL을 입력해주세요'); return; }
 
-  const item = {
-    id: Date.now(),
-    contentTitle, title, summary,
-    media: get('news-media'),
-    date:  get('news-date'),
-    url, mood: get('news-mood'),
-    emoji: '',
-    addedAt: Date.now(),
-  };
-  NEWS_ITEMS.unshift(item);
-  // 최대 12개
-  if(NEWS_ITEMS.length > 12) NEWS_ITEMS = NEWS_ITEMS.slice(0,12);
-  saveNewsItems();
-  clearNewsForm();
-  renderNewsAdminList();
-  renderBuzzInitial();
-  toast(`"${title.slice(0,20)}..." 등록 완료`);
-}
 
-function deleteNewsItem(id){
-  NEWS_ITEMS = NEWS_ITEMS.filter(n => n.id !== id);
-  saveNewsItems();
-  renderNewsAdminList();
-  renderBuzzInitial();
-  toast('삭제됐습니다');
-}
-
-function renderNewsAdminList(){
-  const el = document.getElementById('news-admin-list');
-  const cnt = document.getElementById('news-count');
-  if(!el) return;
-  if(cnt) cnt.textContent = `(${NEWS_ITEMS.length}개)`;
-  if(!NEWS_ITEMS.length){
-    el.innerHTML = `<div style="padding:20px;text-align:center;color:var(--t3);font-size:11px;border:1px dashed var(--bd);border-radius:var(--r)">등록된 기사가 없습니다. 위 폼에서 추가하세요.</div>`;
-    return;
-  }
-  el.innerHTML = NEWS_ITEMS.map(n => {
-    const moodLabel = {hype:'🔥',positive:'✅',anticipation:'⭐',news:'📢'}[n.mood]||'📰';
-    return `<div style="display:flex;align-items:center;gap:10px;padding:10px 12px;border:1px solid var(--bd);border-radius:var(--r);margin-bottom:6px;background:var(--bg)">
-      <span style="font-size:16px;flex-shrink:0">${moodLabel}</span>
-      <div style="flex:1;min-width:0">
-        <div style="font-size:11px;font-weight:600;color:var(--t1);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${n.title}</div>
-        <div style="font-size:10px;color:var(--t3);margin-top:2px;display:flex;gap:8px">
-          <span style="background:var(--purple-bg);color:var(--purple);padding:1px 6px;border-radius:6px;font-weight:600">${n.contentTitle}</span>
-          ${n.media?`<span>${n.media}</span>`:''}
-          ${n.date?`<span>${n.date}</span>`:''}
-        </div>
-      </div>
-      <a href="${n.url}" target="_blank" style="font-size:10px;color:var(--purple);flex-shrink:0">링크↗</a>
-      <button class="del-btn" onclick="deleteNewsItem(${n.id})" style="flex-shrink:0">삭제</button>
-    </div>`;
-  }).join('');
-}
 
 async function loadBuzzNews(){
   const btn  = document.getElementById('buzz-refresh-btn');
@@ -2953,159 +2220,27 @@ async function loadBuzzNews(){
   btn.innerHTML = '🔍 새로고침';
 }
 
-function renderBuzzCards(articles, topItems){
-  const grid = document.getElementById('buzz-grid');
-  if(!grid || !articles.length) return;
 
-  const colorMap = {};
-  DATA.forEach(d => { colorMap[d.title] = gc(d.genre); });
 
-  const moodColor = { hype:'#E8144A', positive:'#0F6E56', anticipation:'#534AB7' };
 
-  grid.innerHTML = articles.map(a => {
-    const col  = colorMap[a.contentTitle] || { bar:'#534AB7', bg:'#EEEDFE', dark:'#3C3489' };
-    const mood = moodColor[a.mood] || col.bar;
-    // 네이버 뉴스 검색 URL (실제 기사로 연결)
-    const searchQ = encodeURIComponent((a.contentTitle || '') + ' ' + (a.keywords || '').split(',')[0]);
-    const newsUrl = `https://search.naver.com/search.naver?where=news&query=${searchQ}&sm=tab_jum`;
-    const kwTags  = (a.keywords || '').split(',').slice(0,3).map(k =>
-      `<span style="font-size:9px;padding:1px 6px;border-radius:6px;background:${col.bar}18;color:${col.dark}">#${k.trim()}</span>`
-    ).join('');
-
-    return `<a class="buzz-card" href="${newsUrl}" target="_blank" rel="noopener" style="text-decoration:none">
-      <div class="buzz-card-thumb" style="background:linear-gradient(135deg,${col.bar}28 0%,${col.dark}44 100%)">
-        <div class="buzz-card-thumb-ph" style="font-size:38px">${a.emoji || '📰'}</div>
-        <div style="position:absolute;top:10px;left:10px">
-          <span style="font-size:9px;font-weight:700;padding:2px 8px;border-radius:8px;background:${mood};color:#fff">${a.mood === 'hype' ? '🔥 화제' : a.mood === 'positive' ? '✅ 호평' : '⭐ 기대작'}</span>
-        </div>
-      </div>
-      <div class="buzz-card-body">
-        <div class="buzz-card-tags">
-          <span class="buzz-tag-title" style="background:${col.bar};color:#fff">${a.contentTitle}</span>
-        </div>
-        <div class="buzz-card-headline">${a.angle}</div>
-        <div class="buzz-card-summary">${a.summary}</div>
-        <div style="display:flex;gap:4px;flex-wrap:wrap;margin-top:8px">${kwTags}</div>
-        <div class="buzz-card-foot">
-          <span class="buzz-card-date">네이버 뉴스 검색</span>
-          <span class="buzz-card-link">기사 보기 →</span>
-        </div>
-      </div>
-    </a>`;
-  }).join('');
-}
-function exportFile(){
-  const demoPw = localStorage.getItem('demoPw') || CONFIG.DEMO_PASSWORD;
-  let out = document.documentElement.outerHTML;
-
-  // DATA 배열 교체
-  const dataJson = JSON.stringify(DATA, null, 2);
-  out = out.replace(
-    /let DATA = \[[\s\S]*?\];\nlet nextId/,
-    `let DATA = ${dataJson};\nlet nextId`
-  );
-
-  // nextId 교체
-  const maxId = DATA.length ? Math.max(...DATA.map(d => d.id)) + 1 : 12;
-  out = out.replace(/let nextId = \d+;/, `let nextId = ${maxId};`);
-
-  // RANKS 교체
-  const ranksJson = JSON.stringify({ tving: RANKS.tving, wavve: RANKS.wavve }, null, 2);
-  out = out.replace(
-    /let RANKS = \{[\s\S]*?\};\n\n\/\/ 광고 상품/,
-    `let RANKS = ${ranksJson};\n\n// 광고 상품`
-  );
-
-  // rankUpdatedDate 교체
-  if(rankUpdatedDate){
-    out = out.replace(
-      /let rankUpdatedDate='[^']*'/,
-      `let rankUpdatedDate='${rankUpdatedDate}'`
-    );
-  }
-
-  // DEMO_PASSWORD 교체
-  out = out.replace(/DEMO_PASSWORD:\s*'[^']*'/, `DEMO_PASSWORD:   '${demoPw}'`);
-
-  // 다운로드
-  const today = new Date();
-  const ts = `${today.getFullYear()}${String(today.getMonth()+1).padStart(2,'0')}${String(today.getDate()).padStart(2,'0')}`;
-  const blob = new Blob([out], { type: 'text/html;charset=utf-8' });
-  const a = document.createElement('a');
-  a.href = URL.createObjectURL(blob);
-  a.download = `tving_wavve_intel_${ts}.html`;
-  a.click();
-  URL.revokeObjectURL(a.href);
-  toast('내보내기 완료 — 파일을 GitHub에 index.html로 업로드하세요');
-}
-
-function changeDemoPw(){
-  const current = document.getElementById('demo-pw-current').value;
-  const next    = document.getElementById('demo-pw-new').value.trim();
-  const confirm = document.getElementById('demo-pw-confirm').value.trim();
-  const fb      = document.getElementById('demo-pw-feedback');
-  const activePw = localStorage.getItem('demoPw') || CONFIG.DEMO_PASSWORD;
-
-  const show = (msg, color) => {
-    fb.textContent = msg; fb.style.color = color; fb.style.display = 'block';
-    setTimeout(() => { fb.style.display = 'none'; }, 3500);
-  };
-
-  if(current !== activePw){ show('현재 비밀번호가 올바르지 않습니다.', 'var(--tv)'); return; }
-  if(!next){ show('새 비밀번호를 입력해주세요.', 'var(--tv)'); return; }
-  if(next.length < 4){ show('비밀번호는 4자 이상이어야 합니다.', 'var(--tv)'); return; }
-  if(next !== confirm){ show('새 비밀번호가 일치하지 않습니다.', 'var(--tv)'); return; }
-
-  localStorage.setItem('demoPw', next);
-  CONFIG.DEMO_PASSWORD = next;
-
-  document.getElementById('demo-pw-current').value = '';
-  document.getElementById('demo-pw-new').value     = '';
-  document.getElementById('demo-pw-confirm').value = '';
-  updateDemoPwStatus();
-  show('✓ 비밀번호가 변경되었습니다. 기존 열람 세션이 초기화됩니다.', 'var(--green)');
-}
-
-function showDemoPw(){
-  const activePw = localStorage.getItem('demoPw') || CONFIG.DEMO_PASSWORD;
-  const fb = document.getElementById('demo-pw-feedback');
-  fb.innerHTML = `현재 열람 비밀번호: <strong style="color:var(--purple);font-family:monospace;font-size:13px">${activePw}</strong> &nbsp;<span style="color:var(--t3);font-size:10px">(광고주·대행사에게 개별 전달)</span>`;
-  fb.style.color = 'var(--t2)'; fb.style.display = 'block';
-  setTimeout(() => { fb.style.display = 'none'; }, 6000);
-}
-
-function updateDemoPwStatus(){
-  const el = document.getElementById('demo-pw-status');
-  if(!el) return;
-  const hasCustPw = !!localStorage.getItem('demoPw');
-  el.textContent = hasCustPw ? '커스텀 비번 설정됨' : `기본값 사용 중`;
-  el.style.color = hasCustPw ? 'var(--green)' : 'var(--t3)';
-}
 
 function restoreCache(){
   try{
     const sd=localStorage.getItem('manualData') || localStorage.getItem('sheetData');
     if(sd){const p=JSON.parse(sd);if(p.length){DATA=p;nextId=Math.max(...DATA.map(d=>d.id))+1}}
     const rk=localStorage.getItem('rankings');
-    if(rk){const{tving,wavve,updatedDate}=JSON.parse(rk);
-      if(tving)RANKS.tving=tving.map(x=>({title:x.title,genre:x.genre,isNew:false,prevRank:x.rank}));
-      if(wavve)RANKS.wavve=wavve.map(x=>({title:x.title,genre:x.genre,isNew:false,prevRank:x.rank}));
-      if(updatedDate)rankUpdatedDate=updatedDate;}
-    // 데모 비밀번호 복원
-    const savedDemoPw = localStorage.getItem('demoPw');
-    if(savedDemoPw) CONFIG.DEMO_PASSWORD = savedDemoPw;
-    // 뉴스 아이템 복원
-    loadNewsItemsFromStorage();
+    if(rk){const r=JSON.parse(rk);
+      if(r.tving)RANKS.tving=r.tving.map(x=>({title:x.title,genre:x.genre||guessGenre(x.title),isNew:false,prevRank:x.rank}));
+      if(r.updatedDate)rankUpdatedDate=r.updatedDate;}
+    const pk=localStorage.getItem('picks');
+    if(pk)PICKS=JSON.parse(pk);
   }catch{}
 }
 
 restoreCache();
 renderAll();
 renderAdmin();
-setTimeout(updateDemoPwStatus, 100);
-setTimeout(initRankHistoryDropdown, 150);
-setTimeout(renderBuzzInitial, 200);
-if(CONFIG.TAS_API_ENABLED) setTimeout(fetchTASRanking, 500);
+initPasteZone();
 </script>
 </body>
 </html>
