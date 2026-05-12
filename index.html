@@ -10,7 +10,7 @@
 <script>
 const CONFIG = {
   TMDB_KEY:           'YOUR_TMDB_API_KEY',
-  SHEETS_ID:          'YOUR_SPREADSHEET_ID',
+  SHEETS_ID:          '1AJEqgi3q0SaJH6pwTUUWvjryMVtOYaYKhIFrhCy3LAs',
   GOOGLE_API_KEY:     'YOUR_GOOGLE_API_KEY',
   ADMIN_PASSWORD:     'tving2026',
   // TVING Redash API (TOP 20)
@@ -696,10 +696,11 @@ select.fin{cursor:pointer}
         </span>
       </div>
       <div class="field-row">
-        <input class="fin" id="sheets-url" placeholder="Google Sheets URL">
-        <input class="fin" id="sheets-gak" placeholder="Google API Key" style="max-width:240px">
-        <button class="btn" onclick="connectSheets()">연결</button>
-        <button class="btn suc" id="sync-btn" onclick="syncSheets()" disabled>동기화</button>
+        <input class="fin" id="sheets-url" value="https://docs.google.com/spreadsheets/d/1AJEqgi3q0SaJH6pwTUUWvjryMVtOYaYKhIFrhCy3LAs" placeholder="Google Sheets URL">
+        <input class="fin" id="sheets-gak" placeholder="Google API Key (선택)" style="max-width:240px">
+        <input type="hidden" id="sheets-range" value="Sheet1!A:M">
+        <button class="btn" onclick="connectSheets()">연결 테스트</button>
+        <button class="btn suc" id="sync-btn" onclick="syncSheets()" disabled>데이터 동기화</button>
       </div>
       <div style="font-size:11px;color:var(--t3);margin-bottom:12px">컬럼 순서: A=platform · B=title · C=genre · D=시작월 · E=종료월 · F=타겟 · G=시놉시스 · H=출연진 · I=편수 · J=광고상품 · K=피크월 · L=포스터URL · M=특판링크URL</div>
 
@@ -1671,6 +1672,47 @@ function switchMTabById(targetId){
 
 // ── Google Sheets ─────────────────────────────────────────────
 function extractSheetId(input){const m=input.match(/\/spreadsheets\/d\/([a-zA-Z0-9_-]+)/);return m?m[1]:input.trim()}
+
+function parseCSV(text){
+  const rows=[];
+  for(const rawLine of text.split('\n')){
+    const line=rawLine.replace(/\r$/,'');
+    if(!line.trim())continue;
+    const row=[];let f='',inQ=false;
+    for(let i=0;i<line.length;i++){
+      const c=line[i];
+      if(c==='"'){if(inQ&&line[i+1]==='"'){f+='"';i++;}else inQ=!inQ;}
+      else if(c===','&&!inQ){row.push(f);f='';}
+      else f+=c;
+    }
+    row.push(f);rows.push(row);
+  }
+  return rows;
+}
+
+async function autoLoadSheets(){
+  const id=CONFIG.SHEETS_ID;
+  if(!id||id==='YOUR_SPREADSHEET_ID')return;
+  try{
+    const res=await fetch(`https://docs.google.com/spreadsheets/d/${id}/export?format=csv`);
+    if(!res.ok)throw new Error(`HTTP ${res.status}`);
+    const csv=await res.text();
+    const rows=parseCSV(csv);
+    const parsed=rows.slice(1).map((r,i)=>parseRow(r,i)).filter(Boolean);
+    if(!parsed.length)return;
+    DATA=parsed;nextId=Math.max(...DATA.map(d=>d.id))+1;
+    localStorage.setItem('sheetData',JSON.stringify(DATA));
+    localStorage.setItem('sheetSync',new Date().toISOString());
+    renderAll();renderAdmin();
+    const dot=document.getElementById('sheets-dot');
+    const lbl=document.getElementById('sheets-lbl');
+    if(dot)dot.className='sdot don';
+    if(lbl)lbl.textContent=`자동 연결됨 (${parsed.length}개)`;
+    document.getElementById('sync-btn').disabled=false;
+  }catch(e){
+    console.warn('Sheet auto-load:',e.message);
+  }
+}
 async function connectSheets(){
   const url=document.getElementById('sheets-url').value.trim();
   const apiKey=document.getElementById('sheets-gak').value.trim()||CONFIG.GOOGLE_API_KEY;
@@ -2210,6 +2252,7 @@ restoreCache();
 renderAll();
 renderAdmin();
 initPasteZone();
+autoLoadSheets();
 </script>
 </body>
 </html>
