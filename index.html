@@ -1,0 +1,1849 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TVING Contents Intelligence</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans+KR:wght@400;500;600;700&display=swap"
+    rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0a0e14;
+      --surface: #121823;
+      --surface-2: #19212f;
+      --line: #26303f;
+      --ink: #eef2f7;
+      --ink-dim: #9aa7b8;
+      --ink-faint: #5e6a7a;
+      --accent: #FF153C;
+      --accent-soft: rgba(255, 21, 60, .14);
+      --reach: #3d8bff;
+      --concentration: #ffb627;
+      --branded: #2ec1a8;
+      --ok: #2ec1a8;
+      --grey-bar: #3a4556;
+      --radius: 14px;
+      --display: "Space Grotesk", "IBM Plex Sans KR", sans-serif;
+      --body: "IBM Plex Sans KR", system-ui, sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--ink);
+      font-family: var(--body);
+      line-height: 1.55;
+      -webkit-font-smoothing: antialiased;
+      min-height: 100vh
+    }
+
+    .wrap {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 0 22px
+    }
+
+    header {
+      border-bottom: 1px solid var(--line);
+      background: rgba(10, 14, 20, .85);
+      backdrop-filter: blur(10px);
+      position: sticky;
+      top: 0;
+      z-index: 30
+    }
+
+    .head-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 64px;
+      gap: 20px
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-family: var(--display);
+      font-weight: 700;
+      letter-spacing: -.02em;
+      font-size: 18px
+    }
+
+    .brand-logo {
+      width: 30px;
+      height: 30px;
+      object-fit: contain;
+      flex-shrink: 0
+    }
+
+    .brand small {
+      font-weight: 500;
+      color: var(--ink-faint);
+      font-size: 11px;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      font-family: var(--display)
+    }
+
+    nav.tabs {
+      border-bottom: 1px solid var(--line);
+      position: sticky;
+      top: 64px;
+      z-index: 29;
+      background: rgba(10, 14, 20, .85);
+      backdrop-filter: blur(10px)
+    }
+
+    .tabs-row {
+      display: flex;
+      gap: 2px;
+      overflow-x: auto;
+      scrollbar-width: none;
+      -ms-overflow-style: none
+    }
+
+    .tabs-row::-webkit-scrollbar {
+      display: none
+    }
+
+    .tab {
+      appearance: none;
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: var(--ink-faint);
+      font-family: var(--display);
+      font-weight: 600;
+      font-size: 14px;
+      letter-spacing: -.01em;
+      padding: 16px 4px;
+      margin-right: 26px;
+      position: relative;
+      transition: color .18s;
+      white-space: nowrap
+    }
+
+    .tab .n {
+      font-size: 11px;
+      color: var(--ink-faint);
+      margin-right: 7px;
+      font-variant-numeric: tabular-nums
+    }
+
+    .tab:hover {
+      color: var(--ink-dim)
+    }
+
+    .tab[aria-selected="true"] {
+      color: var(--ink)
+    }
+
+    .tab[aria-selected="true"]::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      right: 18px;
+      bottom: -1px;
+      height: 2px;
+      background: var(--accent)
+    }
+
+    .tab[aria-selected="true"] .n {
+      color: var(--accent)
+    }
+
+    .panel {
+      display: none;
+      padding: 34px 0 90px;
+      animation: fade .3s ease
+    }
+
+    .panel.active {
+      display: block
+    }
+
+    @keyframes fade {
+      from {
+        opacity: 0;
+        transform: translateY(6px)
+      }
+
+      to {
+        opacity: 1;
+        transform: none
+      }
+    }
+
+    .panel-head {
+      margin-bottom: 22px;
+      max-width: 800px
+    }
+
+    .eyebrow {
+      font-family: var(--display);
+      font-size: 11px;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      color: var(--accent);
+      font-weight: 600;
+      margin-bottom: 9px
+    }
+
+    .panel-head h2 {
+      font-family: var(--display);
+      font-size: 27px;
+      font-weight: 700;
+      letter-spacing: -.025em;
+      margin-bottom: 8px
+    }
+
+    .panel-head p {
+      color: var(--ink-dim);
+      font-size: 14.5px
+    }
+
+    .searchbar {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 11px;
+      padding: 0 14px;
+      max-width: 420px;
+      margin-bottom: 24px
+    }
+
+    .searchbar:focus-within {
+      border-color: var(--accent)
+    }
+
+    .searchbar svg {
+      flex: none;
+      opacity: .6
+    }
+
+    .searchbar input {
+      flex: 1;
+      background: none;
+      border: none;
+      color: var(--ink);
+      font-family: var(--body);
+      font-size: 14px;
+      padding: 12px 0;
+      outline: none
+    }
+
+    .searchbar input::placeholder {
+      color: var(--ink-faint)
+    }
+
+    .seg {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin: 48px 0 20px
+    }
+
+    .seg .ln {
+      flex: 1;
+      height: 1.5px;
+      background: var(--line)
+    }
+
+    .seg .lbl {
+      font-family: var(--display);
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: .05em;
+      text-transform: uppercase;
+      padding: 6px 16px;
+      border-radius: 999px;
+      border: 1.5px solid var(--line);
+      background: var(--surface-2);
+      color: var(--ink);
+      white-space: nowrap
+    }
+
+    .seg.seg-hot .lbl {
+      color: var(--accent);
+      border-color: rgba(255, 21, 60, .45);
+      background: rgba(255, 21, 60, .07)
+    }
+
+    .seg.seg-hot .ln {
+      background: linear-gradient(90deg, rgba(255, 21, 60, .35), var(--line) 60%)
+    }
+
+    .seg.seg-soon .lbl {
+      color: #2ec1a8;
+      border-color: rgba(46, 193, 168, .45);
+      background: rgba(46, 193, 168, .07)
+    }
+
+    .seg.seg-soon .ln {
+      background: linear-gradient(90deg, rgba(46, 193, 168, .35), var(--line) 60%)
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(176px, 1fr));
+      gap: 18px
+    }
+
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      overflow: hidden;
+      box-shadow: 0 1px 2px rgba(0, 0, 0, .25), 0 8px 22px -14px rgba(0, 0, 0, .5)
+    }
+
+    .card.actionable {
+      cursor: default;
+      transition: border-color .18s, transform .18s, box-shadow .18s
+    }
+
+    .card.actionable.card-special {
+      cursor: pointer
+    }
+
+    .card.actionable.card-special:hover {
+      border-color: rgba(255, 21, 60, .55);
+      transform: translateY(-3px);
+      box-shadow: 0 2px 4px rgba(0, 0, 0, .3), 0 18px 36px -14px rgba(0, 0, 0, .65)
+    }
+
+    a.card {
+      text-decoration: none;
+      color: inherit;
+      display: block
+    }
+
+    .card.static {
+      cursor: default
+    }
+
+    .poster {
+      aspect-ratio: 16/24;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      justify-content: space-between;
+      padding: 10px;
+      overflow: hidden
+    }
+
+    .badges-top {
+      display: flex;
+      flex-direction: row;
+      gap: 5px;
+      z-index: 3;
+      width: fit-content;
+      flex-wrap: wrap;
+      align-content: flex-start
+    }
+
+    .poster .ttl {
+      font-family: var(--display);
+      font-weight: 700;
+      font-size: 14.5px;
+      letter-spacing: -.02em;
+      z-index: 2;
+      text-shadow: 0 1px 3px rgba(0, 0, 0, .95), 0 3px 18px rgba(0, 0, 0, .75);
+      line-height: 1.3;
+      color: #fff;
+      word-break: keep-all
+    }
+
+    .poster::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, rgba(0, 0, 0, .45), transparent 28%, transparent 36%, rgba(0, 0, 0, .97));
+      z-index: 1
+    }
+
+    /* 포스터 이미지가 없는 카드: 타이포그래피 포스터 스타일 폴백 */
+    .poster.no-img::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(110% 70% at 50% -14%, rgba(255, 255, 255, .15), transparent 56%),
+        radial-gradient(150% 95% at 50% 120%, rgba(0, 0, 0, .55), transparent 60%);
+      z-index: 0
+    }
+
+    .poster .title-mark {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      padding: 20px 16px;
+      text-align: center;
+      pointer-events: none;
+      user-select: none
+    }
+
+    .title-mark .tm-genre {
+      font-family: var(--display);
+      font-size: 9px;
+      font-weight: 600;
+      letter-spacing: .34em;
+      margin-right: -.34em;
+      text-transform: uppercase;
+      color: rgba(255, 255, 255, .42)
+    }
+
+    .title-mark .tm-line {
+      width: 22px;
+      height: 1px;
+      background: rgba(255, 255, 255, .28)
+    }
+
+    .title-mark .tm-ttl {
+      font-family: var(--display);
+      font-weight: 700;
+      font-size: 20px;
+      line-height: 1.32;
+      letter-spacing: -.02em;
+      word-break: keep-all;
+      background: linear-gradient(180deg, rgba(255, 255, 255, .96), rgba(255, 255, 255, .45));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent
+    }
+
+    .status {
+      position: absolute;
+      top: 11px;
+      left: 11px;
+      z-index: 3;
+      font-family: var(--display);
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: .05em;
+      padding: 4px 9px;
+      border-radius: 999px;
+      text-transform: uppercase
+    }
+
+    .status.onair {
+      background: var(--accent);
+      color: #fff
+    }
+
+    .status.soon {
+      background: rgba(10, 14, 20, .72);
+      color: var(--concentration);
+      border: 1px solid var(--concentration)
+    }
+
+    .status.special {
+      background: var(--accent);
+      color: #fff
+    }
+
+    .card-body {
+      padding: 12px 13px 13px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px
+    }
+
+    .genre-row {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex-wrap: wrap
+    }
+
+    .rating {
+      flex: none;
+      font-family: var(--display);
+      font-weight: 700;
+      font-size: 8.5px;
+      min-width: 19px;
+      height: 19px;
+      padding: 0 4px;
+      border-radius: 5px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-top: 1px
+    }
+
+    .rating.all {
+      background: rgba(46, 193, 168, .14);
+      color: #2ec1a8;
+      border: 1px solid rgba(46, 193, 168, .35)
+    }
+
+    .rating.r12 {
+      background: rgba(61, 139, 255, .14);
+      color: #3d8bff;
+      border: 1px solid rgba(61, 139, 255, .35)
+    }
+
+    .rating.r15 {
+      background: rgba(255, 182, 39, .14);
+      color: #ffb627;
+      border: 1px solid rgba(255, 182, 39, .35)
+    }
+
+    .rating.r19 {
+      background: rgba(255, 21, 60, .14);
+      color: #ff5570;
+      border: 1px solid rgba(255, 21, 60, .4)
+    }
+
+    .meta {
+      font-size: 11.5px;
+      color: var(--ink-faint);
+      margin-bottom: 10px
+    }
+
+    .meta b {
+      color: var(--ink-dim);
+      font-weight: 500
+    }
+
+    .genre {
+      flex: none;
+      font-size: 9.5px;
+      color: var(--ink-dim);
+      background: var(--surface-2);
+      border: 1px solid var(--line);
+      padding: 2px 8px;
+      border-radius: 999px;
+      font-family: var(--display);
+      font-weight: 700
+    }
+
+    .subgenre-tag {
+      font-family: var(--display);
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--ink-dim)
+    }
+
+    .genre-row .ep-chip {
+      margin-left: auto
+    }
+
+    .info-row {
+      display: flex;
+      align-items: center;
+      gap: 0;
+      font-size: 11px;
+      color: var(--ink-dim);
+      min-height: 18px;
+      overflow: hidden
+    }
+
+    .info-cast {
+      flex: 1;
+      min-width: 0;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap
+    }
+
+    .info-sep {
+      flex: none;
+      color: var(--ink-faint);
+      font-size: 10px;
+      padding: 0 4px
+    }
+
+    .info-days {
+      flex: none;
+      font-weight: 600
+    }
+
+    .ep-chip {
+      flex: none;
+      font-size: 9.5px;
+      color: var(--ink-dim);
+      background: var(--surface-2);
+      border: 1px solid var(--line);
+      padding: 2px 7px;
+      border-radius: 999px;
+      font-family: var(--display);
+      font-weight: 500
+    }
+
+    .card-foot {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      border-top: 1px solid var(--line);
+      padding-top: 9px;
+      margin-top: 1px;
+      font-size: 10px
+    }
+
+    .premiere {
+      font-family: var(--display);
+      font-weight: 700;
+      font-size: 12px;
+      color: var(--ink);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      min-width: 0;
+      margin-right: auto
+    }
+
+    .premiere em {
+      font-style: normal;
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: .04em;
+      color: #6fa8d0
+    }
+
+    .card-foot .rating {
+      margin-top: 0
+    }
+
+    .badge {
+      font-size: 8.5px;
+      font-family: var(--display);
+      font-weight: 700;
+      letter-spacing: .06em;
+      padding: 0 9px;
+      border-radius: 999px;
+      text-transform: uppercase;
+      line-height: 1;
+      white-space: nowrap;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 21px;
+      gap: 4px
+    }
+
+    .badge.special {
+      background: linear-gradient(135deg, #ffd166, #ff9f1c);
+      color: #38230a;
+      border: 1px solid rgba(255, 255, 255, .35);
+      box-shadow: 0 2px 10px rgba(255, 159, 28, .45), inset 0 1px 0 rgba(255, 255, 255, .45)
+    }
+
+    .badge.special .spark {
+      font-size: 9px;
+      line-height: 1
+    }
+
+    .badge.original {
+      background: linear-gradient(135deg, #ff3d5e, #d40d30);
+      color: #fff;
+      border: 1px solid rgba(255, 255, 255, .28);
+      box-shadow: 0 2px 10px rgba(255, 21, 60, .45), inset 0 1px 0 rgba(255, 255, 255, .22)
+    }
+
+    .badge.only {
+      background: rgba(8, 11, 17, .78);
+      backdrop-filter: blur(6px);
+      -webkit-backdrop-filter: blur(6px);
+      color: #fff;
+      border: 1px solid rgba(255, 21, 60, .85);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, .45)
+    }
+
+    .promo {
+      font-size: 12px;
+      display: flex;
+      align-items: flex-start;
+      gap: 7px
+    }
+
+    .promo .tag {
+      flex: none;
+      font-family: var(--display);
+      font-size: 9.5px;
+      font-weight: 600;
+      letter-spacing: .04em;
+      padding: 2.5px 7px;
+      border-radius: 5px;
+      text-transform: uppercase;
+      margin-top: 1px
+    }
+
+    .promo.has .tag {
+      background: var(--accent-soft);
+      color: var(--accent)
+    }
+
+    .promo.has span {
+      color: var(--ink)
+    }
+
+    .promo.has .arrow {
+      margin-left: auto;
+      color: var(--accent);
+      font-weight: 700;
+      flex: none
+    }
+
+    .promo.none .tag {
+      background: var(--surface-2);
+      color: var(--ink-faint)
+    }
+
+    .promo.none span {
+      color: var(--ink-faint)
+    }
+
+    .rank-block {
+      margin-top: 54px;
+      border-top: 2px solid var(--line);
+      padding-top: 34px
+    }
+
+    .rank-block .panel-head {
+      margin-bottom: 18px
+    }
+
+    .rank-controls {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 20px
+    }
+
+    select.ctl {
+      appearance: none;
+      background: var(--surface) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%239aa7b8' d='M6 8 0 0h12z'/%3E%3C/svg%3E") no-repeat right 14px center;
+      border: 1px solid var(--line);
+      color: var(--ink);
+      font-family: var(--display);
+      font-size: 13px;
+      font-weight: 500;
+      padding: 10px 38px 10px 14px;
+      border-radius: 9px;
+      cursor: pointer
+    }
+
+    select.ctl:focus {
+      outline: 2px solid var(--accent);
+      outline-offset: 1px
+    }
+
+    .btn {
+      appearance: none;
+      background: var(--accent);
+      color: #fff;
+      border: none;
+      font-family: var(--display);
+      font-weight: 600;
+      font-size: 13px;
+      padding: 10px 18px;
+      border-radius: 9px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      transition: opacity .15s
+    }
+
+    .btn:hover {
+      opacity: .9
+    }
+
+    .btn.ghost {
+      background: none;
+      border: 1px solid var(--line);
+      color: var(--ink-dim)
+    }
+
+    table.rank {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13.5px
+    }
+
+    table.rank th {
+      text-align: left;
+      font-family: var(--display);
+      font-size: 11px;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      color: var(--ink-faint);
+      font-weight: 600;
+      padding: 11px 14px;
+      border-bottom: 1px solid var(--line)
+    }
+
+    table.rank td {
+      padding: 12px 14px;
+      border-bottom: 1px solid var(--surface-2)
+    }
+
+    table.rank tr:hover td {
+      background: var(--surface)
+    }
+
+    .rk {
+      font-family: var(--display);
+      font-weight: 700;
+      color: var(--ink-faint);
+      width: 42px;
+      font-variant-numeric: tabular-nums
+    }
+
+    .rk.top {
+      color: var(--accent)
+    }
+
+    td.tname {
+      font-weight: 500
+    }
+
+    .rt {
+      font-size: 11px;
+      color: var(--ink-faint);
+      border: 1px solid var(--line);
+      border-radius: 5px;
+      padding: 2px 7px;
+      font-family: var(--display)
+    }
+
+    .rank-cols {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px
+    }
+
+    .rank-foot {
+      font-size: 11.5px;
+      color: var(--ink-faint);
+      margin-top: 16px
+    }
+
+    .guide {
+      display: flex;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      overflow: hidden;
+      margin-bottom: 30px;
+      background: var(--surface)
+    }
+
+    .guide>div {
+      flex: 1;
+      padding: 18px 20px
+    }
+
+    .guide>div+div {
+      border-left: 1px solid var(--line)
+    }
+
+    .guide h4 {
+      font-family: var(--display);
+      font-size: 13px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 6px
+    }
+
+    .guide h4 .sw {
+      width: 11px;
+      height: 11px;
+      border-radius: 3px;
+      display: inline-block
+    }
+
+    .guide p {
+      font-size: 12.6px;
+      color: var(--ink-dim);
+      line-height: 1.5
+    }
+
+    .guide .reach h4 .sw {
+      background: var(--reach)
+    }
+
+    .guide .conc h4 .sw {
+      background: var(--concentration)
+    }
+
+    .guide .brand-g h4 .sw {
+      background: var(--branded)
+    }
+
+    .dlist {
+      display: flex;
+      flex-direction: column;
+      gap: 14px
+    }
+
+    .drow {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 20px 22px;
+      cursor: pointer;
+      transition: border-color .18s
+    }
+
+    .drow:hover,
+    .drow.open {
+      border-color: #37506e
+    }
+
+    .drow-top {
+      display: flex;
+      align-items: center;
+      gap: 16px
+    }
+
+    .swatch {
+      width: 44px;
+      height: 62px;
+      border-radius: 7px;
+      flex: none
+    }
+
+    .drow-id {
+      flex: 1;
+      min-width: 0
+    }
+
+    .drow-id h3 {
+      font-family: var(--display);
+      font-size: 17px;
+      font-weight: 700;
+      letter-spacing: -.02em
+    }
+
+    .drow-id .sub {
+      font-size: 12px;
+      color: var(--ink-faint)
+    }
+
+    .goal-labels {
+      display: flex;
+      gap: 7px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+      max-width: 360px
+    }
+
+    .glabel {
+      font-family: var(--display);
+      font-size: 11.5px;
+      font-weight: 600;
+      letter-spacing: -.01em;
+      padding: 6px 11px;
+      border-radius: 8px;
+      text-align: center;
+      line-height: 1.25;
+      border: 1px solid
+    }
+
+    .glabel.reach {
+      border-color: rgba(61, 139, 255, .4);
+      background: rgba(61, 139, 255, .1);
+      color: #9cc2ff
+    }
+
+    .glabel.target {
+      border-color: rgba(255, 182, 39, .4);
+      background: rgba(255, 182, 39, .1);
+      color: #ffd27a
+    }
+
+    .glabel.branded {
+      border-color: rgba(46, 193, 168, .4);
+      background: rgba(46, 193, 168, .1);
+      color: #7fe6d2
+    }
+
+    .drow-detail {
+      display: none;
+      margin-top: 20px;
+      padding-top: 20px;
+      border-top: 1px solid var(--line)
+    }
+
+    .drow.open .drow-detail {
+      display: grid;
+      grid-template-columns: 1fr 1.3fr;
+      gap: 30px
+    }
+
+    .axis-h {
+      font-family: var(--display);
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: .04em;
+      text-transform: uppercase;
+      margin-bottom: 14px;
+      display: flex;
+      align-items: center;
+      gap: 8px
+    }
+
+    .axis-h .sw {
+      width: 10px;
+      height: 10px;
+      border-radius: 3px
+    }
+
+    .reach-track {
+      height: 13px;
+      border-radius: 999px;
+      background: var(--surface-2);
+      overflow: hidden;
+      border: 1px solid var(--line)
+    }
+
+    .reach-fill {
+      height: 100%;
+      border-radius: 999px;
+      background: linear-gradient(90deg, #2f6fd6, var(--reach))
+    }
+
+    .reach-scale {
+      display: flex;
+      justify-content: space-between;
+      font-size: 10.5px;
+      color: var(--ink-faint);
+      margin-top: 7px;
+      font-family: var(--display);
+      letter-spacing: .03em
+    }
+
+    .reach-band {
+      font-family: var(--display);
+      font-size: 23px;
+      font-weight: 700;
+      letter-spacing: -.02em;
+      color: var(--reach);
+      margin-top: 14px
+    }
+
+    .reach-note {
+      font-size: 12px;
+      color: var(--ink-dim);
+      margin-top: 3px
+    }
+
+    .cbar-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 7px
+    }
+
+    .cbar-lab {
+      width: 62px;
+      flex: none;
+      font-size: 12px;
+      color: var(--ink-dim);
+      text-align: right;
+      font-variant-numeric: tabular-nums
+    }
+
+    .cbar-track {
+      flex: 1;
+      height: 18px;
+      background: var(--surface-2);
+      border-radius: 5px;
+      position: relative;
+      overflow: hidden
+    }
+
+    .cbar-base {
+      position: absolute;
+      left: 33.3%;
+      top: 0;
+      bottom: 0;
+      width: 1px;
+      background: var(--ink-faint);
+      opacity: .5;
+      z-index: 2
+    }
+
+    .cbar-fill {
+      height: 100%;
+      border-radius: 5px
+    }
+
+    .cbar-val {
+      width: 38px;
+      flex: none;
+      font-size: 11.5px;
+      font-variant-numeric: tabular-nums;
+      font-family: var(--display);
+      color: var(--ink-dim)
+    }
+
+    .cbar-foot {
+      font-size: 11px;
+      color: var(--ink-faint);
+      margin-top: 9px
+    }
+
+    .cast {
+      margin-top: 18px;
+      padding-top: 16px;
+      border-top: 1px solid var(--line);
+      grid-column: 1/-1
+    }
+
+    .cast-h {
+      font-family: var(--display);
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: .04em;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px
+    }
+
+    .cast-h .sw {
+      width: 10px;
+      height: 10px;
+      border-radius: 3px;
+      background: var(--accent)
+    }
+
+    .cast-list {
+      display: flex;
+      gap: 18px;
+      flex-wrap: wrap
+    }
+
+    .cast-item {
+      display: flex;
+      align-items: center;
+      gap: 10px
+    }
+
+    .cast-av {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      flex: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--display);
+      font-weight: 700;
+      font-size: 14px;
+      color: #fff
+    }
+
+    .cast-meta b {
+      font-size: 13.5px;
+      display: block
+    }
+
+    .cast-meta span {
+      font-size: 11.5px;
+      color: var(--ink-faint)
+    }
+
+    .cast-note {
+      font-size: 11.5px;
+      color: var(--ink-dim);
+      margin-top: 12px;
+      background: var(--accent-soft);
+      border-radius: 8px;
+      padding: 9px 12px;
+      line-height: 1.5
+    }
+
+    .picker {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      margin-bottom: 30px
+    }
+
+    .pick-group h4 {
+      font-family: var(--display);
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: .05em;
+      text-transform: uppercase;
+      color: var(--ink-dim);
+      margin-bottom: 12px
+    }
+
+    .chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px
+    }
+
+    .chip {
+      appearance: none;
+      background: var(--surface);
+      border: 1px solid var(--line);
+      color: var(--ink-dim);
+      font-family: var(--body);
+      font-size: 13px;
+      font-weight: 500;
+      padding: 9px 14px;
+      border-radius: 9px;
+      cursor: pointer;
+      transition: all .15s
+    }
+
+    .chip:hover {
+      border-color: #37506e;
+      color: var(--ink)
+    }
+
+    .chip[aria-pressed="true"] {
+      background: var(--accent-soft);
+      border-color: var(--accent);
+      color: #ffb3bf
+    }
+
+    .rec-result {
+      display: none
+    }
+
+    .rec-result.show {
+      display: block;
+      animation: fade .3s ease
+    }
+
+    .mix-panel {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 22px 24px;
+      margin-bottom: 28px
+    }
+
+    .mix-panel h3 {
+      font-family: var(--display);
+      font-size: 16px;
+      font-weight: 700;
+      margin-bottom: 4px
+    }
+
+    .mix-panel .lead {
+      font-size: 13px;
+      color: var(--ink-dim);
+      margin-bottom: 18px
+    }
+
+    .mix-cols {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px
+    }
+
+    .mix-col h5 {
+      font-family: var(--display);
+      font-size: 11px;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      font-weight: 700;
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 7px
+    }
+
+    .mix-col h5 .dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%
+    }
+
+    .mix-col.anchor h5 .dot {
+      background: var(--accent)
+    }
+
+    .mix-col.support h5 .dot {
+      background: var(--reach)
+    }
+
+    .mix-col.booster h5 .dot {
+      background: var(--concentration)
+    }
+
+    .mix-item {
+      font-size: 12.5px;
+      background: var(--surface-2);
+      border-radius: 7px;
+      padding: 8px 11px;
+      margin-bottom: 7px;
+      color: var(--ink)
+    }
+
+    .mix-empty {
+      font-size: 12px;
+      color: var(--ink-faint);
+      font-style: italic
+    }
+
+    .rec-cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(176px, 1fr));
+      gap: 18px
+    }
+
+    .rec-card {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      overflow: hidden
+    }
+
+    .rec-card .score {
+      position: absolute;
+      top: 11px;
+      right: 11px;
+      z-index: 3;
+      font-family: var(--display);
+      font-weight: 700;
+      font-size: 12px;
+      background: rgba(10, 14, 20, .78);
+      color: var(--accent);
+      border: 1px solid var(--accent);
+      border-radius: 7px;
+      padding: 3px 8px
+    }
+
+    .rec-card .why {
+      padding: 11px 13px 14px;
+      font-size: 11.8px;
+      color: var(--ink-dim);
+      line-height: 1.45
+    }
+
+    .roadmap {
+      margin-top: 54px;
+      border-top: 2px solid var(--line);
+      padding-top: 34px
+    }
+
+    .road-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 14px;
+      margin-top: 18px
+    }
+
+    .road-col {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 16px 15px
+    }
+
+    .road-col h5 {
+      font-family: var(--display);
+      font-size: 13px;
+      font-weight: 700;
+      margin-bottom: 3px
+    }
+
+    .road-col .role {
+      font-size: 10.5px;
+      color: var(--ink-faint);
+      font-family: var(--display);
+      letter-spacing: .04em;
+      text-transform: uppercase;
+      margin-bottom: 12px
+    }
+
+    .road-item {
+      font-size: 12px;
+      color: var(--ink-dim);
+      padding: 6px 0;
+      border-top: 1px solid var(--surface-2)
+    }
+
+    .road-item:first-of-type {
+      border-top: none
+    }
+
+    .privacy {
+      font-size: 11.5px;
+      color: var(--ink-faint);
+      margin-top: 30px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      border-top: 1px solid var(--surface-2);
+      padding-top: 18px
+    }
+
+    .privacy .lock {
+      color: var(--ok)
+    }
+
+    @media(max-width:760px) {
+      .rank-cols {
+        grid-template-columns: 1fr
+      }
+
+      .guide {
+        flex-direction: column
+      }
+
+      .guide>div+div {
+        border-left: none;
+        border-top: 1px solid var(--line)
+      }
+
+      .drow.open .drow-detail {
+        grid-template-columns: 1fr;
+        gap: 24px
+      }
+
+      .goal-labels {
+        justify-content: flex-start;
+        margin-top: 4px
+      }
+
+      .drow-top {
+        flex-wrap: wrap
+      }
+
+      .picker {
+        grid-template-columns: 1fr
+      }
+
+      .mix-cols {
+        grid-template-columns: 1fr
+      }
+
+      .road-grid {
+        grid-template-columns: 1fr 1fr
+      }
+
+      .tab {
+        margin-right: 18px;
+        font-size: 13px
+      }
+    }
+
+    @media(prefers-reduced-motion:reduce) {
+      * {
+        animation: none !important;
+        transition: none !important
+      }
+    }
+
+    .wip-notice {
+      margin-top: 32px;
+      padding: 40px 28px;
+      border: 1.5px dashed var(--line);
+      border-radius: var(--radius);
+      background: var(--surface);
+      color: var(--ink-faint);
+      font-family: var(--display);
+      font-size: 15px;
+      font-weight: 600;
+      letter-spacing: .02em;
+      text-align: center
+    }
+
+    .data-date {
+      font-family: var(--display);
+      font-size: 11px;
+      letter-spacing: .06em;
+      color: var(--ink-faint);
+      white-space: nowrap
+    }
+
+    .data-error {
+      margin: 26px 0 0;
+      padding: 14px 18px;
+      border: 1px solid rgba(255, 21, 60, .45);
+      background: rgba(255, 21, 60, .08);
+      border-radius: var(--radius);
+      color: #ff8fa3;
+      font-size: 13px;
+      line-height: 1.7;
+      white-space: pre-line
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <div class="wrap head-row">
+      <div class="brand"><img class="brand-logo" src="tving_logo.png" alt="TVING">TVING Contents Intelligence<small>TVING Ad</small></div>
+      <span class="data-date" id="data-date"></span>
+    </div>
+  </header>
+
+  <nav class="tabs">
+    <div class="wrap tabs-row" role="tablist">
+      <button class="tab" role="tab" aria-selected="true" data-tab="lineup"><span class="n">01</span>Hot & New
+        콘텐츠</button>
+      <button class="tab" role="tab" aria-selected="false" data-tab="target"><span class="n">02</span>콘텐츠-광고
+        Fit</button>
+      <button class="tab" role="tab" aria-selected="false" data-tab="solution"><span class="n">03</span>내 캠페인
+        설계하기</button>
+    </div>
+  </nav>
+
+  <main class="wrap">
+
+    <div class="data-error" id="data-error" hidden></div>
+
+    <section class="panel active" id="lineup" role="tabpanel">
+      <div class="panel-head">
+        <div class="eyebrow">Lineup</div>
+        <h2>지금 주목해야 할 인기작과 공개 예정작</h2>
+        <p>실시간 인기를 견인하는 화제작과 향후 3개월 오픈 예정작을 모았습니다.</p>
+      </div>
+      <div class="seg seg-hot"><span class="lbl">🔥HOT · 신작 및 주목할 콘텐츠</span><span class="ln"></span></div>
+      <div class="grid" id="grid-onair"></div>
+      <div class="seg seg-soon"><span class="lbl">⏳Coming Soon · 향후 3개월 오픈 예정</span><span class="ln"></span></div>
+      <div class="grid" id="grid-soon"></div>
+
+      <div class="rank-block">
+        <div class="panel-head">
+          <div class="eyebrow">DEMO RANKING</div>
+          <h2>성·연령별 시청 상위 TOP 50</h2>
+          <p>주간 데모별 시청 순위. 어떤 콘텐츠가 어떤 타겟에게 닿고 있는지 가장 직접적으로 보여줍니다.</p>
+        </div>
+        <div class="rank-controls">
+          <select class="ctl" id="rk-gender">
+            <option value="MF">남녀 전체</option>
+            <option value="F">여성</option>
+            <option value="M">남성</option>
+          </select>
+          <select class="ctl" id="rk-age">
+            <option value="">전체 연령</option>
+            <option value="10">10대</option>
+            <option value="20">20대</option>
+            <option value="30">30대</option>
+            <option value="40">40대</option>
+            <option value="50">50대</option>
+            <option value="60">60대+</option>
+          </select>
+          <button class="btn ghost" id="rk-download" style="margin-left:auto">↓ Excel 다운로드</button>
+        </div>
+        <div id="rank-cols" class="rank-cols"></div>
+        <div class="rank-foot" id="rank-foot"></div>
+      </div>
+    </section>
+
+    <section class="panel" id="target" role="tabpanel">
+      <div class="panel-head">
+        <div class="eyebrow">Audience Fit</div>
+        <h2>이 콘텐츠는 누구에게, 얼마나 닿나</h2>
+        <p>광고 적합도를 세 가지 축으로 읽습니다 — <b style="color:var(--reach)">도달 규모</b>, <b style="color:var(--concentration)">타겟
+            집중도</b>, <b style="color:var(--branded)">브랜드 결합도</b>. 콘텐츠가 강한 광고 목표를 자동으로 도출합니다.</p>
+      </div>
+      <div class="wip-notice">⚙️ 준비중입니다</div>
+    </section>
+
+    <section class="panel" id="solution" role="tabpanel">
+      <div class="panel-head">
+        <div class="eyebrow">Find Your Solution</div>
+        <h2>업종과 목표를 고르면, 맞는 솔루션과 콘텐츠를 추립니다</h2>
+        <p>광고주의 업종과 이번 캠페인 목표를 선택하세요. 그에 맞는 광고 솔루션 믹스와, 타겟이 몰리는 콘텐츠를 함께 보여드립니다.</p>
+      </div>
+      <div class="wip-notice">⚙️ 준비중입니다</div>
+    </section>
+
+  </main>
+
+  <script>
+    const THEME = {
+      드라마: ["#3a2f5e", "#5e3a52"], 예능: ["#5e4a2f", "#2f5e4a"], 스포츠: ["#2f4a5e", "#1f3a52"],
+      오리지널: ["#5e2f3a", "#3a2f5e"], 키즈: ["#2f5e3a", "#4a5e2f"], 음악: ["#4a2f5e", "#5e2f4a"]
+    };
+    const g = (genre, seed = 0) => { const t = THEME[genre] || ["#2f3a4a", "#3a4556"]; return `background:linear-gradient(${135 + seed * 15}deg,${t[0]},${t[1]})`; };
+    const GENRE_STYLE = {
+      드라마: { c: '#b794f4', b: 'rgba(167,139,250,.28)', bg: 'rgba(167,139,250,.11)' },
+      예능: { c: '#e9a84c', b: 'rgba(233,168,76,.28)', bg: 'rgba(233,168,76,.11)' },
+      스포츠: { c: '#5fb3e8', b: 'rgba(80,170,230,.28)', bg: 'rgba(80,170,230,.11)' },
+      음악: { c: '#e87fb5', b: 'rgba(230,100,175,.28)', bg: 'rgba(230,100,175,.11)' },
+      키즈: { c: '#5dcfa0', b: 'rgba(80,200,155,.28)', bg: 'rgba(80,200,155,.11)' },
+      오리지널: { c: '#f47a7a', b: 'rgba(240,100,100,.28)', bg: 'rgba(240,100,100,.11)' },
+    };
+    const genreStyle = g => { const s = GENRE_STYLE[g]; return s ? `color:${s.c};border-color:${s.b};background:${s.bg}` : ''; };
+
+    // ===== 데이터 로딩: data/*.csv (리대시 다운로드 CSV를 그대로 사용) =====
+    let ONAIR = [], SOON = [], CONTENT = [], RANKS = {}, META = {};
+
+    function parseCSV(text) {
+      const rows = []; let row = [], field = '', inQ = false;
+      text = text.replace(/^﻿/, '');
+      for (let i = 0; i < text.length; i++) {
+        const ch = text[i];
+        if (inQ) {
+          if (ch === '"') { if (text[i + 1] === '"') { field += '"'; i++; } else inQ = false; }
+          else field += ch;
+        } else if (ch === '"') inQ = true;
+        else if (ch === ',') { row.push(field); field = ''; }
+        else if (ch === '\n' || ch === '\r') {
+          if (ch === '\r' && text[i + 1] === '\n') i++;
+          row.push(field); field = '';
+          if (row.length > 1 || row[0] !== '') rows.push(row);
+          row = [];
+        } else field += ch;
+      }
+      if (field !== '' || row.length) { row.push(field); if (row.length > 1 || row[0] !== '') rows.push(row); }
+      return rows;
+    }
+
+    async function loadCSV(file, required) {
+      let res;
+      try { res = await fetch('data/' + file + '?v=' + Date.now()); }
+      catch (e) { throw new Error(`${file} 로드 실패 — 파일을 직접 열면(file://) 데이터를 불러올 수 없습니다. preview.bat으로 로컬 서버를 띄워 확인하세요.`); }
+      if (!res.ok) throw new Error(`${file} 로드 실패 (HTTP ${res.status}) — data 폴더에 해당 파일이 있는지 확인하세요.`);
+      const rows = parseCSV(await res.text());
+      if (rows.length < 2) throw new Error(`${file}: 데이터가 비어 있습니다.`);
+      const header = rows[0].map(h => h.trim().toLowerCase());
+      const missing = required.filter(c => !header.includes(c));
+      if (missing.length) throw new Error(`${file}: 필수 컬럼 누락 — [${missing.join(', ')}] 리대시 쿼리의 컬럼명(alias)을 확인하세요.`);
+      return rows.slice(1).map(r => Object.fromEntries(header.map((h, i) => [h, (r[i] || '').trim()])));
+    }
+
+    const asBool = v => /^(1|true|y|yes)$/i.test(v);
+    const asList = (v, sep = '|') => v ? v.split(sep).map(s => s.trim()).filter(Boolean) : [];
+
+    function mapLineup(r) {
+      return {
+        t: r.title, genre: r.genre, genres: [r.genre], subGenres: asList(r.sub_genres),
+        rating: r.rating, cast: asList(r.cast), premiere: r.premiere, days: r.days, episodes: r.episodes,
+        isOriginal: asBool(r.is_original), isTvingOnly: asBool(r.is_tving_only), isSpecial: asBool(r.is_special),
+        specialUrl: r.special_url || '',
+        img: r.poster_url || ''
+      };
+    }
+    function card(c, status) {
+      const badgesHTML = (isOriginal, isTvingOnly, isSpecial) => {
+        const badges = [];
+        if (isSpecial) badges.push('<span class="badge special"><span class="spark">★</span> 특판</span>');
+        if (isOriginal) {
+          badges.push('<span class="badge original">T ORIGINAL</span>');
+        } else if (isTvingOnly) {
+          badges.push('<span class="badge only">T ONLY</span>');
+        }
+        return badges.join('');
+      };
+      const ratingBadge = (r) => {
+        if (!r) return '';
+        const label = r === '전체' ? 'ALL' : (r === '청불' ? '19' : r);
+        const cls = r === '전체' ? 'all' : 'r' + label;
+        return `<span class="rating ${cls}">${label}</span>`;
+      };
+      const fmtEp = v => {
+        if (!v) return '';
+        if (/[부회화]/.test(v)) return v;
+        if (/^\d+$/.test(v)) return v + '부작';
+        return v;
+      };
+      // 단색 placeholder SVG는 실제 포스터가 아니므로 폴백 디자인으로 표시
+      const hasPoster = c.img && !c.img.startsWith('data:image/svg');
+      const posterBg = hasPoster ? `background-image: url('${c.img}'); background-size: cover; background-position: center;` : g(c.genre, c.t.length % 4);
+      const fallbackDeco = hasPoster ? '' : `<span class="title-mark"><span class="tm-genre">${c.genre}</span><i class="tm-line"></i></span>`;
+      const subgenresHTML = (c.subGenres || []).map(s => `<span class="subgenre-tag">#${s}</span>`).join('');
+      const infoParts = [];
+      if (c.cast.length) infoParts.push(`<span class="info-cast">${c.cast.join(', ')}</span>`);
+      if (c.days) infoParts.push(`<span class="info-days">${c.days}</span>`);
+      const infoRowHTML = infoParts.join('<span class="info-sep">·</span>');
+      const epFmt = fmtEp(c.episodes);
+      const epChipHTML = epFmt ? `<span class="ep-chip">${epFmt}</span>` : '';
+      const gs = genreStyle(c.genre);
+      const cardCls = `card actionable${c.isSpecial ? ' card-special' : ''}`;
+      const isLink = c.isSpecial && c.specialUrl;
+      const wrapOpen = isLink ? `<a href="${c.specialUrl}" target="_blank" rel="noopener noreferrer" class="${cardCls}">` : `<div class="${cardCls}">`;
+      const wrapClose = isLink ? '</a>' : '</div>';
+      return `${wrapOpen}
+    <div class="poster${hasPoster ? '' : ' no-img'}" style="${posterBg}">
+      ${fallbackDeco}<div class="badges-top">${badgesHTML(c.isOriginal, c.isTvingOnly, c.isSpecial)}</div>
+      <span class="ttl">${c.t}</span>
+    </div>
+    <div class="card-body">
+      <div class="genre-row"><span class="genre"${gs ? ` style="${gs}"` : ''}>${c.genre}</span>${subgenresHTML}${epChipHTML}</div>
+      <div class="info-row">${infoRowHTML}</div>
+      <div class="card-foot">
+        <span class="premiere"><em>🗓️공개일</em>${c.premiere}</span>
+        ${ratingBadge(c.rating)}
+      </div>
+    </div>${wrapClose}`;
+    }
+    function renderLineup() {
+      document.getElementById('grid-onair').innerHTML = ONAIR.map(c => card(c, 'onair')).join('');
+      document.getElementById('grid-soon').innerHTML = SOON.map(c => card(c, 'soon')).join('');
+    }
+    function getRankRows() {
+      const gender = document.getElementById('rk-gender').value, age = document.getElementById('rk-age').value;
+      return { gender, age, rows: RANKS[gender + age] || [] };
+    }
+    function getRankLabel(gender, age) {
+      const gl = gender === 'MF' ? '남녀 전체' : (gender === 'F' ? '여성' : '남성');
+      const al = age ? `${age}${age === '60' ? '대+' : '대'}` : '전체 연령';
+      return `${gl} ${al} 기준`;
+    }
+    function renderRank() {
+      const { gender, age, rows } = getRankRows();
+      const HALF = 25;
+      function buildTable(slice, offset) {
+        if (!slice.length) return '';
+        const body = slice.map((r, i) => {
+          const rank = offset + i + 1;
+          return `<tr><td class="rk ${rank <= 3 ? 'top' : ''}">${rank}</td><td class="tname">${r.t}</td><td style="color:var(--ink-dim)">${r.genre}</td></tr>`;
+        }).join('');
+        return `<table class="rank"><thead><tr><th>#</th><th>콘텐츠</th><th>장르</th></tr></thead><tbody>${body}</tbody></table>`;
+      }
+      document.getElementById('rank-cols').innerHTML = rows.length
+        ? buildTable(rows.slice(0, HALF), 0) + buildTable(rows.slice(HALF, HALF * 2), HALF)
+        : `<div style="color:var(--ink-faint);padding:18px 0;font-size:13.5px">해당 데모의 랭킹 데이터가 없습니다 — rank.csv를 확인하세요</div>`;
+      document.getElementById('rank-foot').textContent = `${getRankLabel(gender, age)}${META.rank_period ? ' · ' + META.rank_period : ''}`;
+    }
+    ['rk-gender', 'rk-age'].forEach(id => document.getElementById(id).addEventListener('change', renderRank));
+    document.getElementById('rk-download').addEventListener('click', () => {
+      const { gender, age, rows } = getRankRows();
+      const esc = v => /[",\n]/.test(v) ? `"${v.replace(/"/g, '""')}"` : v;
+      const csv = "순위,콘텐츠,장르\n" + rows.map((r, i) => `${i + 1},${esc(r.t)},${esc(r.genre)}`).join("\n");
+      const blob = new Blob(["\ufeff" + csv], { type: "text/csv" }); const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob); a.download = `tving_rank_${gender}${age}.csv`; a.click();
+    });
+
+    const DEMOS = ["F10", "F20", "F30", "F40", "F50", "F60", "M10", "M20", "M30", "M40", "M50", "M60"];
+    const DLABEL = { F10: "10대 여", F20: "20대 여", F30: "30대 여", F40: "40대 여", F50: "50대 여", F60: "60대+ 여", M10: "10대 남", M20: "20대 남", M30: "30대 남", M40: "40대 남", M50: "50대 남", M60: "60대+ 남" };
+    function mapTarget(r) {
+      const demos = {}; DEMOS.forEach(d => demos[d] = +r[d.toLowerCase()] || 0);
+      return {
+        t: r.title, genre: r.genre, band: r.band, reach: +r.reach || 0, branded: asBool(r.branded),
+        demos, cast: asList(r.cast_info).map(p => p.split(':').map(s => s.trim()))
+      };
+    }
+    const BANDS = ["소형", "중형", "대형", "초대형"];
+    const AVCOL = ["#5e3a52", "#2f5e4a", "#3a2f5e", "#5e2f3a", "#2f4a5e"];
+    function deriveGoals(c) {
+      const out = [];
+      if (c.band === "초대형" || c.band === "대형") out.push({ cls: "reach", txt: "최대한 많이 알리기" });
+      const peak = Math.max(...Object.values(c.demos));
+      if (peak >= 140) out.push({ cls: "target", txt: "타겟에게 정확히 닿기" });
+      if (c.branded && out.length < 2) out.push({ cls: "branded", txt: "콘텐츠와 한 몸으로 녹이기" });
+      return out.slice(0, 2);
+    }
+    function concBars(c) {
+      return DEMOS.map(d => {
+        const v = c.demos[d]; const strong = v >= 120; const w = Math.min(100, v / 3);
+        const col = strong ? (v >= 160 ? 'var(--concentration)' : '#e0a93f') : 'var(--grey-bar)';
+        return `<div class="cbar-row"><span class="cbar-lab">${DLABEL[d]}</span><span class="cbar-track"><span class="cbar-base"></span><span class="cbar-fill" style="width:${w}%;background:${col}"></span></span><span class="cbar-val" style="${strong ? 'color:var(--concentration)' : ''}">${v}</span></div>`;
+      }).join('');
+    }
+    function castBlock(c) {
+      const peakDemo = Object.keys(c.demos).reduce((a, b) => c.demos[a] > c.demos[b] ? a : b);
+      const items = c.cast.map((p, i) => { const sub = [p[1], p[2]].filter(Boolean).join(' · '); return `<div class="cast-item"><span class="cast-av" style="background:${AVCOL[i % AVCOL.length]}">${p[0][0]}</span><span class="cast-meta"><b>${p[0]}</b>${sub ? `<span>${sub}</span>` : ''}</span></div>`; }).join('');
+      return `<div class="cast"><div class="cast-h"><span class="sw"></span>주요 출연자 · 광고모델 연계</div><div class="cast-list">${items}</div><div class="cast-note">출연자를 모델로 쓰는 브랜드라면 ${DLABEL[peakDemo]} 집중 시청층과 직접 연결됩니다 — 모델=출연자 연계는 브랜디드·협찬 제안의 핵심 내러티브입니다.</div></div>`;
+    }
+    function renderDlist(q = "") {
+      const f = c => (c.t + c.genre).toLowerCase().includes(q.toLowerCase());
+      const list = CONTENT.filter(f);
+      document.getElementById('dlist').innerHTML = list.length ? list.map((c) => {
+        const i = CONTENT.indexOf(c);
+        const goals = deriveGoals(c).map(x => `<span class="glabel ${x.cls}">${x.txt}</span>`).join('');
+        const bandIdx = BANDS.indexOf(c.band);
+        return `<div class="drow" data-i="${i}"><div class="drow-top"><span class="swatch" style="${g(c.genre, i)}"></span><span class="drow-id"><h3>${c.t}</h3><span class="sub">${c.genre}</span></span><span class="goal-labels">${goals || '<span class="glabel" style="border-color:var(--line);color:var(--ink-faint)">변별 라벨 없음</span>'}</span></div>
+    <div class="drow-detail">
+      <div><div class="axis-h"><span class="sw" style="background:var(--reach)"></span>도달 규모</div>
+        <div class="reach-track"><div class="reach-fill" style="width:${c.reach}%"></div></div>
+        <div class="reach-scale"><span>소형</span><span>중형</span><span>대형</span><span>초대형</span></div>
+        <div class="reach-band">${c.band}</div>
+        <div class="reach-note">${bandIdx >= 2 ? '전 데모에 고르게 닿는 — 누구에게나 닿는 콘텐츠' : bandIdx === 1 ? '특정 층 중심으로 도달' : '한정된 타겟에 집중 도달'}</div></div>
+      <div><div class="axis-h"><span class="sw" style="background:var(--concentration)"></span>타겟 집중도 <span style="color:var(--ink-faint);font-weight:400;text-transform:none;letter-spacing:0;margin-left:4px">· 세로선 = 평균(100)</span></div>
+        ${concBars(c)}<div class="cbar-foot">강조색 = 평균 대비 쏠린 데모(120↑) · 회색 = 평균 수준</div></div>
+      ${castBlock(c)}
+    </div></div>`;
+      }).join('') : '<p style="color:var(--ink-faint);font-size:13px">검색 결과 없음</p>';
+    }
+    const GOALS = [{ key: "awareness", label: "최대한 많이 알리기" }, { key: "targeting", label: "타겟에게 정확히 닿기" }, { key: "branded", label: "콘텐츠와 한 몸으로 녹이기" }, { key: "conversion", label: "반응·클릭 끌어내기" }];
+    const MIX = {
+      awareness: { anchor: ["스플래시 배너", "오늘의 TOP 20"], support: ["베이직 인스트림", "배너 광고"], booster: [] },
+      targeting: { anchor: ["추천 타게팅 (시청데모·관심사)"], support: ["프라임타임 인스트림", "CTV 타게팅"], booster: ["뉴스채널 타게팅"] },
+      branded: { anchor: ["브랜디드 콘텐츠", "오리지널 콘텐츠 협찬"], support: ["기획형 PPL", "가상광고"], booster: ["일반 콘텐츠 협찬 (출시 예정)", "타이틀 ID"] },
+      conversion: { anchor: ["아웃스트림 (Beta)"], support: ["일시정지 광고"], booster: ["Shorts in-feed (Beta)", "TVING 라이트 (Beta)"] },
+    };
+    function scoreContent(c, goal, targets) {
+      const tgtIdx = targets.length ? Math.max(...targets.map(d => c.demos[d] || 0)) : 100;
+      let s = 0;
+      if (goal === "awareness") s = c.reach * 0.9 + tgtIdx * 0.1;
+      else if (goal === "targeting") s = tgtIdx * 0.85 + c.reach * 0.15;
+      else if (goal === "branded") s = (c.branded ? 60 : 0) + tgtIdx * 0.4 + c.reach * 0.2;
+      else s = c.reach * 0.5 + tgtIdx * 0.5;
+      return Math.round(s);
+    }
+    function whyText(c, goal, targets) {
+      const peakDemo = Object.keys(c.demos).reduce((a, b) => c.demos[a] > c.demos[b] ? a : b); const pv = c.demos[peakDemo];
+      if (goal === "awareness") return `${c.band} 도달 — 폭넓게 닿습니다`;
+      if (goal === "targeting") { const td = targets.find(d => c.demos[d] >= 120); return td ? `${DLABEL[td]} 인덱스 ${c.demos[td]} (${(c.demos[td] / 100).toFixed(1)}배 쏠림)` : `${DLABEL[peakDemo]} 중심 (${pv})`; }
+      if (goal === "branded") return `PPL·협찬 가능 · ${DLABEL[peakDemo]} 집중층 + 출연자 연계`;
+      return `도달·집중 균형형`;
+    }
+    function maybeRec() {
+      if (!selIndustry || !selGoal) return;
+      const targets = IND_TARGET[selIndustry] || [], goal = selGoal, m = MIX[goal];
+      document.getElementById('mix-title').textContent = `${selIndustry} × ${GOALS.find(x => x.key === goal).label}`;
+      document.getElementById('mix-lead').textContent = MIXLEAD[goal];
+      const fill = arr => arr.length ? arr.map(x => `<div class="mix-item">${x}</div>`).join('') : '<div class="mix-empty">해당 구간 상품 없음</div>';
+      document.getElementById('mix-anchor').innerHTML = fill(m.anchor);
+      document.getElementById('mix-support').innerHTML = fill(m.support);
+      document.getElementById('mix-booster').innerHTML = fill(m.booster);
+      const ranked = [...CONTENT].map(c => ({ c, s: scoreContent(c, goal, targets) })).sort((a, b) => b.s - a.s);
+      document.getElementById('rec-cards').innerHTML = ranked.map(({ c, s }, i) => `<div class="rec-card"><div class="poster" style="${g(c.genre, i)}"><span class="score">${s}</span><span class="ttl">${c.t}</span></div><div class="why">${whyText(c, goal, targets)}</div></div>`).join('');
+      document.getElementById('rec-result').classList.add('show');
+    }
+    const tabs = document.querySelectorAll('.tab'), panels = document.querySelectorAll('.panel');
+    tabs.forEach(t => t.addEventListener('click', () => { tabs.forEach(x => x.setAttribute('aria-selected', 'false')); t.setAttribute('aria-selected', 'true'); panels.forEach(p => p.classList.remove('active')); document.getElementById(t.dataset.tab).classList.add('active'); }));
+
+    async function initData() {
+      try {
+        const [lineup, rank, meta] = await Promise.all([
+          loadCSV('lineup.csv', ['status', 'title', 'genre', 'sub_genres', 'rating', 'cast', 'premiere', 'days', 'episodes', 'is_original', 'is_tving_only', 'is_special', 'poster_url']),
+          loadCSV('rank.csv', ['gender', 'age', 'rank', 'title', 'main_genre']),
+          loadCSV('meta.csv', ['key', 'value']),
+        ]);
+        ONAIR = lineup.filter(r => r.status.toLowerCase() === 'onair').map(mapLineup);
+        SOON = lineup.filter(r => r.status.toLowerCase() === 'soon').map(mapLineup);
+        rank.forEach(r => { const k = (r.gender || 'MF').toUpperCase() + (r.age || ''); const genre = [r.main_genre, r.sub_genre].filter(Boolean).join(' · '); (RANKS[k] = RANKS[k] || []).push({ rank: +r.rank, t: r.title, genre }); });
+        Object.values(RANKS).forEach(a => a.sort((x, y) => x.rank - y.rank));
+        meta.forEach(r => META[r.key] = r.value);
+        if (META.updated_at) document.getElementById('data-date').textContent = `데이터 기준 ${META.updated_at}`;
+        renderLineup(); renderRank();
+      } catch (e) {
+        const el = document.getElementById('data-error');
+        el.textContent = '데이터를 불러오지 못했습니다.\n' + e.message;
+        el.hidden = false;
+        renderRank();
+      }
+    }
+    initData();
+  </script>
+</body>
+
+</html>
