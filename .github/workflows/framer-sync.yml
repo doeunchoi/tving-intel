@@ -37,7 +37,7 @@ jobs:
         working-directory: framer-sync
         run: npm ci
 
-      - name: Sync to Framer CMS
+      - name: Sync Content (lineup.csv → Content)
         working-directory: framer-sync
         env:
           FRAMER_PROJECT_URL: ${{ secrets.FRAMER_PROJECT_URL }}
@@ -45,6 +45,14 @@ jobs:
           FRAMER_COLLECTION_NAME: ${{ secrets.FRAMER_COLLECTION_NAME }}
           SOURCE_BASE: ../data # 이 checkout 의 data/ 를 직접 읽음 (raw URL 캐시 지연 회피)
         run: node scripts/content-sync.js
+
+      - name: Sync Ranking (rank.csv → Ranking, 성·연령별 TOP50)
+        working-directory: framer-sync
+        env:
+          FRAMER_PROJECT_URL: ${{ secrets.FRAMER_PROJECT_URL }}
+          FRAMER_API_KEY: ${{ secrets.FRAMER_API_KEY }}
+          SOURCE_BASE: ../data
+        run: node scripts/ranking-sync.js
 
       # 증분 해시 상태 커밋 — [skip ci] 로 재트리거 방지 (paths 필터로도 걸리지 않음)
       - name: Commit sync state

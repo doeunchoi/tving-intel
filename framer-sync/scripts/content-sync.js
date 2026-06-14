@@ -170,7 +170,9 @@ function toEntry(field, [type, value]) {
   if (type === "enum") {
     if (field.type === "enum") {
       const kase = (field.cases || []).find((c) => c.name?.toLowerCase() === String(value).toLowerCase());
-      return kase ? { type: "enum", value: kase.id } : undefined;
+      // 케이스 미발견 시 silent drop 금지 (예: status 에 예상 밖 값) — 에러로 표면화
+      if (!kase) throw new Error(`enum 케이스 없음: 필드 "${field.name}" 값 "${value}" (가능: ${(field.cases || []).map((c) => c.name).join(", ")})`);
+      return { type: "enum", value: kase.id };
     }
     return { type: "string", value: String(value) }; // enum 폴백(string 필드)
   }

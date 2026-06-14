@@ -1,19 +1,25 @@
 # framer-sync
 
-이 레포의 **`data/*.csv` 를 Framer CMS "Content" 컬렉션에 자동 동기화하고 사이트까지 게시**하는 파이프라인입니다.
+이 레포의 **`data/*.csv` 를 Framer CMS 컬렉션에 매일 자동 동기화하고 사이트까지 게시**하는 파이프라인입니다.
 
 ```
-data/lineup.csv + data/meta.csv  (이 레포)
+data/*.csv  (이 레포)
    │  ① data/ 푸시 시 즉시   ② 매일 KST 05:00 cron (안전망)
    ▼
-framer-sync/scripts/content-sync.js  (GitHub Actions)
-   ├─ 스키마 보장: Content 컬렉션 18필드 자동 생성/정리 (멱등)
-   ├─ 해시 diff → 변경·신규 항목만 upsert (공식 포스터 포함)
-   ├─ 소스에서 빠진 항목 삭제 (컬렉션 = lineup.csv 와 항상 1:1)
-   └─ 변경이 있을 때만 publish + deploy
+framer-sync/scripts/  (GitHub Actions)
+   ├─ content-sync.js : lineup.csv + meta.csv → "Content" 컬렉션 (Hot & New, 15편, 18필드)
+   └─ ranking-sync.js : rank.csv          → "Ranking" 컬렉션 (성·연령별 TOP50, 1,050행)
+        · 스키마 자동 보장(멱등), 해시 diff 증분 upsert, 빠진 항목 삭제
+        · 변경이 있을 때만 publish + deploy
    ▼
 Framer CMS → 게시된 사이트
 ```
+
+> **Ranking 컬렉션** — 필드: `Title`(프로그램명) · `Gender`(Option) · `Age`(Option) · `Rank`(Number) · `Genre`(Text).
+> `Gender`·`Age` 를 Option 필드로 두어 Framer 네이티브 Dynamic Filters(드롭다운)로 거를 수 있습니다. 드롭다운에
+> 표시되는 값은 한글(`남녀 전체`/`여성`/`남성`, `전체 연령`/`10대`…/`60대+`). 디자이너는 Collection List 를
+> `Rank` 오름차순 정렬 + `Gender`·`Age` 드롭다운 필터로 구성하면 "성·연령별 TOP 50" 섹션이 완성됩니다.
+> (필터 기본값을 `남녀 전체`+`전체 연령`으로 두면 원본과 동일하게 시작)
 
 ## 활성화 (1회 설정)
 
