@@ -114,7 +114,10 @@ function toEntry(field, [type, value]) {
     if (value == null || value === "") return undefined
     if (type === "enum") {
         const kase = (field.cases || []).find((c) => c.name === value)
-        return kase ? { type: "enum", value: kase.id } : undefined
+        // 케이스 미발견 시 silent drop 금지 — 라벨 드리프트로 성별/연령이 빈 채
+        // 적재되고 해시가 라벨 기준이라 '변경 없음'으로 영구 고착되는 것을 방지.
+        if (!kase) throw new Error(`enum 케이스 없음: 필드 "${field.name}" 값 "${value}" (가능: ${(field.cases || []).map((c) => c.name).join(", ")})`)
+        return { type: "enum", value: kase.id }
     }
     return { type, value }
 }
