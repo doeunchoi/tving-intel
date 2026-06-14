@@ -15,7 +15,7 @@ const SOURCE_BASE =
     "https://raw.githubusercontent.com/doeunchoi/tving-intel/main/data"
 const COLLECTION_NAME = "Ranking"
 const STATE_PATH = new URL("../state/ranking-state.json", import.meta.url).pathname
-const SCHEMA_VERSION = "ranking-v1"
+const SCHEMA_VERSION = "ranking-v2" // v2: 필드명 영어화(성별→Gender 등, 다른 컬렉션과 일관)
 const BATCH = 200
 
 const args = process.argv.slice(2)
@@ -33,7 +33,8 @@ const GENDER_CASES = ["남녀 전체", "여성", "남성"]
 const AGE_CASES = ["전체 연령", "10대", "20대", "30대", "40대", "50대", "60대+"]
 
 // 불필요한 기본 필드 제거 (컬렉션 생성 시 딸려온 formattedText)
-const FIELDS_TO_REMOVE = ["Content"]
+// 기본 Content 필드 + 구(한글) 필드 제거 → 영어 필드로 재생성 (값은 rank.csv 에서 재적재)
+const FIELDS_TO_REMOVE = ["Content", "성별", "연령", "순위", "장르"]
 
 const log = (...a) => console.log(`[${new Date().toISOString()}]`, ...a)
 const pad2 = (n) => String(n).padStart(2, "0")
@@ -68,10 +69,10 @@ function buildRecord(r) {
         slug,
         fields: {
             Title: ["string", r.title],
-            성별: ["enum", GENDER_LABEL[gender] || gender], // 라벨 → 케이스ID 변환은 upsert 시
-            연령: ["enum", AGE_LABEL[age] || age],
-            순위: ["number", rank],
-            장르: ["string", genre],
+            Gender: ["enum", GENDER_LABEL[gender] || gender], // 표시값(케이스)은 한글 유지, 라벨→케이스ID 변환은 upsert 시
+            Age: ["enum", AGE_LABEL[age] || age],
+            Rank: ["number", rank],
+            Genre: ["string", genre],
         },
     }
 }
@@ -100,10 +101,10 @@ async function ensureSchema(collection) {
     if (removeIds.length) { log(`기본 필드 제거: ${FIELDS_TO_REMOVE.join(", ")}`); await collection.removeFields(removeIds) }
 
     const toAdd = []
-    if (!byName.has("성별")) toAdd.push({ type: "enum", name: "성별", cases: GENDER_CASES.map((name) => ({ name })) })
-    if (!byName.has("연령")) toAdd.push({ type: "enum", name: "연령", cases: AGE_CASES.map((name) => ({ name })) })
-    if (!byName.has("순위")) toAdd.push({ type: "number", name: "순위" })
-    if (!byName.has("장르")) toAdd.push({ type: "string", name: "장르" })
+    if (!byName.has("Gender")) toAdd.push({ type: "enum", name: "Gender", cases: GENDER_CASES.map((name) => ({ name })) })
+    if (!byName.has("Age")) toAdd.push({ type: "enum", name: "Age", cases: AGE_CASES.map((name) => ({ name })) })
+    if (!byName.has("Rank")) toAdd.push({ type: "number", name: "Rank" })
+    if (!byName.has("Genre")) toAdd.push({ type: "string", name: "Genre" })
     if (toAdd.length) { log(`필드 생성: ${toAdd.map((f) => f.name).join(", ")}`); await collection.addFields(toAdd) }
 
     fields = await collection.getFields()

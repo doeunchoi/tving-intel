@@ -15,9 +15,11 @@ framer-sync/scripts/  (GitHub Actions)
 Framer CMS → 게시된 사이트
 ```
 
-> **Ranking 컬렉션** — `성별`·`연령`을 Option 필드로 두어 Framer 네이티브 Dynamic Filters(드롭다운)로
-> 거를 수 있습니다. 디자이너는 Collection List 를 `순위` 오름차순 정렬 + 성별·연령 드롭다운 필터로 구성하면
-> "성·연령별 TOP 50" 섹션이 완성됩니다. (필터 기본값을 `남녀 전체`+`전체 연령`으로 두면 원본과 동일하게 시작)
+> **Ranking 컬렉션** — 필드: `Title`(프로그램명) · `Gender`(Option) · `Age`(Option) · `Rank`(Number) · `Genre`(Text).
+> `Gender`·`Age` 를 Option 필드로 두어 Framer 네이티브 Dynamic Filters(드롭다운)로 거를 수 있습니다. 드롭다운에
+> 표시되는 값은 한글(`남녀 전체`/`여성`/`남성`, `전체 연령`/`10대`…/`60대+`). 디자이너는 Collection List 를
+> `Rank` 오름차순 정렬 + `Gender`·`Age` 드롭다운 필터로 구성하면 "성·연령별 TOP 50" 섹션이 완성됩니다.
+> (필터 기본값을 `남녀 전체`+`전체 연령`으로 두면 원본과 동일하게 시작)
 
 ## 활성화 (1회 설정)
 
