@@ -1,0 +1,65 @@
+name: framer-sync
+
+# data/*.csv → Framer CMS "Content" 컬렉션 자동 동기화 + 게시.
+#   - data/ 가 main 에 푸시되면 즉시 동기화 (checkout 으로 캐시 지연 없음)
+#   - 매일 KST 05:00 / 08:00(백업) cron — 푸시 트리거 누락 대비 안전망 (멱등이라 중복 무해)
+#   - 수동 실행: Actions 탭 ▶ Run workflow
+on:
+  push:
+    branches: [main]
+    paths: ["data/**"]
+  schedule:
+    - cron: "0 20 * * *" # KST 05:00 (UTC 20:00)
+    - cron: "0 23 * * *" # KST 08:00 (백업)
+  workflow_dispatch: {}
+
+# framer-sync/state 커밋(증분 해시 영속화 + 60일 비활성 중단 방지)에 쓰기 권한 필요
+permissions:
+  contents: write
+
+concurrency:
+  group: framer-sync
+  cancel-in-progress: false
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Install
+        working-directory: framer-sync
+        run: npm ci
+
+      - name: Sync to Framer CMS
+        working-directory: framer-sync
+        env:
+          FRAMER_PROJECT_URL: ${{ secrets.FRAMER_PROJECT_URL }}
+          FRAMER_API_KEY: ${{ secrets.FRAMER_API_KEY }}
+          FRAMER_COLLECTION_NAME: ${{ secrets.FRAMER_COLLECTION_NAME }}
+          SOURCE_BASE: ../data # 이 checkout 의 data/ 를 직접 읽음 (raw URL 캐시 지연 회피)
+        run: node scripts/content-sync.js
+
+      # 증분 해시 상태 커밋 — [skip ci] 로 재트리거 방지 (paths 필터로도 걸리지 않음)
+      - name: Commit sync state
+        if: success()
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add framer-sync/state/
+          git commit -m "chore(framer-sync): state $(date -u +%Y-%m-%dT%H:%M:%SZ) [skip ci]" || echo "변경 없음"
+          git push
+
+      # (선택) 실패 시 Slack 알림 — SLACK_WEBHOOK_URL Secret 등록 후 주석 해제
+      # - name: Notify on failure
+      #   if: failure()
+      #   run: |
+      #     curl -X POST -H 'Content-type: application/json' \
+      #       --data '{"text":"⚠️ Framer 동기화 실패: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"}' \
+      #       "${{ secrets.SLACK_WEBHOOK_URL }}"
