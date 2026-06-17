@@ -310,16 +310,12 @@
     }
 
     .card.actionable {
-      cursor: default;
+      cursor: pointer;
       transition: border-color .18s, transform .18s, box-shadow .18s
     }
 
-    .card.actionable.card-special {
-      cursor: pointer
-    }
-
-    .card.actionable.card-special:hover {
-      border-color: rgba(255, 21, 60, .55);
+    .card.actionable:hover {
+      border-color: rgba(255, 21, 60, .45);
       transform: translateY(-3px);
       box-shadow: 0 2px 4px rgba(0, 0, 0, .3), 0 18px 36px -14px rgba(0, 0, 0, .65)
     }
@@ -347,12 +343,22 @@
 
     .badges-top {
       display: flex;
-      flex-direction: row;
+      justify-content: space-between;
+      align-items: flex-start;
+      width: 100%;
+      z-index: 3
+    }
+
+    .badges-left {
+      display: flex;
+      flex-direction: column;
       gap: 5px;
-      z-index: 3;
-      width: fit-content;
-      flex-wrap: wrap;
-      align-content: flex-start
+      align-items: flex-start
+    }
+
+    .badges-right {
+      display: flex;
+      gap: 4px
     }
 
     .poster .ttl {
@@ -1489,6 +1495,202 @@
       line-height: 1.7;
       white-space: pre-line
     }
+
+    .badge.tving {
+      background: linear-gradient(135deg, #ff3d5e, #d40d30);
+      color: #fff;
+      border: 1px solid rgba(255, 255, 255, .22);
+      box-shadow: 0 2px 8px rgba(255, 21, 60, .3)
+    }
+
+    .badge.wavve {
+      background: linear-gradient(135deg, #9b6dff, #6b3fd1);
+      color: #fff;
+      border: 1px solid rgba(255, 255, 255, .22);
+      box-shadow: 0 2px 8px rgba(107, 63, 209, .3)
+    }
+
+    .cmodal-bd {
+      position: fixed;
+      inset: 0;
+      z-index: 200;
+      background: rgba(0, 0, 0, .72);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      animation: fade .2s ease
+    }
+
+    .cmodal-box {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      width: 100%;
+      max-width: 620px;
+      max-height: 88vh;
+      overflow-y: auto;
+      box-shadow: 0 28px 80px rgba(0, 0, 0, .7), 0 0 0 1px rgba(255, 255, 255, .04);
+      scrollbar-width: thin;
+      scrollbar-color: var(--line) transparent
+    }
+
+    .cmodal-top {
+      display: grid;
+      grid-template-columns: 152px 1fr
+    }
+
+    .cmodal-poster {
+      border-radius: 20px 0 0 0;
+      overflow: hidden;
+      background-size: cover;
+      background-position: center;
+      min-height: 228px
+    }
+
+    .cmodal-hd {
+      padding: 18px 18px 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      position: relative
+    }
+
+    .cmodal-close {
+      position: absolute;
+      top: 14px;
+      right: 14px;
+      appearance: none;
+      background: var(--surface-2);
+      border: 1px solid var(--line);
+      color: var(--ink-dim);
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      cursor: pointer;
+      font-size: 13px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background .15s;
+      line-height: 1
+    }
+
+    .cmodal-close:hover {
+      background: var(--line)
+    }
+
+    .cmodal-hbadges {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 5px;
+      padding-right: 36px
+    }
+
+    .cmodal-title {
+      font-family: var(--display);
+      font-size: 20px;
+      font-weight: 700;
+      letter-spacing: -.025em;
+      line-height: 1.25;
+      word-break: keep-all
+    }
+
+    .cmodal-gmeta {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex-wrap: wrap
+    }
+
+    .cmodal-castrow {
+      font-size: 12.5px;
+      color: var(--ink-dim);
+      display: flex;
+      align-items: flex-start;
+      gap: 6px;
+      line-height: 1.5
+    }
+
+    .cmodal-sched {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px
+    }
+
+    .cmodal-sched-item {
+      font-family: var(--display);
+      font-size: 11px;
+      font-weight: 600;
+      background: var(--surface-2);
+      border: 1px solid var(--line);
+      border-radius: 7px;
+      padding: 4px 9px;
+      color: var(--ink-dim)
+    }
+
+    .cmodal-body {
+      padding: 0 22px 24px;
+      border-top: 1px solid var(--line);
+      margin-top: 4px
+    }
+
+    .cmodal-sec-label {
+      font-family: var(--display);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: var(--ink-faint);
+      margin-bottom: 8px;
+      margin-top: 20px
+    }
+
+    .cmodal-syn-text {
+      font-size: 13.5px;
+      color: var(--ink-dim);
+      line-height: 1.7;
+      word-break: keep-all
+    }
+
+    .cmodal-syn-empty {
+      font-size: 13px;
+      color: var(--ink-faint);
+      font-style: italic
+    }
+
+    .cmodal-acts {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 20px;
+      padding-top: 18px;
+      border-top: 1px solid var(--line)
+    }
+
+    .cmodal-acts .btn {
+      flex: 1;
+      justify-content: center;
+      min-width: 120px;
+      text-decoration: none
+    }
+
+    .cmodal-acts .btn.wavve-btn {
+      background: linear-gradient(135deg, #9b6dff, #6b3fd1)
+    }
+
+    @media(max-width: 520px) {
+      .cmodal-top {
+        grid-template-columns: 1fr
+      }
+
+      .cmodal-poster {
+        min-height: 180px;
+        border-radius: 20px 20px 0 0
+      }
+    }
   </style>
 </head>
 
@@ -1520,8 +1722,7 @@
       <div class="panel-head">
         <div class="eyebrow">Lineup</div>
         <h2>지금 주목해야 할 인기작과 공개 예정작</h2>
-        <p>실시간 인기를 견인하는 화제작과 향후 3개월 오픈 예정작을 모았습니다.</p>
-        <p>특판 상품이 있는 카드를 클릭하시면 특판 상품 소개 페이지로 이동합니다.</p>
+        <p>실시간 인기를 견인하는 화제작과 향후 3개월 오픈 예정작을 모았습니다. 카드를 클릭하면 콘텐츠 세부 정보를 확인할 수 있습니다.</p>
       </div>
       <div class="seg seg-hot"><span class="lbl">🔥HOT · 신작 및 주목할 콘텐츠</span><span class="ln"></span></div>
       <div class="grid" id="grid-onair"></div>
@@ -1576,6 +1777,26 @@
     </section>
 
   </main>
+
+  <div id="cmodal" class="cmodal-bd" hidden role="dialog" aria-modal="true" aria-labelledby="cmodal-title">
+    <div class="cmodal-box" id="cmodal-box">
+      <div class="cmodal-top">
+        <div class="cmodal-poster" id="cmodal-poster"></div>
+        <div class="cmodal-hd">
+          <button class="cmodal-close" id="cmodal-close" aria-label="닫기">✕</button>
+          <div class="cmodal-hbadges" id="cmodal-hbadges"></div>
+          <h2 class="cmodal-title" id="cmodal-title"></h2>
+          <div class="cmodal-gmeta" id="cmodal-gmeta"></div>
+          <div class="cmodal-castrow" id="cmodal-castrow"></div>
+          <div class="cmodal-sched" id="cmodal-sched"></div>
+        </div>
+      </div>
+      <div class="cmodal-body">
+        <div id="cmodal-syn"></div>
+        <div id="cmodal-acts" class="cmodal-acts" hidden></div>
+      </div>
+    </div>
+  </div>
 
   <script>
     const THEME = {
@@ -1633,39 +1854,50 @@
     const asBool = v => /^(1|true|y|yes)$/i.test(v);
     const asList = (v, sep = '|') => v ? v.split(sep).map(s => s.trim()).filter(Boolean) : [];
 
+    const fmtEp = v => {
+      if (!v) return '';
+      if (/[부회화]/.test(v)) return v;
+      if (/^\d+$/.test(v)) return v + '부작';
+      return v;
+    };
+    const ratingBadge = (r) => {
+      if (!r) return '';
+      const label = r === '전체' ? 'ALL' : (r === '청불' ? '19' : r);
+      const cls = r === '전체' ? 'all' : 'r' + label;
+      return `<span class="rating ${cls}">${label}</span>`;
+    };
+
     function mapLineup(r) {
+      const platform = (r.platform || 't').toLowerCase();
       return {
         t: r.title, genre: r.genre, genres: [r.genre], subGenres: asList(r.sub_genres),
         rating: r.rating, cast: asList(r.cast), premiere: r.premiere, days: r.days, episodes: r.episodes,
         isOriginal: asBool(r.is_original), isTvingOnly: asBool(r.is_tving_only), isSpecial: asBool(r.is_special),
-        specialUrl: r.special_url || '',
+        platform,
+        synopsis: r.synopsis || '',
+        previewUrl: r.preview_url || '',
+        tvingUrl: r.tving_url || '',
+        wavveUrl: r.wavve_url || '',
         img: r.poster_url || ''
       };
     }
-    function card(c, status) {
-      const badgesHTML = (isOriginal, isTvingOnly, isSpecial) => {
-        const badges = [];
-        if (isSpecial) badges.push('<span class="badge special"><span class="spark">★</span> 특판</span>');
-        if (isOriginal) {
-          badges.push('<span class="badge original">T ORIGINAL</span>');
-        } else if (isTvingOnly) {
-          badges.push('<span class="badge only">T ONLY</span>');
-        }
-        return badges.join('');
-      };
-      const ratingBadge = (r) => {
-        if (!r) return '';
-        const label = r === '전체' ? 'ALL' : (r === '청불' ? '19' : r);
-        const cls = r === '전체' ? 'all' : 'r' + label;
-        return `<span class="rating ${cls}">${label}</span>`;
-      };
-      const fmtEp = v => {
-        if (!v) return '';
-        if (/[부회화]/.test(v)) return v;
-        if (/^\d+$/.test(v)) return v + '부작';
-        return v;
-      };
-      // 단색 placeholder SVG는 실제 포스터가 아니므로 폴백 디자인으로 표시
+
+    let ALL_LINEUP = [];
+
+    function platBadgesHTML(platform) {
+      const p = platform || 't';
+      const out = [];
+      if (p === 't' || p === 'tw') out.push('<span class="badge tving">T</span>');
+      if (p === 'w' || p === 'tw') out.push('<span class="badge wavve">W</span>');
+      return out.join('');
+    }
+
+    function card(c, idx) {
+      const leftBadges = [];
+      if (c.isSpecial) leftBadges.push('<span class="badge special"><span class="spark">★</span> 특판</span>');
+      if (c.isOriginal) leftBadges.push('<span class="badge original">T ORIGINAL</span>');
+      else if (c.isTvingOnly) leftBadges.push('<span class="badge only">T ONLY</span>');
+
       const hasPoster = c.img && !c.img.startsWith('data:image/svg');
       const posterBg = hasPoster ? `background-image: url('${c.img}'); background-size: cover; background-position: center;` : g(c.genre, c.t.length % 4);
       const fallbackDeco = hasPoster ? '' : `<span class="title-mark"><span class="tm-genre">${c.genre}</span><i class="tm-line"></i></span>`;
@@ -1674,16 +1906,12 @@
       if (c.cast.length) infoParts.push(`<span class="info-cast">${c.cast.join(', ')}</span>`);
       if (c.days) infoParts.push(`<span class="info-days">${c.days}</span>`);
       const infoRowHTML = infoParts.join('<span class="info-sep">·</span>');
-      const epFmt = fmtEp(c.episodes);
-      const epChipHTML = epFmt ? `<span class="ep-chip">${epFmt}</span>` : '';
+      const epFmtVal = fmtEp(c.episodes);
+      const epChipHTML = epFmtVal ? `<span class="ep-chip">${epFmtVal}</span>` : '';
       const gs = genreStyle(c.genre);
-      const cardCls = `card actionable${c.isSpecial ? ' card-special' : ''}`;
-      const isLink = c.isSpecial && c.specialUrl;
-      const wrapOpen = isLink ? `<a href="${c.specialUrl}" target="_blank" rel="noopener noreferrer" class="${cardCls}">` : `<div class="${cardCls}">`;
-      const wrapClose = isLink ? '</a>' : '</div>';
-      return `${wrapOpen}
+      return `<div class="card actionable" data-ci="${idx}">
     <div class="poster${hasPoster ? '' : ' no-img'}" style="${posterBg}">
-      ${fallbackDeco}<div class="badges-top">${badgesHTML(c.isOriginal, c.isTvingOnly, c.isSpecial)}</div>
+      ${fallbackDeco}<div class="badges-top"><div class="badges-left">${leftBadges.join('')}</div><div class="badges-right">${platBadgesHTML(c.platform)}</div></div>
       <span class="ttl">${c.t}</span>
     </div>
     <div class="card-body">
@@ -1693,12 +1921,90 @@
         <span class="premiere"><em>🗓️공개일</em>${c.premiere}</span>
         ${ratingBadge(c.rating)}
       </div>
-    </div>${wrapClose}`;
+    </div></div>`;
     }
+
     function renderLineup() {
-      document.getElementById('grid-onair').innerHTML = ONAIR.map(c => card(c, 'onair')).join('');
-      document.getElementById('grid-soon').innerHTML = SOON.map(c => card(c, 'soon')).join('');
+      ALL_LINEUP = [...ONAIR, ...SOON];
+      document.getElementById('grid-onair').innerHTML = ONAIR.map((c, i) => card(c, i)).join('');
+      document.getElementById('grid-soon').innerHTML = SOON.map((c, i) => card(c, ONAIR.length + i)).join('');
+      ['grid-onair', 'grid-soon'].forEach(gid => {
+        document.getElementById(gid).addEventListener('click', e => {
+          const el = e.target.closest('.card[data-ci]');
+          if (el) openModal(ALL_LINEUP[+el.dataset.ci]);
+        });
+      });
     }
+    function openModal(c) {
+      const hasPoster = c.img && !c.img.startsWith('data:image/svg');
+      const pEl = document.getElementById('cmodal-poster');
+      if (hasPoster) {
+        pEl.style.cssText = `background-image:url('${c.img}');background-size:cover;background-position:center`;
+      } else {
+        pEl.style.cssText = g(c.genre, c.t.length % 4);
+      }
+
+      const leftBadges = [];
+      if (c.isSpecial) leftBadges.push('<span class="badge special"><span class="spark">★</span> 특판</span>');
+      if (c.isOriginal) leftBadges.push('<span class="badge original">T ORIGINAL</span>');
+      else if (c.isTvingOnly) leftBadges.push('<span class="badge only">T ONLY</span>');
+      document.getElementById('cmodal-hbadges').innerHTML = platBadgesHTML(c.platform) + leftBadges.join('');
+
+      document.getElementById('cmodal-title').textContent = c.t;
+
+      const gs = genreStyle(c.genre);
+      const subHTML = (c.subGenres || []).map(s => `<span class="subgenre-tag">#${s}</span>`).join('');
+      const epFmtVal = fmtEp(c.episodes);
+      document.getElementById('cmodal-gmeta').innerHTML =
+        `<span class="genre"${gs ? ` style="${gs}"` : ''}>${c.genre}</span>${subHTML}` +
+        (epFmtVal ? `<span class="ep-chip">${epFmtVal}</span>` : '') +
+        ratingBadge(c.rating);
+
+      document.getElementById('cmodal-castrow').innerHTML = c.cast.length
+        ? `<span style="opacity:.6">🎭</span><span>${c.cast.join(', ')}</span>` : '';
+
+      const schedParts = [];
+      if (c.premiere) schedParts.push(`<span class="cmodal-sched-item">📅 ${c.premiere}</span>`);
+      if (c.days) schedParts.push(`<span class="cmodal-sched-item">📺 ${c.days} 방영</span>`);
+      document.getElementById('cmodal-sched').innerHTML = schedParts.join('');
+
+      const synEl = document.getElementById('cmodal-syn');
+      synEl.innerHTML = c.synopsis
+        ? `<div class="cmodal-sec-label">시놉시스</div><p class="cmodal-syn-text">${c.synopsis}</p>`
+        : `<div class="cmodal-sec-label">시놉시스</div><p class="cmodal-syn-empty">시놉시스 정보가 없습니다.</p>`;
+
+      const actEl = document.getElementById('cmodal-acts');
+      const actions = [];
+      if (c.previewUrl) {
+        actions.push(`<a href="${c.previewUrl}" target="_blank" rel="noopener" class="btn ghost">▶ 예고편 보기</a>`);
+      }
+      const p = c.platform || 't';
+      if (c.tvingUrl) {
+        actions.push(`<a href="${c.tvingUrl}" target="_blank" rel="noopener" class="btn">→ TVING에서 보기</a>`);
+      }
+      if (c.wavveUrl) {
+        actions.push(`<a href="${c.wavveUrl}" target="_blank" rel="noopener" class="btn wavve-btn">→ Wavve에서 보기</a>`);
+      }
+      actEl.innerHTML = actions.join('');
+      actEl.hidden = actions.length === 0;
+
+      document.getElementById('cmodal').hidden = false;
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeModal() {
+      document.getElementById('cmodal').hidden = true;
+      document.body.style.overflow = '';
+    }
+
+    document.getElementById('cmodal-close').addEventListener('click', closeModal);
+    document.getElementById('cmodal').addEventListener('click', e => {
+      if (e.target === document.getElementById('cmodal')) closeModal();
+    });
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape' && !document.getElementById('cmodal').hidden) closeModal();
+    });
+
     function getRankRows() {
       const gender = document.getElementById('rk-gender').value, age = document.getElementById('rk-age').value;
       return { gender, age, rows: RANKS[gender + age] || [] };
@@ -1826,7 +2132,7 @@
     async function initData() {
       try {
         const [lineup, rank, meta] = await Promise.all([
-          loadCSV('lineup.csv', ['status', 'title', 'genre', 'sub_genres', 'rating', 'cast', 'premiere', 'days', 'episodes', 'is_original', 'is_tving_only', 'is_special', 'poster_url']),
+          loadCSV('lineup.csv', ['status', 'title', 'genre', 'sub_genres', 'rating', 'cast', 'premiere', 'days', 'episodes', 'is_original', 'is_tving_only', 'is_special', 'poster_url', 'platform']),
           loadCSV('rank.csv', ['gender', 'age', 'rank', 'title', 'main_genre']),
           loadCSV('meta.csv', ['key', 'value']),
         ]);
