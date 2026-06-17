@@ -1,3 +1,7 @@
 index.backup_20260611.html
 preview.bat
 .env
+
+# framer-sync
+framer-sync/node_modules/
+framer-sync/.env

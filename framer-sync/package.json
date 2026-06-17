@@ -1,0 +1,18 @@
+{
+  "name": "tving-framer-sync",
+  "version": "2.0.0",
+  "private": true,
+  "type": "module",
+  "description": "TVING 광고정보센터 — data/*.csv 를 Framer CMS Content 컬렉션에 자동 동기화 + 게시",
+  "engines": {
+    "node": ">=20.6.0"
+  },
+  "scripts": {
+    "sync": "node --env-file=.env scripts/content-sync.js",
+    "sync:force": "node --env-file=.env scripts/content-sync.js --force"
+  },
+  "dependencies": {
+    "framer-api": "^0.1.1",
+    "papaparse": "^5.5.3"
+  }
+}
