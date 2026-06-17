@@ -1504,7 +1504,7 @@
     }
 
     .badge.wavve {
-      background: linear-gradient(135deg, #9b6dff, #6b3fd1);
+      background: linear-gradient(135deg, #3d9bff, #0d5fd4);
       color: #fff;
       border: 1px solid rgba(255, 255, 255, .22);
       box-shadow: 0 2px 8px rgba(107, 63, 209, .3)
@@ -1888,19 +1888,18 @@
 
     let ALL_LINEUP = [];
 
-    function platBadgesHTML(platform) {
-      const p = platform || 't';
+    function rightBadgesHTML(c) {
       const out = [];
-      if (p === 't' || p === 'tw') out.push('<span class="badge tving">T</span>');
-      if (p === 'w' || p === 'tw') out.push('<span class="badge wavve">W</span>');
+      if (c.isOriginal) out.push('<span class="badge original">ORIGINAL</span>');
+      else if (c.isTvingOnly) out.push('<span class="badge only">ONLY</span>');
+      else if (c.platform === 't' || c.platform === 'tw') out.push('<span class="badge tving">T</span>');
+      if (c.platform === 'w' || c.platform === 'tw') out.push('<span class="badge wavve">W</span>');
       return out.join('');
     }
 
     function card(c, idx) {
       const leftBadges = [];
       if (c.isSpecial) leftBadges.push('<span class="badge special"><span class="spark">★</span> 특판</span>');
-      if (c.isOriginal) leftBadges.push('<span class="badge original">T ORIGINAL</span>');
-      else if (c.isTvingOnly) leftBadges.push('<span class="badge only">T ONLY</span>');
 
       const hasPoster = c.img && !c.img.startsWith('data:image/svg');
       const posterBg = hasPoster ? `background-image: url('${c.img}'); background-size: cover; background-position: center;` : g(c.genre, c.t.length % 4);
@@ -1915,7 +1914,7 @@
       const gs = genreStyle(c.genre);
       return `<div class="card actionable" data-ci="${idx}">
     <div class="poster${hasPoster ? '' : ' no-img'}" style="${posterBg}">
-      ${fallbackDeco}<div class="badges-top"><div class="badges-left">${leftBadges.join('')}</div><div class="badges-right">${platBadgesHTML(c.platform)}</div></div>
+      ${fallbackDeco}<div class="badges-top"><div class="badges-left">${leftBadges.join('')}</div><div class="badges-right">${rightBadgesHTML(c)}</div></div>
       <span class="ttl">${c.t}</span>
     </div>
     <div class="card-body">
@@ -1948,11 +1947,9 @@
         pEl.style.cssText = g(c.genre, c.t.length % 4);
       }
 
-      const leftBadges = [];
-      if (c.isSpecial) leftBadges.push('<span class="badge special"><span class="spark">★</span> 특판</span>');
-      if (c.isOriginal) leftBadges.push('<span class="badge original">T ORIGINAL</span>');
-      else if (c.isTvingOnly) leftBadges.push('<span class="badge only">T ONLY</span>');
-      document.getElementById('cmodal-hbadges').innerHTML = platBadgesHTML(c.platform) + leftBadges.join('');
+      const modalBadges = [];
+      if (c.isSpecial) modalBadges.push('<span class="badge special"><span class="spark">★</span> 특판</span>');
+      document.getElementById('cmodal-hbadges').innerHTML = rightBadgesHTML(c) + modalBadges.join('');
 
       document.getElementById('cmodal-title').textContent = c.t;
 
