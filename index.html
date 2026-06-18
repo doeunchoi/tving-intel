@@ -317,7 +317,7 @@
 
     .grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(176px, 1fr));
+      grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
       gap: 18px
     }
 
@@ -1739,23 +1739,25 @@
 
     .cmodal-video::before {
       top: 0;
-      height: 176px;
+      height: 130px;
       background: linear-gradient(to bottom, #000 55%, transparent)
     }
 
     .cmodal-video::after {
       bottom: 0;
-      height: 144px;
+      height: 100px;
       background: linear-gradient(to top, #000 55%, transparent)
     }
 
     @keyframes maskFadeOut {
-      to { opacity: 0; }
+      to {
+        opacity: 0;
+      }
     }
 
     .cmodal-video.playing::before,
     .cmodal-video.playing::after {
-      animation: maskFadeOut 1.2s ease-out 4s forwards
+      animation: maskFadeOut 2s ease-out 5s forwards
     }
 
     .cmodal-video iframe {
