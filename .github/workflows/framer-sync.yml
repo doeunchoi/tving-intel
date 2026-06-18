@@ -31,7 +31,9 @@ jobs:
 
       - uses: actions/setup-node@v4
         with:
-          node-version: "20"
+          # framer-api 는 node >=22 + global WebSocket 필요. Node 20 은 globalThis.WebSocket 이
+          # 없어 실제 연결 시 "Gn is not a constructor" 로 실패함(무변경 스킵일 땐 안 드러남).
+          node-version: "22"
 
       - name: Install
         working-directory: framer-sync
