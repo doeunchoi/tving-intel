@@ -2061,7 +2061,7 @@
 
     function getYouTubeId(url) {
       if (!url) return null;
-      const m = url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([^&?/]+)/);
+      const m = url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/shorts\/)([^&?/]+)/);
       return m ? m[1] : null;
     }
 
