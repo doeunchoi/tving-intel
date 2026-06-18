@@ -1709,6 +1709,11 @@
       border: none
     }
 
+    .cmodal-acts .btn.brochure-btn {
+      background: linear-gradient(135deg, #a78bfa, #7c3aed);
+      border: none
+    }
+
     .cmodal-video {
       position: relative;
       width: 100%;
@@ -1953,6 +1958,7 @@
         previewUrl: r.preview_url || '',
         tvingUrl: r.tving_url || '',
         wavveUrl: r.wavve_url || '',
+        brochureUrl: r.special_url || '',
         img: r.poster_url || ''
       };
     }
@@ -2075,6 +2081,9 @@
         if (c.wavveUrl) {
           actions.push(`<a href="${c.wavveUrl}" target="_blank" rel="noopener" class="btn wavve-btn">→ Wavve에서 보기</a>`);
         }
+      }
+      if (c.isSpecial && c.brochureUrl) {
+        actions.push(`<a href="${c.brochureUrl}" target="_blank" rel="noopener" class="btn brochure-btn">📄 상품 소개서 바로가기</a>`);
       }
       actEl.innerHTML = actions.join('');
       actEl.hidden = actions.length === 0;
