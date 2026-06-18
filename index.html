@@ -1793,7 +1793,6 @@
     <div class="wrap head-row">
       <div class="brand"><img class="brand-logo" src="tving_logo.png" alt="TVING">TVING Contents
         Intelligence<small>TVING Ad</small></div>
-      <span class="data-date" id="data-date"></span>
     </div>
   </header>
 
@@ -1831,9 +1830,10 @@
       <div class="rank-block">
         <div class="panel-head">
           <div class="eyebrow">DEMO RANKING</div>
-          <h2>성·연령별 시청 상위 TOP 50</h2>
+          <h2>TVING 성·연령별 시청 상위 TOP 50</h2>
           <p>주간 데모별 시청 순위. 어떤 콘텐츠가 어떤 타겟에게 닿고 있는지 가장 직접적으로 보여줍니다.</p>
         </div>
+        <div id="rank-date" class="data-date" style="margin-bottom:10px" hidden></div>
         <div class="rank-controls">
           <select class="ctl" id="rk-gender">
             <option value="MF">남녀 전체</option>
@@ -2275,7 +2275,11 @@
         rank.forEach(r => { const k = (r.gender || 'MF').toUpperCase() + (r.age || ''); const genre = [r.main_genre, r.sub_genre].filter(Boolean).join(' · '); (RANKS[k] = RANKS[k] || []).push({ rank: +r.rank, t: r.title, genre }); });
         Object.values(RANKS).forEach(a => a.sort((x, y) => x.rank - y.rank));
         meta.forEach(r => META[r.key] = r.value);
-        if (META.updated_at) document.getElementById('data-date').textContent = `데이터 기준 ${META.updated_at}`;
+        const rankDateEl = document.getElementById('rank-date');
+        if (META.rank_updated_at) {
+          rankDateEl.textContent = `랭킹 데이터 기준 ${META.rank_updated_at}`;
+          rankDateEl.hidden = false;
+        }
         renderLineup(); renderRank();
       } catch (e) {
         const el = document.getElementById('data-error');
