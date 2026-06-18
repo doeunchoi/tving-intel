@@ -1770,8 +1770,7 @@
       inset: 0;
       width: 100%;
       height: 100%;
-      border: none;
-      pointer-events: none
+      border: none
     }
 
     @media(max-width: 520px) {
@@ -2081,7 +2080,7 @@
       const ytId = getYouTubeId(c.previewUrl);
       const vidEl = document.getElementById('cmodal-video');
       if (ytId) {
-        vidEl.innerHTML = `<div class="cmodal-video-lbl">▶ 예고편 미리보기</div><iframe src="https://www.youtube.com/embed/${ytId}?autoplay=1&mute=1&rel=0&controls=0&modestbranding=1&iv_load_policy=3&disablekb=1&playsinline=1&loop=1&playlist=${ytId}" allow="autoplay; encrypted-media" allowfullscreen></iframe>`;
+        vidEl.innerHTML = `<div class="cmodal-video-lbl">▶ 예고편 미리보기</div><iframe src="https://www.youtube.com/embed/${ytId}?autoplay=1&mute=1&rel=0&controls=1&modestbranding=1&iv_load_policy=3&disablekb=0&playsinline=1&loop=1&playlist=${ytId}" allow="autoplay; encrypted-media" allowfullscreen></iframe>`;
         vidEl.hidden = false;
         vidEl.classList.remove('playing');
         void vidEl.offsetWidth;
