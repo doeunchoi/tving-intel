@@ -189,6 +189,26 @@
       max-width: 800px
     }
 
+    .badge-legend {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 20px;
+      font-size: 12px;
+      color: var(--ink-dim)
+    }
+
+    .badge-legend .badge {
+      font-size: 10px;
+      padding: 2px 6px
+    }
+
+    .badge-legend .sep {
+      width: 1px;
+      height: 12px;
+      background: var(--line)
+    }
+
     .eyebrow {
       font-family: var(--display);
       font-size: 11px;
@@ -666,12 +686,10 @@
     }
 
     .badge.only {
-      background: rgba(8, 11, 17, .78);
-      backdrop-filter: blur(6px);
-      -webkit-backdrop-filter: blur(6px);
+      background: linear-gradient(135deg, #ff3d5e, #d40d30);
       color: #fff;
-      border: 1px solid rgba(255, 21, 60, .85);
-      box-shadow: 0 2px 8px rgba(0, 0, 0, .45)
+      border: 1px solid rgba(255, 255, 255, .28);
+      box-shadow: 0 2px 10px rgba(255, 21, 60, .45), inset 0 1px 0 rgba(255, 255, 255, .22)
     }
 
     .promo {
@@ -1682,7 +1700,13 @@
     }
 
     .cmodal-acts .btn.wavve-btn {
-      background: linear-gradient(135deg, #9b6dff, #6b3fd1)
+      background: linear-gradient(135deg, #3d9bff, #0d5fd4)
+    }
+
+    .cmodal-acts .btn.preview-btn {
+      background: linear-gradient(135deg, #ffd166, #ff9f1c);
+      color: #38230a;
+      border: none
     }
 
     @media(max-width: 520px) {
@@ -1727,6 +1751,11 @@
         <div class="eyebrow">Lineup</div>
         <h2>지금 주목해야 할 인기작과 공개 예정작</h2>
         <p>실시간 인기를 견인하는 화제작과 향후 3개월 오픈 예정작을 모았습니다. 카드를 클릭하면 콘텐츠 세부 정보를 확인할 수 있습니다.</p>
+      </div>
+      <div class="badge-legend">
+        <span class="badge tving">T</span><span>TVING</span>
+        <span class="sep"></span>
+        <span class="badge wavve">W</span><span>Wavve</span>
       </div>
       <div class="seg seg-hot"><span class="lbl">🔥HOT · 신작 및 주목할 콘텐츠</span><span class="ln"></span></div>
       <div class="grid" id="grid-onair"></div>
@@ -1878,6 +1907,7 @@
         rating: r.rating, cast: asList(r.cast), premiere: r.premiere, days: r.days, episodes: r.episodes,
         isOriginal: asBool(r.is_original), isTvingOnly: asBool(r.is_tving_only), isSpecial: asBool(r.is_special),
         platform,
+        status: (r.status || '').toLowerCase(),
         synopsis: r.synopsis || '',
         previewUrl: r.preview_url || '',
         tvingUrl: r.tving_url || '',
@@ -1890,10 +1920,17 @@
 
     function rightBadgesHTML(c) {
       const out = [];
-      if (c.isOriginal) out.push('<span class="badge original">ORIGINAL</span>');
-      else if (c.isTvingOnly) out.push('<span class="badge only">ONLY</span>');
-      else if (c.platform === 't' || c.platform === 'tw') out.push('<span class="badge tving">T</span>');
-      if (c.platform === 'w' || c.platform === 'tw') out.push('<span class="badge wavve">W</span>');
+      const p = c.platform || 't';
+      if (c.isOriginal) {
+        const prefix = p === 'w' ? 'W' : 'T';
+        out.push(`<span class="badge original">${prefix} ORIGINAL</span>`);
+        if (p === 'tw') out.push('<span class="badge wavve">W</span>');
+      } else if (c.isTvingOnly) {
+        out.push('<span class="badge only">T ONLY</span>');
+      } else {
+        if (p === 't' || p === 'tw') out.push('<span class="badge tving">T</span>');
+        if (p === 'w' || p === 'tw') out.push('<span class="badge wavve">W</span>');
+      }
       return out.join('');
     }
 
@@ -1976,15 +2013,17 @@
 
       const actEl = document.getElementById('cmodal-acts');
       const actions = [];
+      const isSoon = c.status === 'soon';
       if (c.previewUrl) {
-        actions.push(`<a href="${c.previewUrl}" target="_blank" rel="noopener" class="btn ghost">▶ 예고편 보기</a>`);
+        actions.push(`<a href="${c.previewUrl}" target="_blank" rel="noopener" class="btn${isSoon ? ' preview-btn' : ' ghost'}">▶ 예고편 보기</a>`);
       }
-      const p = c.platform || 't';
-      if (c.tvingUrl) {
-        actions.push(`<a href="${c.tvingUrl}" target="_blank" rel="noopener" class="btn">→ TVING에서 보기</a>`);
-      }
-      if (c.wavveUrl) {
-        actions.push(`<a href="${c.wavveUrl}" target="_blank" rel="noopener" class="btn wavve-btn">→ Wavve에서 보기</a>`);
+      if (!isSoon) {
+        if (c.tvingUrl) {
+          actions.push(`<a href="${c.tvingUrl}" target="_blank" rel="noopener" class="btn">→ TVING에서 보기</a>`);
+        }
+        if (c.wavveUrl) {
+          actions.push(`<a href="${c.wavveUrl}" target="_blank" rel="noopener" class="btn wavve-btn">→ Wavve에서 보기</a>`);
+        }
       }
       actEl.innerHTML = actions.join('');
       actEl.hidden = actions.length === 0;
