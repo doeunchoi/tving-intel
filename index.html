@@ -1528,6 +1528,20 @@
       box-shadow: 0 2px 8px rgba(107, 63, 209, .3)
     }
 
+    .badge.wavve-original {
+      background: linear-gradient(135deg, #3d9bff, #0d5fd4);
+      color: #fff;
+      border: 1px solid rgba(255, 255, 255, .22);
+      box-shadow: 0 2px 8px rgba(61, 155, 255, .3)
+    }
+
+    .badge.wavve-only {
+      background: linear-gradient(135deg, #3d9bff, #0d5fd4);
+      color: #fff;
+      border: 1px solid rgba(255, 255, 255, .22);
+      box-shadow: 0 2px 8px rgba(61, 155, 255, .3)
+    }
+
     .cmodal-bd {
       position: fixed;
       inset: 0;
@@ -1971,7 +1985,7 @@
       return {
         t: r.title, genre: r.genre, genres: [r.genre], subGenres: asList(r.sub_genres),
         rating: r.rating, cast: asList(r.cast), premiere: r.premiere, days: r.days, episodes: r.episodes,
-        isOriginal: asBool(r.is_original), isTvingOnly: asBool(r.is_tving_only), isSpecial: asBool(r.is_special),
+        isOriginal: asBool(r.is_original), isTvingOnly: asBool(r.is_tving_only), isWavveOriginal: asBool(r.is_wavve_original), isWavveOnly: asBool(r.is_wavve_only), isSpecial: asBool(r.is_special),
         platform,
         status: (r.status || '').toLowerCase(),
         synopsis: r.synopsis || '',
@@ -1992,8 +2006,12 @@
         const prefix = p === 'w' ? 'W' : 'T';
         out.push(`<span class="badge original">${prefix} ORIGINAL</span>`);
         if (p === 'tw') out.push('<span class="badge wavve">W</span>');
+      } else if (c.isWavveOriginal) {
+        out.push('<span class="badge wavve-original">W ORIGINAL</span>');
       } else if (c.isTvingOnly) {
         out.push('<span class="badge only">T ONLY</span>');
+      } else if (c.isWavveOnly) {
+        out.push('<span class="badge wavve-only">W ONLY</span>');
       } else {
         if (p === 't' || p === 'tw') out.push('<span class="badge tving">T</span>');
         if (p === 'w' || p === 'tw') out.push('<span class="badge wavve">W</span>');
@@ -2265,7 +2283,7 @@
     async function initData() {
       try {
         const [lineup, rank] = await Promise.all([
-          loadCSV('lineup.csv', ['status', 'title', 'genre', 'sub_genres', 'rating', 'cast', 'premiere', 'days', 'episodes', 'is_original', 'is_tving_only', 'is_special', 'poster_url', 'platform']),
+          loadCSV('lineup.csv', ['status', 'title', 'genre', 'sub_genres', 'rating', 'cast', 'premiere', 'days', 'episodes', 'is_original', 'is_tving_only', 'is_wavve_original', 'is_wavve_only', 'is_special', 'poster_url', 'platform']),
           loadCSV('rank.csv', ['gender', 'age', 'rank', 'week', 'title', 'main_genre']),
         ]);
         ONAIR = lineup.filter(r => r.status.toLowerCase() === 'onair').map(mapLineup);
