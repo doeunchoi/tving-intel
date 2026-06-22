@@ -859,7 +859,7 @@
     .rank-foot {
       font-size: 11.5px;
       color: var(--ink-faint);
-      margin-top: 16px
+      align-self: center
     }
 
     .guide {
@@ -1848,10 +1848,10 @@
             <option value="50">50대</option>
             <option value="60">60대+</option>
           </select>
-          <button class="btn ghost" id="rk-download" style="margin-left:auto">↓ Excel 다운로드</button>
+          <div class="rank-foot" id="rank-foot" style="margin-left:auto"></div>
+          <button class="btn ghost" id="rk-download">↓ Excel 다운로드</button>
         </div>
         <div id="rank-cols" class="rank-cols"></div>
-        <div class="rank-foot" id="rank-foot"></div>
       </div>
     </section>
 
