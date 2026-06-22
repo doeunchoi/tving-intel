@@ -1833,7 +1833,6 @@
           <h2>TVING 성·연령별 시청 상위 TOP 50</h2>
           <p>주간 데모별 시청 순위. 어떤 콘텐츠가 어떤 타겟에게 닿고 있는지 가장 직접적으로 보여줍니다.</p>
         </div>
-        <div id="rank-date" class="data-date" style="margin-bottom:10px" hidden></div>
         <div class="rank-controls">
           <select class="ctl" id="rk-gender">
             <option value="MF">남녀 전체</option>
@@ -1915,7 +1914,7 @@
     const genreStyle = g => { const s = GENRE_STYLE[g]; return s ? `color:${s.c};border-color:${s.b};background:${s.bg}` : ''; };
 
     // ===== 데이터 로딩: data/*.csv (리대시 다운로드 CSV를 그대로 사용) =====
-    let ONAIR = [], SOON = [], CONTENT = [], RANKS = {}, META = {};
+    let ONAIR = [], SOON = [], CONTENT = [], RANKS = {}, RANK_WEEK = '';
 
     function parseCSV(text) {
       const rows = []; let row = [], field = '', inQ = false;
@@ -2162,7 +2161,7 @@
       document.getElementById('rank-cols').innerHTML = rows.length
         ? buildTable(rows.slice(0, HALF), 0) + buildTable(rows.slice(HALF, HALF * 2), HALF)
         : `<div style="color:var(--ink-faint);padding:18px 0;font-size:13.5px">해당 데모의 랭킹 데이터가 없습니다 — rank.csv를 확인하세요</div>`;
-      document.getElementById('rank-foot').textContent = `${getRankLabel(gender, age)}${META.rank_period ? ' · ' + META.rank_period : ''}`;
+      document.getElementById('rank-foot').textContent = `${getRankLabel(gender, age)}${RANK_WEEK ? ' · ' + RANK_WEEK : ''}`;
     }
     ['rk-gender', 'rk-age'].forEach(id => document.getElementById(id).addEventListener('change', renderRank));
     document.getElementById('rk-download').addEventListener('click', () => {
@@ -2265,21 +2264,15 @@
 
     async function initData() {
       try {
-        const [lineup, rank, meta] = await Promise.all([
+        const [lineup, rank] = await Promise.all([
           loadCSV('lineup.csv', ['status', 'title', 'genre', 'sub_genres', 'rating', 'cast', 'premiere', 'days', 'episodes', 'is_original', 'is_tving_only', 'is_special', 'poster_url', 'platform']),
-          loadCSV('rank.csv', ['gender', 'age', 'rank', 'title', 'main_genre']),
-          loadCSV('meta.csv', ['key', 'value']),
+          loadCSV('rank.csv', ['gender', 'age', 'rank', 'week', 'title', 'main_genre']),
         ]);
         ONAIR = lineup.filter(r => r.status.toLowerCase() === 'onair').map(mapLineup);
         SOON = lineup.filter(r => r.status.toLowerCase() === 'soon').map(mapLineup);
         rank.forEach(r => { const k = (r.gender || 'MF').toUpperCase() + (r.age || ''); const genre = [r.main_genre, r.sub_genre].filter(Boolean).join(' · '); (RANKS[k] = RANKS[k] || []).push({ rank: +r.rank, t: r.title, genre }); });
         Object.values(RANKS).forEach(a => a.sort((x, y) => x.rank - y.rank));
-        meta.forEach(r => META[r.key] = r.value);
-        const rankDateEl = document.getElementById('rank-date');
-        if (META.rank_updated_at) {
-          rankDateEl.textContent = `랭킹 데이터 기준 ${META.rank_updated_at}`;
-          rankDateEl.hidden = false;
-        }
+        RANK_WEEK = rank[0]?.week || '';
         renderLineup(); renderRank();
       } catch (e) {
         const el = document.getElementById('data-error');
