@@ -5,7 +5,7 @@
   "type": "module",
   "description": "TVING 광고정보센터 — data/*.csv 를 Framer CMS Content 컬렉션에 자동 동기화 + 게시",
   "engines": {
-    "node": ">=20.6.0"
+    "node": ">=22"
   },
   "scripts": {
     "sync": "node --env-file=.env scripts/content-sync.js",
