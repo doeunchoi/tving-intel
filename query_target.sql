@@ -5,7 +5,8 @@
 --       hour_dist = 시간대별 시청 비중(%) 24값 파이프 구분 (0시~23시)
 -- 사용법: Redash에서 실행 → Download as CSV → data/target.csv 교체
 -- ※ branded 컬럼은 0으로 출력됨 — CSV 받은 후 수기로 1/0 입력
--- ※ cast_info는 이름만 파이프 구분 (역할/설명은 수기 보완 가능)
+-- ※ cast_info는 이름만 콤마 구분 (역할/설명은 콜론 구분으로 수기 보완 가능)
+-- ※ 콤마가 포함되므로 CSV에서 따옴표로 감싸짐 — 정상 (프론트 파서가 따옴표 처리)
 -- =============================================================
 WITH watch AS (
     SELECT
@@ -151,7 +152,7 @@ meta AS (
     SELECT DISTINCT
         COALESCE(program_title_kr, title_kr) AS title_kr,
         main_genre_name AS genre,
-        ARRAY_JOIN(COALESCE(casting_kr, ARRAY[]), '|') AS cast_info
+        ARRAY_JOIN(COALESCE(casting_kr, ARRAY[]), ', ') AS cast_info
     FROM prod_de_neat.content_meta_v2
     WHERE media_type IN ('PROGRAM', 'MOVIE')
 )

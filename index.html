@@ -2196,7 +2196,7 @@
       const demos = {}; DEMOS.forEach(d => demos[d] = +r[d.toLowerCase()] || 0);
       return {
         t: r.title, genre: r.genre, band: r.band, reach: +r.reach || 0, branded: asBool(r.branded),
-        demos, cast: asList(r.cast_info).map(p => p.split(':').map(s => s.trim()))
+        demos, cast: asList(r.cast_info, /\s*[|,]\s*/).map(p => p.split(':').map(s => s.trim()))
       };
     }
     const BANDS = ["소형", "중형", "대형", "초대형"];
