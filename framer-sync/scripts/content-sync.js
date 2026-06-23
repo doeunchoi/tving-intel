@@ -54,7 +54,7 @@ const FIELDS_TO_ADD = [
   // v3 신규 (lineup.csv 신규 컬럼)
   { type: "string", name: "Platform" }, // t/tw/w → TVING/TVING·Wavve/Wavve
   { type: "string", name: "Synopsis" },
-  { type: "link", name: "Preview URL" },
+  { type: "string", name: "Preview URL" }, // 텍스트(원시 URL) — 임베드/파싱용
   { type: "link", name: "TVING URL" },
   { type: "link", name: "Wavve URL" },
   { type: "boolean", name: "Is Wavve Original" },
@@ -137,7 +137,7 @@ function buildRecord(row, index, updatedAt) {
       // v3 신규
       Platform: ["string", PLATFORM_LABEL[(row.platform || "").trim()] || (row.platform || "").trim()],
       Synopsis: ["string", row.synopsis || ""],
-      "Preview URL": ["link", (row.preview_url || "").trim() || null],
+      "Preview URL": ["string", (row.preview_url || "").trim()],
       "TVING URL": ["link", (row.tving_url || "").trim() || null],
       "Wavve URL": ["link", (row.wavve_url || "").trim() || null],
       "Is Wavve Original": ["boolean", asBool(row.is_wavve_original)],
