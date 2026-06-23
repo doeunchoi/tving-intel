@@ -24,7 +24,7 @@ const SOURCE_BASE = process.env.SOURCE_BASE
   || "https://raw.githubusercontent.com/doeunchoi/tving-intel/main/data";
 const COLLECTION_NAME = process.env.FRAMER_COLLECTION_NAME || "Content";
 const STATE_PATH = new URL("../state/content-state.json", import.meta.url).pathname;
-const SCHEMA_VERSION = "lineup-v2"; // 스키마 정의를 바꾸면 올릴 것 → 다음 실행에서 스키마 재보장
+const SCHEMA_VERSION = "lineup-v3"; // v3: platform/synopsis/preview·시청 URL/Wavve 플래그 7필드 추가
 
 const args = process.argv.slice(2);
 const FORCE = args.includes("--force");
@@ -33,7 +33,7 @@ const PUBLISH = !args.includes("--no-publish");
 // ── 스키마 정의 (lineup.csv 기준) ─────────────────────────────────────────
 // 구(더미/시트 시절) 필드 — 존재하면 제거
 const FIELDS_TO_REMOVE = [
-  "Top 20 Rank", "Previous Rank", "Is New", "Platform", "Synopsis", "Recommended",
+  "Top 20 Rank", "Previous Rank", "Is New", "Recommended",
   "Is TVING Special", "Air Period", "Start Month", "End Month", "Peak Month",
   "Ad Info", "Target Audience", "Ad Products", "Brand Fit", "Sales Points",
   "Audience Female %", "Audience Male %",
@@ -51,7 +51,22 @@ const FIELDS_TO_ADD = [
   { type: "boolean", name: "Is TVING Only" },
   { type: "boolean", name: "Is Special" },
   { type: "string", name: "Updated At" }, // meta.csv updated_at (사이트 "데이터 기준일" 표기용)
+  // v3 신규 (lineup.csv 신규 컬럼)
+  { type: "string", name: "Platform" }, // t/tw/w → TVING/TVING·Wavve/Wavve
+  { type: "string", name: "Synopsis" },
+  { type: "string", name: "Preview URL" }, // 텍스트(원시 URL) — 임베드/파싱용
+  { type: "link", name: "TVING URL" },
+  { type: "link", name: "Wavve URL" },
+  { type: "boolean", name: "Is Wavve Original" },
+  { type: "boolean", name: "Is Wavve Only" },
 ];
+
+// platform 코드 → 표시 라벨
+const PLATFORM_LABEL = { t: "TVING", tw: "TVING·Wavve", w: "Wavve" };
+
+// Framer 가 서버측에서 가져올 수 있는 공식 포스터 CDN 만 허용.
+// (namu.wiki 등 비공식 출처는 403 으로 업로드 실패 → 스킵)
+const POSTER_OK = /^https?:\/\/(image\.tving\.com|image\.wavve\.com)\//i;
 // 유지(기존): Content Info(divider), Sort Order, Poster, Title, Genre, Cast, Episodes, Special Link
 
 const log = (...a) => console.log(`[${new Date().toISOString()}]`, ...a);
@@ -89,8 +104,14 @@ function slugOf(row) {
 
 // lineup 행 → 논리 레코드 { slug, fields: { 필드명: [type, value] } }
 function buildRecord(row, index, updatedAt) {
-  const premiere = (row.premiere || "").trim(); // ISO "2026-05-11"
-  const month = premiere ? `${parseInt(premiere.split("-")[1], 10)}월` : "";
+  const premiereRaw = (row.premiere || "").trim(); // "2026-05-11" 또는 "7월"(미정) 등
+  const isISO = /^\d{4}-\d{2}-\d{2}$/.test(premiereRaw);
+  const premiere = isISO ? premiereRaw : null; // date 필드는 유효 ISO 만, 아니면 비움
+  const month = isISO
+    ? `${parseInt(premiereRaw.split("-")[1], 10)}월`
+    : /^\d{1,2}월$/.test(premiereRaw)
+      ? premiereRaw // "7월" 같은 월 표기는 그대로 Premiere Month 로
+      : "";
   const episodes = String(row.episodes || "").trim();
   const specialUrl = (row.special_url || "").trim();
   return {
@@ -110,9 +131,17 @@ function buildRecord(row, index, updatedAt) {
       "Is TVING Only": ["boolean", asBool(row.is_tving_only)],
       "Is Special": ["boolean", asBool(row.is_special)],
       "Special Link": ["link", specialUrl || null],
-      Poster: ["image", (row.poster_url || "").trim() || null],
+      Poster: POSTER_OK.test((row.poster_url || "").trim()) ? ["image", (row.poster_url || "").trim()] : null,
       "Sort Order": ["number", index + 1],
       "Updated At": ["string", updatedAt || ""],
+      // v3 신규
+      Platform: ["string", PLATFORM_LABEL[(row.platform || "").trim()] || (row.platform || "").trim()],
+      Synopsis: ["string", row.synopsis || ""],
+      "Preview URL": ["string", (row.preview_url || "").trim()],
+      "TVING URL": ["link", (row.tving_url || "").trim() || null],
+      "Wavve URL": ["link", (row.wavve_url || "").trim() || null],
+      "Is Wavve Original": ["boolean", asBool(row.is_wavve_original)],
+      "Is Wavve Only": ["boolean", asBool(row.is_wavve_only)],
     },
   };
 }
@@ -182,11 +211,15 @@ function toEntry(field, [type, value]) {
 async function main() {
   // 1) 소스
   log(`소스: ${SOURCE_BASE}`);
-  const [lineup, metaRows] = await Promise.all([
-    fetchCsv("lineup.csv", ["status", "title", "genre", "poster_url"]),
-    fetchCsv("meta.csv", ["key", "value"]),
-  ]);
-  const meta = Object.fromEntries(metaRows.map((r) => [r.key, r.value]));
+  const lineup = await fetchCsv("lineup.csv", ["status", "title", "genre", "poster_url"]);
+  // meta.csv 는 선택사항(소스에서 제거될 수 있음) — 없으면 Updated At 만 빈 값
+  let meta = {};
+  try {
+    const metaRows = await fetchCsv("meta.csv", ["key", "value"]);
+    meta = Object.fromEntries(metaRows.map((r) => [r.key, r.value]));
+  } catch (e) {
+    log(`meta.csv 없음/읽기 실패 — Updated At 생략 (${e.message})`);
+  }
   if (!lineup.length) throw new Error("lineup.csv 가 비었습니다 — 동기화 중단(소스 이상 추정)");
   log(`lineup ${lineup.length}편 (기준일 ${meta.updated_at || "?"})`);
 
