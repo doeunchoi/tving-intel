@@ -1,8 +1,9 @@
 -- =============================================================
 -- TVING Contents Intelligence — target.csv 추출 쿼리 v2
--- 출력: title, genre, band, reach, branded(0고정), f10~m60(비중%), cast_info, hour_dist
+-- 출력: title, genre, band, reach, branded(0고정), f10~m60(비중%), cast_info, hour_dist, dow_dist
 -- 변경: f10~m60 = 전체 시청자 대비 순수 비중(%), 인덱스 아님
 --       hour_dist = 시간대별 시청 비중(%) 24값 파이프 구분 (0시~23시)
+--       dow_dist  = 요일별 시청 비중(%) 7값 파이프 구분 (월~일 순, DAY_OF_WEEK 1=월…7=일)
 -- 사용법: Redash에서 실행 → Download as CSV → data/target.csv 교체
 -- ※ branded 컬럼은 0으로 출력됨 — CSV 받은 후 수기로 1/0 입력
 -- ※ cast_info는 이름만 콤마 구분 (역할/설명은 콜론 구분으로 수기 보완 가능)
@@ -148,6 +149,32 @@ hour_agg AS (
     FROM hour_segment
     GROUP BY program_title_kr
 ),
+-- 요일별 시청 비중: 콘텐츠별 요일당 UV, 파이프 구분 7값 (월~일 순)
+-- DAY_OF_WEEK: 1=월요일 … 7=일요일 (ISO). 분모 = 요일별 UV 합계
+dow_segment AS (
+    SELECT
+        c.program_title_kr,
+        DAY_OF_WEEK(w.kst_date) AS dow,
+        COUNT(DISTINCT w.user_no) AS dow_uv
+    FROM watch w
+    INNER JOIN content c ON w.media_code = c.media_code
+    GROUP BY 1, 2
+),
+dow_agg AS (
+    SELECT
+        program_title_kr AS title,
+        ARRAY_JOIN(ARRAY[
+            CAST(ROUND(100.0 * COALESCE(MAX(CASE WHEN dow=1 THEN dow_uv END), 0) / NULLIF(SUM(dow_uv), 0), 1) AS VARCHAR),
+            CAST(ROUND(100.0 * COALESCE(MAX(CASE WHEN dow=2 THEN dow_uv END), 0) / NULLIF(SUM(dow_uv), 0), 1) AS VARCHAR),
+            CAST(ROUND(100.0 * COALESCE(MAX(CASE WHEN dow=3 THEN dow_uv END), 0) / NULLIF(SUM(dow_uv), 0), 1) AS VARCHAR),
+            CAST(ROUND(100.0 * COALESCE(MAX(CASE WHEN dow=4 THEN dow_uv END), 0) / NULLIF(SUM(dow_uv), 0), 1) AS VARCHAR),
+            CAST(ROUND(100.0 * COALESCE(MAX(CASE WHEN dow=5 THEN dow_uv END), 0) / NULLIF(SUM(dow_uv), 0), 1) AS VARCHAR),
+            CAST(ROUND(100.0 * COALESCE(MAX(CASE WHEN dow=6 THEN dow_uv END), 0) / NULLIF(SUM(dow_uv), 0), 1) AS VARCHAR),
+            CAST(ROUND(100.0 * COALESCE(MAX(CASE WHEN dow=7 THEN dow_uv END), 0) / NULLIF(SUM(dow_uv), 0), 1) AS VARCHAR)
+        ], '|') AS dow_dist
+    FROM dow_segment
+    GROUP BY program_title_kr
+),
 meta AS (
     SELECT DISTINCT
         COALESCE(program_title_kr, title_kr) AS title_kr,
@@ -176,9 +203,11 @@ SELECT
     COALESCE(p.m50, 0)         AS m50,
     COALESCE(p.m60, 0)         AS m60,
     COALESCE(m.cast_info, '')  AS cast_info,
-    COALESCE(h.hour_dist, '')  AS hour_dist
+    COALESCE(h.hour_dist, '')  AS hour_dist,
+    COALESCE(d.dow_dist, '')   AS dow_dist
 FROM pivoted p
 JOIN content_band b  ON p.title = b.title
 LEFT JOIN meta m     ON p.title = m.title_kr
 LEFT JOIN hour_agg h ON p.title = h.title
+LEFT JOIN dow_agg d  ON p.title = d.title
 ORDER BY b.total_uv DESC
