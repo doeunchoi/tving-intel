@@ -1,6 +1,7 @@
 -- =============================================================
 -- TVING Contents Intelligence — target.csv 추출 쿼리 v2
--- 출력: title, genre, band, reach, branded(0고정), f10~m60(비중%), cast_info, hour_dist, dow_dist
+-- 출력: title, genre, sub_genres, band, reach, branded(0고정), f10~m60(비중%), cast_info, hour_dist, dow_dist
+--       sub_genres = 서브장르 키워드 (content_meta_v2.main_genre_sub_name, 예: '쿡방/먹방') — 프론트에서 /,#,| 기준 분리
 -- 변경: f10~m60 = 전체 시청자 대비 순수 비중(%), 인덱스 아님
 --       hour_dist = 시간대별 시청 비중(%) 24값 파이프 구분 (0시~23시)
 --       dow_dist  = 요일별 시청 비중(%) 7값 파이프 구분 (월~일 순, DAY_OF_WEEK 1=월…7=일)
@@ -179,6 +180,7 @@ meta AS (
     SELECT DISTINCT
         COALESCE(program_title_kr, title_kr) AS title_kr,
         main_genre_name AS genre,
+        COALESCE(main_genre_sub_name, '') AS sub_genres,
         ARRAY_JOIN(COALESCE(casting_kr, ARRAY[]), ', ') AS cast_info
     FROM prod_de_neat.content_meta_v2
     WHERE media_type IN ('PROGRAM', 'MOVIE')
@@ -186,7 +188,8 @@ meta AS (
 -- 최종 출력: target.csv 스키마 (hour_dist 컬럼 추가)
 SELECT
     p.title,
-    COALESCE(m.genre, '')      AS genre,
+    COALESCE(m.genre, '')        AS genre,
+    COALESCE(m.sub_genres, '')   AS sub_genres,
     b.band,
     b.reach,
     0                          AS branded,
