@@ -14,8 +14,10 @@ on:
   workflow_dispatch: {}
 
 # framer-sync/state 커밋(증분 해시 영속화 + 60일 비활성 중단 방지)에 쓰기 권한 필요
+# issues: 실패 알림 이슈 생성용
 permissions:
   contents: write
+  issues: write
 
 concurrency:
   group: framer-sync
@@ -66,8 +68,31 @@ jobs:
           git commit -m "chore(framer-sync): state $(date -u +%Y-%m-%dT%H:%M:%SZ) [skip ci]" || echo "변경 없음"
           git push
 
+      # 실패 시 GitHub 이슈 알림 — 연속 실패가 묻히는 것 방지.
+      # (2026-06-25 API 키 무효화로 일주일간 미동기화가 발견되지 않은 사고 재발 방지.
+      #  키 무효화 시 로그에 "API key does not have access to this project" 가 찍힘 →
+      #  Framer 사이트 설정 → API 에서 키 재발급 후 FRAMER_API_KEY/FRAMER_PROJECT_URL Secret 갱신)
+      # 열려 있는 동일 제목 이슈가 있으면 새로 만들지 않고 댓글로 누적.
+      - name: Notify on failure (GitHub issue)
+        if: failure()
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          title="framer-sync 실패 — CMS 동기화 중단, 확인 필요"
+          run_url="${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+          body="워크플로 실행 실패: $run_url
+
+          로그에 \"API key does not have access to this project\" 가 보이면 Framer API 키가 무효화된 것입니다.
+          → Framer 사이트 설정 → API 에서 키 재발급 후 레포 Secrets(FRAMER_API_KEY, FRAMER_PROJECT_URL) 갱신."
+          existing=$(gh issue list --state open --search "in:title \"$title\"" --json number --jq '.[0].number // empty')
+          if [ -n "$existing" ]; then
+            gh issue comment "$existing" --body "재실패: $run_url"
+          else
+            gh issue create --title "$title" --body "$body"
+          fi
+
       # (선택) 실패 시 Slack 알림 — SLACK_WEBHOOK_URL Secret 등록 후 주석 해제
-      # - name: Notify on failure
+      # - name: Notify on failure (Slack)
       #   if: failure()
       #   run: |
       #     curl -X POST -H 'Content-type: application/json' \
